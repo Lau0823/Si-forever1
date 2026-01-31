@@ -157,7 +157,7 @@ export default function HomePage() {
                 <div className="mt-4 flex gap-3">
                   {/* ✅ SOLO CAMBIO: Ver demo ahora va a /tarjetas/[id] */}
                   <Link
-                    href={`/tarjetas/${item.id}`}
+                    href={`/tarjetas/lauyantonio`}
                     className="flex-1 rounded-full border border-black/15 px-4 py-2 text-center text-sm hover:bg-black/5"
                   >
                     Ver demo
