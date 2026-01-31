@@ -1,35 +1,35 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Nunito } from "next/font/google";
-import Navbar from "@/components/navBar/NavBar";
+import { DM_Serif_Display, Inter } from "next/font/google";
 
-const nunito = Nunito({
+const serif = DM_Serif_Display({
   subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-serif",
+  display: "swap",
+});
+
+const sans = Inter({
+  subsets: ["latin"],
+  weight: ["300", "400", "500"],
+  variable: "--font-sans",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Si Forever",
-  description: "Tarjetas de invitacion",
+  title: "Invitación",
+  description: "Invitación de matrimonio",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="es">
-      <body className={nunito.className}>
-        
-          <div className="flex flex-col min-h-screen pt-20 ">
-            {/* Navbar */}
-            <Navbar />
-
-            {/* Main content */}
-            <main className="flex-3">
-              {/* Banner o secciones que deben ocupar toda la pantalla */}
-              {children}
-            </main>
-
-           
-          </div>
-        
+    <html lang="es" className={`${serif.variable} ${sans.variable}`}>
+      <body className="min-h-screen bg-neutral-950 text-neutral-50 antialiased">
+        {children}
       </body>
     </html>
   );

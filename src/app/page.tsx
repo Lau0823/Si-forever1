@@ -60,7 +60,7 @@ export default function HomePage() {
     <main className="bg-white text-black">
       {/* NAVBAR */}
       <header className="sticky top-0 z-30 border-b border-black/10 bg-white/80 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 font-serif text-5xl tracking-wide md:text-6xl">
           <Link href="/" className="text-sm font-semibold tracking-tight">
             Sí, Forever
           </Link>
@@ -120,10 +120,7 @@ export default function HomePage() {
       </section>
 
       {/* CATALOGO */}
-      <section
-        id="catalogo"
-        className="mx-auto max-w-7xl px-6 py-20"
-      >
+      <section id="catalogo" className="mx-auto max-w-7xl px-6 py-20">
         <div className="mb-12 text-center">
           <p className="text-xs uppercase tracking-[0.3em] text-black/50">
             Catálogo
@@ -155,14 +152,17 @@ export default function HomePage() {
                 <p className="text-xs uppercase tracking-widest text-black/50">
                   {item.style}
                 </p>
-                <h3 className="mt-2 text-lg font-semibold">
-                  {item.title}
-                </h3>
+                <h3 className="mt-2 text-lg font-semibold">{item.title}</h3>
 
                 <div className="mt-4 flex gap-3">
-                  <button className="flex-1 rounded-full border border-black/15 px-4 py-2 text-sm hover:bg-black/5">
+                  {/* ✅ SOLO CAMBIO: Ver demo ahora va a /tarjetas/[id] */}
+                  <Link
+                    href={`/tarjetas/${item.id}`}
+                    className="flex-1 rounded-full border border-black/15 px-4 py-2 text-center text-sm hover:bg-black/5"
+                  >
                     Ver demo
-                  </button>
+                  </Link>
+
                   <button className="flex-1 rounded-full bg-black px-4 py-2 text-sm font-semibold text-white hover:opacity-90">
                     Elegir
                   </button>
