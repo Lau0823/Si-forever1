@@ -347,7 +347,7 @@ export default function WeddingInviteCardStyle() {
             <div className="mt-6 rounded-[22px] bg-white/10 p-5 ring-1 ring-white/15">
               <p className="text-[11px] uppercase tracking-[0.35em] text-white/80">Tip</p>
               <p className="mt-2 text-sm text-white/85">
-                Puedes usar esta como “highlight” para una sección premium (por ejemplo: Dress code / Itinerario).
+                 Ven listo para bailar (aunque no sepas).
               </p>
             </div>
           </PlayingCard>
