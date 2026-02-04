@@ -37,7 +37,7 @@ const INVITATIONS: Invitation[] = [
     id: "cartadeamor",
     title: "Carta de Amor",
     style: "Papel • Moderno",
-    image: "https://i.pinimg.com/1200x/78/0f/20/780f20e1b6c7f91e55d7915da587088d.jpg",
+    image: "https://i.pinimg.com/736x/46/96/80/469680bec8a2451d909321f0b218554e.jpg",
   },
   {
     id: "bw-04",

@@ -14,9 +14,9 @@ export default function WeddingInviteCardStyle() {
 
   // ✅ Imágenes
   const PHOTOS = {
-    heroLeftBg: "https://i.pinimg.com/1200x/78/0f/20/780f20e1b6c7f91e55d7915da587088d.jpg",
-    heroRightPhoto: "https://i.pinimg.com/1200x/3e/73/f0/3e73f05acd2bfc40b8b78cb19a010097.jpg",
-    bannerTwo: "https://i.pinimg.com/1200x/ba/29/90/ba2990b11237ab6ba0c5add970ea48b8.jpg",
+    heroLeftBg: "https://i.pinimg.com/736x/46/96/80/469680bec8a2451d909321f0b218554e.jpg",
+    heroRightPhoto: "https://i.pinimg.com/736x/46/96/80/469680bec8a2451d909321f0b218554e.jpg",
+    bannerTwo: "https://i.pinimg.com/736x/46/96/80/469680bec8a2451d909321f0b218554e.jpg",
   };
 
   // ✅ Links
