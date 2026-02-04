@@ -332,7 +332,7 @@ export default function WeddingInviteCardStyle() {
               Todo al rojo <span className="text-white/90">♥</span>
             </h3>
             <p className="mt-4 text-sm text-white/85 max-w-md">
-              Esta card va invertida: fondo rojo, textos blancos y botones en modo invertido.
+              
             </p>
 
             <div className="mt-7 grid gap-3 sm:grid-cols-2">
@@ -457,7 +457,7 @@ export default function WeddingInviteCardStyle() {
               </div>
 
               <p className="mt-4 text-xs text-black/50">
-                *Esto envía a WhatsApp como demo. Manuel puede conectar el backend para guardar RSVP.
+                
               </p>
             </div>
           </PlayingCard>
