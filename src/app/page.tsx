@@ -40,16 +40,16 @@ const INVITATIONS: Invitation[] = [
     image: "https://i.pinimg.com/736x/46/96/80/469680bec8a2451d909321f0b218554e.jpg",
   },
   {
-    id: "bw-04",
+    id: "anayluis",
     title: "Promesa Eterna",
     style: "B&N • Editorial",
-    image: "https://i.pinimg.com/1200x/3e/73/f0/3e73f05acd2bfc40b8b78cb19a010097.jpg",
+    image: "https://i.pinimg.com/1200x/62/0a/af/620aaf9b82dc047deccd9c39ad588fc5.jpg",
   },
   {
-    id: "soft-05",
+    id: "manuelypau",
     title: "Siempre Nosotros",
     style: "Romántico • Claro",
-    image: "https://i.pinimg.com/1200x/ba/29/90/ba2990b11237ab6ba0c5add970ea48b8.jpg",
+    image: "/manuelypaula.jpeg",
   },
   {
     id: "nature-06",

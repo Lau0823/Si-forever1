@@ -260,7 +260,7 @@ export default function Page() {
         <div className="grid gap-6 lg:grid-cols-3">
           {/* DETAILS */}
           <section className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm lg:col-span-1">
-            <h2 className="text-2xl font-black tracking-tight">The Details</h2>
+            <h2 className="text-2xl font-black tracking-tight">Los Detalles</h2>
 
             {/* ✅ DRESS CODE COMPLETO + COLORES */}
             <div className="mt-5 rounded-2xl border border-neutral-900 bg-white p-4">
