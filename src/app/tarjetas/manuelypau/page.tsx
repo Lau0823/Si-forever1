@@ -278,7 +278,7 @@ export default function Home() {
                 */}
                 <audio
                   ref={audioRef}
-                  src="/audio/Conocerte Es Amarte - Su Presencia - Jesus Freak  Video Oficial.MP3"
+                  src="/audio/manuel.MP3"
                   loop
                   preload="metadata"
                 />

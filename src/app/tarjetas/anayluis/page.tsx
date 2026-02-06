@@ -45,8 +45,8 @@ export default function Page() {
 
       // ✅ Recomendado: renombrar tu mp3 y ponerlo en /public/audio/
       songSrc: "/audio/manuel.MP3",
-      songTitle: "Conocerte Es Amarte",
-      songArtist: "Su Presencia",
+      songTitle: "Hasta viejitos",
+      songArtist: "Alejo Gonzales",
     }),
     []
   );
