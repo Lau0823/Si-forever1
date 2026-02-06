@@ -140,9 +140,8 @@ export default function HomePage() {
             <a href="#catalogo" className="hover:text-white">
               Catálogo
             </a>
-            <a href="#contacto" className="hover:text-white">
-              Contacto
-            </a>
+           <Link href="/contacto" className="hover:text-white">Contacto</Link>
+
           </nav>
 
           <a
