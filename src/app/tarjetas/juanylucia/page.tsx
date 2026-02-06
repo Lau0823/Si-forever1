@@ -18,7 +18,6 @@ function pad2(n: number) {
 }
 
 export default function Page() {
-  // ===== Config rápida (edita aquí) =====
   const coupleName = "MANUEL & PAULA";
   const cityLine = "Villavicencio · Meta · Colombia";
   const venueName = "Finca Palo & Rosa";
@@ -26,34 +25,30 @@ export default function Page() {
   const weddingDateLabel = "10 de mayo 2026";
   const ceremonyTimeLabel = "4:00 p.m.";
 
-  // ✅ Textos nuevos (los que mandaste en imágenes)
-  const gratitudeText =
-    "Gracias a nuestros padres, amigos y familiares por su amor y apoyo. Y a todos nuestros invitados, gracias por asistir y compartir este día con nosotros. Con amor, Manuel y Paula.";
+  // ✅ Usa uno de estos 2:
+  // 1) RECOMENDADO: renombra tu archivo a: public/audio/song.mp3
+  const audioSrc = "/audio/manuel.MP3";
 
-  const bibleVerseText =
-    "Mejores son dos que uno; porque tienen mejor paga de su trabajo. Porque si cayeren, el uno levantará a su compañero; pero ¡ay del solo! que cuando cayere, no habrá segundo que lo levante. También si dos durmieren juntos, se calentarán mutuamente; mas ¿cómo se calentará uno solo? Y si alguno prevaleciere contra uno, dos le resistirán; y cordón de tres dobleces no se rompe pronto.";
+  // 2) Si NO puedes renombrar, comenta el de arriba y usa este (con %20 para espacios):
+  // const audioSrc =
+  //   "/audio/Conocerte%20Es%20Amarte%20-%20Su%20Presencia%20-%20Jesus%20Freak%20%20Video%20Oficial.MP3";
 
-  const bibleVerseRef = "Eclesiastés 4:9-12 RVR1960";
-
-  // Hora Colombia
   const targetDate = useMemo(() => new Date("2026-05-10T16:00:00-05:00"), []);
+  const rsvpPhone = "57XXXXXXXXXX"; // <-- tu número
 
-  // RSVP WhatsApp destino (pon el real)
-  const rsvpPhone = "57XXXXXXXXXX";
-
-  // Maps query
   const mapsQuery = useMemo(
     () => encodeURIComponent(`${venueName}, ${venueAddress}`),
     [venueName, venueAddress]
   );
 
-  // ✅ FIX hydration: solo mostramos countdown cuando ya montó en cliente
+  // ✅ fix hydration
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
   // ===== Música =====
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
+  const [audioError, setAudioError] = useState<string | null>(null);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -62,33 +57,51 @@ export default function Page() {
     const onPlay = () => setPlaying(true);
     const onPause = () => setPlaying(false);
     const onEnded = () => setPlaying(false);
+    const onError = () => setAudioError("No se pudo cargar el audio. Revisa la ruta o el nombre.");
 
     audio.addEventListener("play", onPlay);
     audio.addEventListener("pause", onPause);
     audio.addEventListener("ended", onEnded);
+    audio.addEventListener("error", onError);
 
     return () => {
       audio.removeEventListener("play", onPlay);
       audio.removeEventListener("pause", onPause);
       audio.removeEventListener("ended", onEnded);
+      audio.removeEventListener("error", onError);
     };
   }, []);
 
   const toggleMusic = async () => {
     const audio = audioRef.current;
     if (!audio) return;
+
     try {
-      if (audio.paused) await audio.play();
-      else audio.pause();
-    } catch {}
+      setAudioError(null);
+
+      // ✅ fuerza carga antes de reproducir
+      audio.load();
+
+      // si está muteado por algo, lo quitamos
+      audio.muted = false;
+
+      if (audio.paused) {
+        await audio.play(); // el click ya habilita reproducción
+      } else {
+        audio.pause();
+      }
+    } catch {
+      setAudioError(
+        "Tu navegador bloqueó la reproducción. Verifica que el archivo exista en /public/audio y que la ruta sea correcta."
+      );
+    }
   };
 
-  // ===== Cuenta regresiva =====
+  // ===== Countdown =====
   const [countdownMs, setCountdownMs] = useState<number>(0);
 
   useEffect(() => {
     if (!mounted) return;
-
     const tick = () => setCountdownMs(clampNonNegative(targetDate.getTime() - Date.now()));
     tick();
     const id = window.setInterval(tick, 1000);
@@ -104,9 +117,9 @@ export default function Page() {
     return { days, hours, minutes, seconds, done: mounted && countdownMs === 0 };
   }, [countdownMs, mounted]);
 
-  // ===== Calendario Mayo 2026 marcado día 10 =====
+  // ===== Calendario =====
   const calYear = 2026;
-  const calMonthIndex0 = 4; // Mayo
+  const calMonthIndex0 = 4;
   const highlightedDay = 10;
 
   const monthNamesEs = [
@@ -125,8 +138,8 @@ export default function Page() {
   ];
 
   const calendarCells = useMemo(() => {
-    const firstDay = new Date(calYear, calMonthIndex0, 1).getDay(); // 0=Dom
-    const startOffset = (firstDay + 6) % 7; // Lunes=0..Domingo=6
+    const firstDay = new Date(calYear, calMonthIndex0, 1).getDay();
+    const startOffset = (firstDay + 6) % 7;
     const total = daysInMonth(calYear, calMonthIndex0);
 
     const cells: Array<{ day: number | null; isHighlight?: boolean }> = [];
@@ -147,7 +160,7 @@ export default function Page() {
 
   const onChange =
     (key: keyof typeof form) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       setForm((prev) => ({ ...prev, [key]: e.target.value }));
     };
 
@@ -167,7 +180,13 @@ export default function Page() {
     window.open(`https://wa.me/${rsvpPhone}?text=${text}`, "_blank");
   };
 
-  // ===== Contenido principal =====
+  const gratitudeText =
+    "Gracias a nuestros padres, amigos y familiares por su amor y apoyo. Y a todos nuestros invitados, gracias por asistir y compartir este día con nosotros. Con amor, Manuel y Paula.";
+
+  const bibleVerseText =
+    "Mejores son dos que uno; porque tienen mejor paga de su trabajo. Porque si cayeren, el uno levantará a su compañero; pero ¡ay del solo! que cuando cayere, no habrá segundo que lo levante. También si dos durmieren juntos, se calentarán mutuamente; mas ¿cómo se calentará uno solo? Y si alguno prevaleciere contra uno, dos le resistirán; y cordón de tres dobleces no se rompe pronto.";
+  const bibleVerseRef = "Eclesiastés 4:9-12 RVR1960";
+
   const editorialTitle = "El mejor día de nuestras vidas";
   const editorialBody =
     "Hoy compartimos una noticia que nos llena de alegría: vamos a casarnos. Queremos celebrarlo contigo, con una tarde llena de amor, música y momentos inolvidables.";
@@ -187,7 +206,6 @@ export default function Page() {
     <main className="min-h-screen bg-gradient-to-b from-neutral-50 to-neutral-100 text-neutral-900">
       <div className="mx-auto max-w-6xl px-4 py-8 md:py-10">
         <div className="overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm">
-          {/* Header */}
           <header className="border-b border-neutral-200 p-6 md:p-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <div>
@@ -204,38 +222,60 @@ export default function Page() {
               </div>
 
               {/* Música */}
-              <div className="flex items-center gap-3 rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3">
-                <button
-                  type="button"
-                  onClick={toggleMusic}
-                  className="rounded-full bg-neutral-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-neutral-800"
-                >
-                  {playing ? "Pausar" : "▶ Reproducir"}
-                </button>
-                <div className="min-w-[160px]">
-                  <p className="text-xs font-medium text-neutral-600">Nuestra canción</p>
-                  <p className="text-sm text-neutral-900">Dale play 🤍</p>
+              <div className="flex flex-col gap-2 rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3">
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={toggleMusic}
+                    className="rounded-full bg-neutral-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-neutral-800"
+                  >
+                    {playing ? "Pausar" : "▶ Reproducir"}
+                  </button>
+
+                  <div className="min-w-[160px]">
+                    <p className="text-xs font-medium text-neutral-600">Nuestra canción</p>
+                    <p className="text-sm text-neutral-900">Dale play 🤍</p>
+                  </div>
                 </div>
 
-                {/* ✅ Pon tu audio en: /public/audio/song.mp3 */}
-                <audio ref={audioRef} src="/public/audio/Conocerte Es Amarte - Su Presencia - Jesus Freak  Video Oficial.MP3" loop preload="metadata" />
+                {audioError ? (
+                  <p className="text-xs text-red-600">{audioError}</p>
+                ) : (
+                  <p className="text-xs text-neutral-500">
+                    disfruta
+                  </p>
+                )}
+
+                <audio
+                  ref={audioRef}
+                  src={audioSrc}
+                  loop
+                  preload="auto"
+                  playsInline
+                  crossOrigin="anonymous"
+                />
               </div>
             </div>
           </header>
 
-          {/* Hero */}
           <section className="p-6 md:p-8">
             <div className="grid gap-6 md:grid-cols-[1.2fr_.8fr] md:items-start">
               <div className="space-y-4">
-                <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-200">
-                  {/* ✅ Foto: /public/couple.jpg */}
-                  <Image
-                    src="https://i.pinimg.com/1200x/ed/a9/7a/eda97ad8ead231357b1216e32be0ecce.jpg"
-                    alt="Foto de la pareja"
-                    fill
-                    className="object-cover"
-                    priority
-                  />
+                {/* ✅ FOTO sin cortar caras */}
+                <div className="relative overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 p-3">
+                  <div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-neutral-100">
+                    {/* Foto: /public/couple.jpg */}
+                    <Image
+                      src="/manuel.jpeg"
+                      alt="Foto de la pareja"
+                      fill
+                      className="object-cover object-[50%_20%]"
+                      priority
+                    />
+                  </div>
+                  <p className="mt-2 text-xs text-neutral-500">
+                    (La foto ahora no se recorta: se ajusta completa.)
+                  </p>
                 </div>
 
                 <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-5">
@@ -244,9 +284,7 @@ export default function Page() {
                 </div>
               </div>
 
-              {/* Sidebar */}
               <aside className="space-y-4">
-                {/* Cuenta regresiva */}
                 <div className="rounded-2xl border border-neutral-200 bg-white p-5">
                   <div className="flex items-center justify-between">
                     <p className="text-xs font-semibold uppercase tracking-widest text-neutral-600">
@@ -281,7 +319,6 @@ export default function Page() {
                   </p>
                 </div>
 
-                {/* Lugar */}
                 <div className="rounded-2xl border border-neutral-200 bg-white p-5">
                   <p className="text-xs font-semibold uppercase tracking-widest text-neutral-600">
                     Lugar
@@ -299,7 +336,6 @@ export default function Page() {
                   </a>
                 </div>
 
-                {/* ✅ NUEVO: Texto de agradecimientos (como tu referencia) */}
                 <div className="rounded-2xl border border-neutral-200 bg-white p-5">
                   <p className="text-xs font-semibold uppercase tracking-widest text-neutral-600">
                     Nota
@@ -310,9 +346,7 @@ export default function Page() {
             </div>
           </section>
 
-          {/* Grid: calendario + itinerario + dresscode + RSVP */}
           <section className="grid gap-4 border-t border-neutral-200 p-6 md:grid-cols-2 md:p-8">
-            {/* Calendario */}
             <div className="rounded-2xl border border-neutral-200 bg-white p-5">
               <div className="flex items-start justify-between">
                 <div>
@@ -356,7 +390,6 @@ export default function Page() {
               </div>
             </div>
 
-            {/* Itinerario */}
             <div className="rounded-2xl border border-neutral-200 bg-white p-5">
               <p className="text-xs font-semibold uppercase tracking-widest text-neutral-600">
                 Itinerario
@@ -375,7 +408,6 @@ export default function Page() {
               </div>
             </div>
 
-            {/* Dress code */}
             <div className="rounded-2xl border border-neutral-200 bg-white p-5">
               <p className="text-xs font-semibold uppercase tracking-widest text-neutral-600">
                 Código de vestimenta
@@ -386,31 +418,8 @@ export default function Page() {
                 <br />
                 Hombres: Traje formal · Mujeres: Vestido de cóctel
               </p>
-
-              <div className="mt-4 grid grid-cols-5 gap-2">
-                {[
-                  { hex: "#E9D8B4" },
-                  { hex: "#DCC7A1" },
-                  { hex: "#E7B7B2" },
-                  { hex: "#A7B8A8" },
-                  { hex: "#F4F1EA" },
-                ].map((c) => (
-                  <div key={c.hex} className="text-center">
-                    <div
-                      className="h-8 w-full rounded-lg border border-neutral-200"
-                      style={{ backgroundColor: c.hex }}
-                    />
-                    <div className="mt-1 text-[10px] text-neutral-500">{c.hex}</div>
-                  </div>
-                ))}
-              </div>
-
-              <p className="mt-3 text-xs text-neutral-500">
-                Evitar: blanco total (reservado para la novia), neones y estampados fuertes.
-              </p>
             </div>
 
-            {/* RSVP */}
             <div className="rounded-2xl border border-neutral-200 bg-white p-5">
               <p className="text-xs font-semibold uppercase tracking-widest text-neutral-600">
                 RSVP
@@ -505,24 +514,18 @@ export default function Page() {
                 >
                   Enviar confirmación por WhatsApp
                 </button>
-
-                <p className="text-xs text-neutral-500">
-                  Cambia el número destino en <span className="font-semibold">rsvpPhone</span>.
-                </p>
               </form>
             </div>
 
-            {/* ✅ NUEVO: Versículo bíblico full width */}
             <div className="md:col-span-2 rounded-2xl border border-neutral-200 bg-white p-5">
               <p className="text-xs font-semibold uppercase tracking-widest text-neutral-600">
-                
+                Lectura
               </p>
               <p className="mt-2 text-sm leading-6 text-neutral-700">{bibleVerseText}</p>
               <p className="mt-3 text-sm font-semibold text-neutral-900">{bibleVerseRef}</p>
             </div>
           </section>
 
-          {/* Footer */}
           <footer className="border-t border-neutral-200 p-6 text-center text-xs text-neutral-500">
             Con amor, {coupleName} · {weddingDateLabel} · {cityLine}
           </footer>
