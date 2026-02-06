@@ -34,7 +34,7 @@ export default function Page() {
   //   "/audio/Conocerte%20Es%20Amarte%20-%20Su%20Presencia%20-%20Jesus%20Freak%20%20Video%20Oficial.MP3";
 
   const targetDate = useMemo(() => new Date("2026-05-10T16:00:00-05:00"), []);
-  const rsvpPhone = "57XXXXXXXXXX"; // <-- tu número
+  const rsvpPhone = "573116533163"; // <-- tu número
 
   const mapsQuery = useMemo(
     () => encodeURIComponent(`${venueName}, ${venueAddress}`),
@@ -242,7 +242,7 @@ export default function Page() {
                   <p className="text-xs text-red-600">{audioError}</p>
                 ) : (
                   <p className="text-xs text-neutral-500">
-                    disfruta
+                    🤍
                   </p>
                 )}
 
@@ -274,7 +274,7 @@ export default function Page() {
                     />
                   </div>
                   <p className="mt-2 text-xs text-neutral-500">
-                    (La foto ahora no se recorta: se ajusta completa.)
+                   
                   </p>
                 </div>
 
