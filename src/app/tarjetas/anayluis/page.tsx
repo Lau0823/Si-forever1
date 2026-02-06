@@ -44,7 +44,7 @@ export default function Page() {
       rsvpDeadline: "25 de mayo 2027",
 
       // ✅ Recomendado: renombrar tu mp3 y ponerlo en /public/audio/
-      songSrc: "/audio/Conocerte Es Amarte - Su Presencia - Jesus Freak  Video Oficial.MP3",
+      songSrc: "/audio/manuel.MP3",
       songTitle: "Conocerte Es Amarte",
       songArtist: "Su Presencia",
     }),

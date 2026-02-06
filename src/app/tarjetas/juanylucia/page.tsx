@@ -266,7 +266,7 @@ export default function Page() {
                   <div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-neutral-100">
                     {/* Foto: /public/couple.jpg */}
                     <Image
-                      src="/manuel.jpeg"
+                      src="https://i.pinimg.com/1200x/28/80/b0/2880b0579a6b1f3280266cb423e98f05.jpg"
                       alt="Foto de la pareja"
                       fill
                       className="object-cover object-[50%_20%]"

@@ -49,13 +49,13 @@ const INVITATIONS: Invitation[] = [
     id: "manuelypau",
     title: "Siempre Nosotros",
     style: "Romántico • Claro",
-    image: "/manuelypaula.jpeg",
+    image: "https://i.pinimg.com/736x/8c/49/af/8c49afce47e2c3e68ebae5020284c2c5.jpg",
   },
   {
     id: "juanylucia",
     title: "Raíces del Amor",
     style: "Natural • Editorial",
-    image: "https://i.pinimg.com/1200x/38/c2/29/38c2293e0a5f704b8bf92866c1c655d5.jpg",
+    image: "https://i.pinimg.com/1200x/28/80/b0/2880b0579a6b1f3280266cb423e98f05.jpg",
   },
 ];
 
