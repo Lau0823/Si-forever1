@@ -289,7 +289,7 @@ export default function Home() {
             <div className="relative">
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-white/20 bg-white/10 shadow-lg">
                 <Image
-                  src="/lau.jpeg"
+                  src="https://i.pinimg.com/736x/c5/5b/97/c55b979c1499e599aeb22282556a1a1f.jpg"
                   alt="Foto de la pareja"
                   fill
                   className="object-cover"
