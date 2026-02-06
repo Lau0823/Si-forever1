@@ -52,7 +52,7 @@ const INVITATIONS: Invitation[] = [
     image: "/manuelypaula.jpeg",
   },
   {
-    id: "nature-06",
+    id: "juanylucia",
     title: "Raíces del Amor",
     style: "Natural • Editorial",
     image: "https://i.pinimg.com/1200x/38/c2/29/38c2293e0a5f704b8bf92866c1c655d5.jpg",
