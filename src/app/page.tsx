@@ -14,7 +14,7 @@ type Invitation = {
   id: string;
   title: string;
   style: string;
-  image: string; // ✅ pega aquí links de Pinterest (si son públicos)
+  image: string;
   tag?: string;
 };
 
@@ -24,38 +24,44 @@ const INVITATIONS: Invitation[] = [
     title: "Eterna Complicidad",
     style: "Editorial • Fotografía",
     tag: "Más vendido",
-    image: "https://i.pinimg.com/736x/3b/0b/3e/3b0b3e875c7d88bd74e4c31036f86b78.jpg",
+    image:
+      "https://i.pinimg.com/736x/3b/0b/3e/3b0b3e875c7d88bd74e4c31036f86b78.jpg",
   },
   {
     id: "camiloyjohana",
     title: "Votos en Blanco",
     style: "Minimal • Clean",
     tag: "Nuevo",
-    image: "https://i.pinimg.com/736x/23/99/ec/2399ec56b1d6da2e55ee2426bd61897d.jpg",
+    image:
+      "https://i.pinimg.com/736x/23/99/ec/2399ec56b1d6da2e55ee2426bd61897d.jpg",
   },
   {
     id: "cartadeamor",
     title: "Carta de Amor",
     style: "Papel • Moderno",
-    image: "https://i.pinimg.com/736x/46/96/80/469680bec8a2451d909321f0b218554e.jpg",
+    image:
+      "https://i.pinimg.com/736x/46/96/80/469680bec8a2451d909321f0b218554e.jpg",
   },
   {
     id: "anayluis",
     title: "Promesa Eterna",
     style: "B&N • Editorial",
-    image: "https://i.pinimg.com/1200x/62/0a/af/620aaf9b82dc047deccd9c39ad588fc5.jpg",
+    image:
+      "https://i.pinimg.com/1200x/62/0a/af/620aaf9b82dc047deccd9c39ad588fc5.jpg",
   },
   {
     id: "manuelypau",
     title: "Siempre Nosotros",
     style: "Romántico • Claro",
-    image: "https://i.pinimg.com/736x/8c/49/af/8c49afce47e2c3e68ebae5020284c2c5.jpg",
+    image:
+      "https://i.pinimg.com/736x/8c/49/af/8c49afce47e2c3e68ebae5020284c2c5.jpg",
   },
   {
     id: "juanylucia",
     title: "Raíces del Amor",
     style: "Natural • Editorial",
-    image: "https://i.pinimg.com/1200x/28/80/b0/2880b0579a6b1f3280266cb423e98f05.jpg",
+    image:
+      "https://i.pinimg.com/1200x/28/80/b0/2880b0579a6b1f3280266cb423e98f05.jpg",
   },
 ];
 
@@ -83,6 +89,167 @@ function GlassButton({
   );
 }
 
+/* ===== Estética oscura / glass (igual a tu page de planes) ===== */
+
+function Bullet() {
+  return (
+    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/70 shrink-0" />
+  );
+}
+
+function PlanCardDark({
+  title,
+  subtitle,
+  price,
+  oldPrice,
+  features,
+  highlight,
+  href,
+}: {
+  title: string;
+  subtitle: string;
+  price: string;
+  oldPrice?: string;
+  features: string[];
+  highlight?: boolean;
+  href: string;
+}) {
+  return (
+    <div className="relative group z-20">
+      <div className="pointer-events-none absolute -inset-1 rounded-[32px] bg-white/10 blur-2xl opacity-30 transition group-hover:opacity-60" />
+
+      <div
+        className={[
+          "relative rounded-[32px] border border-white/12 bg-white/10 p-8 backdrop-blur-2xl",
+          "shadow-[0_30px_90px_-60px_rgba(0,0,0,0.9)]",
+          "transition duration-300 group-hover:-translate-y-2 group-hover:bg-white/14",
+          highlight ? "ring-1 ring-white/25" : "",
+        ].join(" ")}
+      >
+        {highlight && (
+          <div className="absolute -top-4 left-8 rounded-full bg-white px-4 py-1 text-xs font-medium text-black">
+            Recomendado
+          </div>
+        )}
+
+        <h3 className="text-2xl font-semibold tracking-tight">{title}</h3>
+        <p className="mt-2 text-sm text-white/75">{subtitle}</p>
+
+        <div className="mt-6">
+          {oldPrice ? (
+            <p className="text-sm text-white/50 line-through">Antes {oldPrice}</p>
+          ) : (
+            <p className="text-sm text-white/50">&nbsp;</p>
+          )}
+
+          <p className="mt-1 text-3xl font-semibold">{price}</p>
+
+          <span className="inline-block mt-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/80">
+            HOY
+          </span>
+        </div>
+
+        <div className="mt-8 h-px w-full bg-white/12" />
+
+        <ul className="mt-6 space-y-3 text-sm text-white/85">
+          {features.map((item, idx) => (
+            <li key={`${title}-${idx}`} className="flex items-start gap-3">
+              <Bullet />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+
+        <Link
+          href={href}
+          className={[
+            "mt-10 block w-full rounded-full py-3 text-center text-sm font-medium transition",
+            highlight
+              ? "bg-white text-black hover:bg-white/90"
+              : "border border-white/20 bg-white/10 hover:bg-white/18",
+          ].join(" ")}
+        >
+          Ver plan
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+function PaymentCardDark({
+  title,
+  subtitle,
+  badge,
+}: {
+  title: string;
+  subtitle: string;
+  badge?: string;
+}) {
+  return (
+    <div className="relative group z-20">
+      <div className="pointer-events-none absolute -inset-1 rounded-[28px] bg-white/10 blur-2xl opacity-25 transition group-hover:opacity-55" />
+      <div className="relative rounded-[28px] border border-white/12 bg-white/10 p-7 backdrop-blur-2xl shadow-[0_30px_90px_-60px_rgba(0,0,0,0.9)] transition duration-300 group-hover:-translate-y-1 group-hover:bg-white/14">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h4 className="text-xl font-semibold">{title}</h4>
+            <p className="mt-2 text-sm text-white/75">{subtitle}</p>
+          </div>
+          {badge && (
+            <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/80">
+              {badge}
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DarkBgSection({
+  id,
+  title,
+  subtitle,
+  bgImage,
+  children,
+}: {
+  id: string;
+  title: string;
+  subtitle: string;
+  bgImage: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section id={id} className="relative overflow-hidden text-white">
+      {/* BG image */}
+      <div
+        className="absolute inset-0 z-0 bg-cover bg-center"
+        style={{ backgroundImage: `url(${bgImage})` }}
+      />
+      {/* Overlay */}
+      <div className="absolute inset-0 z-[1] bg-black/55" />
+      {/* Champagne tint */}
+      <div className="absolute inset-0 z-[2] bg-gradient-to-b from-[#f6e7d2]/10 via-transparent to-[#f6e7d2]/8" />
+      {/* Warm glow */}
+      <div className="pointer-events-none absolute inset-0 z-[3]">
+        <div className="absolute -top-44 left-1/2 h-[560px] w-[560px] -translate-x-1/2 rounded-full bg-[#f6e7d2]/10 blur-3xl" />
+        <div className="absolute -bottom-44 right-[-160px] h-[560px] w-[560px] rounded-full bg-[#f6e7d2]/10 blur-3xl" />
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-7xl px-6 py-20">
+        <div className="mb-12 text-center">
+          <span className="text-xs tracking-widest text-white/70">SI, FOREVER</span>
+          <h2 className={`${headingFont.className} mt-5 text-3xl sm:text-4xl`}>
+            {title}
+          </h2>
+          <p className="mt-4 text-sm text-white/75">{subtitle}</p>
+        </div>
+
+        {children}
+      </div>
+    </section>
+  );
+}
+
 export default function HomePage() {
   const [year, setYear] = useState(2026);
   useEffect(() => setYear(new Date().getFullYear()), []);
@@ -102,7 +269,18 @@ export default function HomePage() {
   const whatsappLink =
     "https://wa.me/573102345742?text=Hola%20%F0%9F%92%97%20Quiero%20cotizar%20una%20invitaci%C3%B3n%20digital%20con%20S%C3%AD%2C%20Forever";
 
-  // ✅ Carrusel de backgrounds (pon 3–5 imágenes)
+  const NAV_ITEMS = useMemo(
+    () => [
+      { label: "Catálogo", href: "#catalogo" },
+      { label: "Planes", href: "#planes" },
+      { label: "Medios de pago", href: "#medios-de-pago" },
+      { label: "15 años", href: "/15-anos" },
+      { label: "Cumpleaños", href: "/cumpleanos" },
+      { label: "Contacto", href: "/contacto" },
+    ],
+    []
+  );
+
   const HERO_BGS = useMemo(
     () => [
       "https://i.pinimg.com/736x/72/74/8e/72748ebad522415a3fa42a7b31cf1122.jpg",
@@ -114,92 +292,198 @@ export default function HomePage() {
 
   const [bgIndex, setBgIndex] = useState(0);
   useEffect(() => {
-    const id = setInterval(
-      () => setBgIndex((i) => (i + 1) % HERO_BGS.length),
-      6500
-    );
+    const id = setInterval(() => setBgIndex((i) => (i + 1) % HERO_BGS.length), 6500);
     return () => clearInterval(id);
   }, [HERO_BGS.length]);
 
   const TINT =
     "linear-gradient(120deg, rgba(255,173,204,0.22), rgba(195,185,255,0.12), rgba(0,0,0,0.06))";
 
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
+
+  const handleNavClick = (href: string) => {
+    setMenuOpen(false);
+    if (href.startsWith("#")) {
+      const el = document.querySelector(href);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   return (
     <main className={`${bodyFont.className} text-white`}>
       {/* NAV */}
       <header className="fixed left-0 right-0 top-0 z-40">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-          <Link
-            href="/"
-            className={`${headingFont.className} text-sm font-semibold tracking-tight`}
-          >
+          <Link href="/" className={`${headingFont.className} text-sm font-semibold tracking-tight`}>
             {brand}
           </Link>
 
+          {/* Desktop nav */}
           <nav className="hidden items-center gap-8 text-sm text-white/80 md:flex">
-            <a href="#catalogo" className="hover:text-white">
-              Catálogo
-            </a>
-           <Link href="/contacto" className="hover:text-white">Contacto</Link>
-
+            {NAV_ITEMS.map((item) =>
+              item.href.startsWith("#") ? (
+                <button
+                  key={item.label}
+                  onClick={() => handleNavClick(item.href)}
+                  className="hover:text-white transition"
+                >
+                  {item.label}
+                </button>
+              ) : (
+                <Link key={item.label} href={item.href} className="hover:text-white transition">
+                  {item.label}
+                </Link>
+              )
+            )}
           </nav>
 
-          <a
-            href="#catalogo"
-            className="rounded-full bg-white/14 px-5 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-white/20 backdrop-blur hover:bg-white/18"
-          >
-            Ver diseños
-          </a>
+          <div className="flex items-center gap-3">
+            <a
+              href="#catalogo"
+              className="hidden rounded-full bg-white/14 px-5 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-white/20 backdrop-blur hover:bg-white/18 md:inline-flex"
+            >
+              Ver diseños
+            </a>
+
+            {/* Hamburger */}
+            <button
+              type="button"
+              aria-label="Abrir menú"
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen(true)}
+              className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/10 p-2 backdrop-blur hover:bg-white/15 transition md:hidden"
+            >
+              <div className="flex h-5 w-5 flex-col items-center justify-center gap-1.5">
+                <span className="h-[2px] w-5 rounded-full bg-white/90" />
+                <span className="h-[2px] w-5 rounded-full bg-white/70" />
+                <span className="h-[2px] w-5 rounded-full bg-white/90" />
+              </div>
+            </button>
+          </div>
         </div>
+
+        {/* Mobile drawer */}
+        {menuOpen && (
+          <div className="fixed inset-0 z-50 md:hidden">
+            <button
+              aria-label="Cerrar menú"
+              onClick={() => setMenuOpen(false)}
+              className="absolute inset-0 bg-black/55"
+            />
+            <div className="absolute right-0 top-0 h-full w-[86%] max-w-sm border-l border-white/10 bg-black/35 backdrop-blur-2xl">
+              <div className="flex items-center justify-between px-6 py-5">
+                <div className={`${headingFont.className} text-sm font-semibold`}>{brand}</div>
+                <button
+                  aria-label="Cerrar menú"
+                  onClick={() => setMenuOpen(false)}
+                  className="rounded-full border border-white/15 bg-white/10 p-2 hover:bg-white/15 transition"
+                >
+                  <div className="relative h-5 w-5">
+                    <span className="absolute left-1/2 top-1/2 h-[2px] w-5 -translate-x-1/2 -translate-y-1/2 rotate-45 rounded-full bg-white/90" />
+                    <span className="absolute left-1/2 top-1/2 h-[2px] w-5 -translate-x-1/2 -translate-y-1/2 -rotate-45 rounded-full bg-white/90" />
+                  </div>
+                </button>
+              </div>
+
+              <div className="px-6 pb-6">
+                <div className="h-px w-full bg-white/10" />
+                <nav className="mt-6 flex flex-col gap-1">
+                  {NAV_ITEMS.map((item) =>
+                    item.href.startsWith("#") ? (
+                      <button
+                        key={item.label}
+                        onClick={() => handleNavClick(item.href)}
+                        className="flex w-full items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-sm text-white/85 hover:bg-white/10 transition"
+                      >
+                        <span>{item.label}</span>
+                        <span className="text-white/50">→</span>
+                      </button>
+                    ) : (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        onClick={() => setMenuOpen(false)}
+                        className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/85 hover:bg-white/10 transition"
+                      >
+                        <span>{item.label}</span>
+                        <span className="text-white/50">→</span>
+                      </Link>
+                    )
+                  )}
+                </nav>
+
+                <div className="mt-6 grid gap-3">
+                  <a
+                    href={whatsappLink}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => setMenuOpen(false)}
+                    className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-black hover:bg-white/90 transition"
+                  >
+                    Cotizar ahora
+                  </a>
+                  <button
+                    onClick={() => handleNavClick("#catalogo")}
+                    className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur hover:bg-white/15 transition"
+                  >
+                    Ver catálogo
+                  </button>
+                </div>
+
+                <p className="mt-6 text-xs text-white/55">
+                  Menú · {year} · {brand}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
-      {/* HERO (SIN CARD) */}
+      {/* HERO */}
       <section className="relative min-h-[100svh] overflow-hidden">
-        {/* background carousel */}
         <div className="absolute inset-0">
           {HERO_BGS.map((src, i) => (
             <div
               key={src}
               className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000"
-              style={{
-                backgroundImage: `url(${src})`,
-                opacity: i === bgIndex ? 1 : 0,
-              }}
+              style={{ backgroundImage: `url(${src})`, opacity: i === bgIndex ? 1 : 0 }}
             />
           ))}
         </div>
 
-        {/* tint */}
         <div className="absolute inset-0" style={{ backgroundImage: TINT }} />
-        {/* vignette */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/18 via-black/5 to-black/55" />
 
-        {/* big word */}
         <div className="pointer-events-none absolute inset-0 flex items-start justify-center pt-20 md:pt-24">
           <p
             className={`${headingFont.className} select-none text-center leading-none tracking-tight`}
-            style={{
-              fontSize: "clamp(4rem, 14vw, 11rem)",
-              color: "rgba(255,255,255,0.14)",
-            }}
+            style={{ fontSize: "clamp(4rem, 14vw, 11rem)", color: "rgba(255,255,255,0.14)" }}
           >
             {hero.bigWord}
           </p>
         </div>
 
-        {/* content (centrado y limpio) */}
         <div className="relative mx-auto flex max-w-7xl flex-col items-center px-6 pb-20 pt-28 text-center md:pt-32">
-          <p className="text-xs tracking-[0.35em] text-white/80">
-            {hero.kicker}
-          </p>
-
+          <p className="text-xs tracking-[0.35em] text-white/80">{hero.kicker}</p>
           <h1 className={`${headingFont.className} mt-4 text-4xl leading-tight md:text-6xl`}>
             {hero.title}
           </h1>
-
-          <p className="mt-5 max-w-2xl text-sm text-white/85 md:text-base">
-            {hero.subtitle}
-          </p>
+          <p className="mt-5 max-w-2xl text-sm text-white/85 md:text-base">{hero.subtitle}</p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <a
@@ -213,25 +497,8 @@ export default function HomePage() {
 
             <GlassButton href="#catalogo">{hero.ctaSecondary}</GlassButton>
           </div>
-
-          {/* dots */}
-          <div className="mt-7 flex items-center justify-center gap-2">
-            {HERO_BGS.map((_, i) => (
-              <button
-                key={i}
-                aria-label={`Ir al fondo ${i + 1}`}
-                onClick={() => setBgIndex(i)}
-                className={[
-                  "h-2.5 w-2.5 rounded-full ring-1 ring-white/35 transition",
-                  i === bgIndex ? "bg-white" : "bg-white/25 hover:bg-white/40",
-                ].join(" ")}
-              />
-            ))}
-            <span className="ml-2 text-xs text-white/60">Fondo</span>
-          </div>
         </div>
 
-        {/* scroll hint */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-xs text-white/75">
           <a
             href="#catalogo"
@@ -242,26 +509,15 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* CATÁLOGO */}
-           {/* CATÁLOGO */}
-      <section
-        id="catalogo"
-        className="relative overflow-hidden bg-white"
-      >
+      {/* 1) CATÁLOGO PRIMERO */}
+      <section id="catalogo" className="relative overflow-hidden bg-white">
         <div className="relative mx-auto max-w-7xl px-6 py-20">
           <div className="mb-12 text-center">
-   ,
-            <p className=" text-2xl uppercase  text-black font-mono  font-semibold">
-              Catálogo
-            </p>
-            <h2
-              className={`${headingFont.className} mt-4 text-3xl sm:text-4xl`}
-            >
+            <p className="text-2xl uppercase text-black font-mono font-semibold">Catálogo</p>
+            <h2 className={`${headingFont.className} mt-4 text-3xl sm:text-4xl text-black`}>
               Elige tu estilo
             </h2>
-            <p className="mt-4 text-black">
-              Diseños listos para personalizar con tus fotos y datos.
-            </p>
+            <p className="mt-4 text-black">Diseños listos para personalizar con tus fotos y datos.</p>
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -319,6 +575,104 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* 2) PLANES (oscuro + bg + glass) */}
+      <DarkBgSection
+        id="planes"
+        title="Elige tu plan ideal"
+        subtitle="Planes premium con diseño editorial, animaciones y confirmación de asistencia."
+        bgImage="https://i.pinimg.com/736x/4e/1b/ac/4e1bac6e5654a5f192c97d1a9049cec8.jpg"
+      >
+        <div className="grid gap-10 md:grid-cols-3">
+          <PlanCardDark
+            title="Plan Premium"
+            subtitle="La experiencia más completa y personalizada"
+            oldPrice="$499.900"
+            price="$349.900"
+            highlight
+            href="/planes"
+            features={[
+              "Portada video carrusel",
+              "Cuenta regresiva",
+              "Canción de los novios",
+              "Lista de canciones",
+              "Animaciones",
+              "Nombre de invitados (personalizado)",
+              "Mensajes y frases",
+              "Itinerario",
+              "Ubicación (mapa)",
+              "Dress Code",
+              "Lista de regalos",
+              "Compartir fotos",
+              "Confirmación con base de datos + dashboard",
+            ]}
+          />
+
+          <PlanCardDark
+            title="Plan Oro"
+            subtitle="Equilibrio perfecto entre diseño y precio"
+            oldPrice="$360.000"
+            price="$249.900"
+            href="/planes"
+            features={[
+              "Portada",
+              "Cuenta regresiva",
+              "Animaciones",
+              "Canción de los novios",
+              "Lista de canciones",
+              "Mensajes y frases",
+              "Itinerario",
+              "Ubicación (evento)",
+              "Compartir fotos",
+              "Dress Code",
+              "Lista de regalos",
+              "Confirmación (WhatsApp)",
+            ]}
+          />
+
+          <PlanCardDark
+            title="Plan Básico"
+            subtitle="Lo esencial para una invitación elegante"
+            price="$129.900"
+            href="/planes"
+            features={[
+              "Portada carrusel",
+              "Canción de los novios",
+              "Mensajes y frases",
+              "Cuenta regresiva",
+              "Ubicación (evento)",
+              "Galería 4 fotos",
+              "Dress Code",
+              "Lista de regalos",
+              "Confirmación (WhatsApp)",
+            ]}
+          />
+        </div>
+
+        <div className="mt-10 flex justify-center">
+          <a
+            href={whatsappLink}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-full bg-white px-7 py-3 text-sm font-semibold text-black hover:bg-white/90 transition"
+          >
+            Cotizar por WhatsApp
+          </a>
+        </div>
+      </DarkBgSection>
+
+      {/* 3) MEDIOS DE PAGO (oscuro + bg + glass) */}
+      <DarkBgSection
+        id="medios-de-pago"
+        title="Medios de pago"
+        subtitle="Pagos rápidos y seguros para separar tu invitación."
+        bgImage="https://i.pinimg.com/736x/96/94/22/96942268a67d8941e267e7a46998d5d2.jpg"
+      >
+        <div className="grid gap-6 md:grid-cols-3">
+          <PaymentCardDark title="Nequi" subtitle="Transferencia inmediata" badge="Popular" />
+          <PaymentCardDark title="Daviplata" subtitle="Pago rápido desde tu celular" badge="Fácil" />
+          <PaymentCardDark title="PSE" subtitle="Pago seguro desde tu banco" badge="Seguro" />
+        </div>
+      </DarkBgSection>
 
       {/* FOOTER */}
       <footer id="contacto" className="bg-white text-center text-sm text-black/50">
