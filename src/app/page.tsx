@@ -89,93 +89,7 @@ function GlassButton({
   );
 }
 
-/* ===== Estética oscura / glass (igual a tu page de planes) ===== */
-
-function Bullet() {
-  return (
-    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/70 shrink-0" />
-  );
-}
-
-function PlanCardDark({
-  title,
-  subtitle,
-  price,
-  oldPrice,
-  features,
-  highlight,
-  href,
-}: {
-  title: string;
-  subtitle: string;
-  price: string;
-  oldPrice?: string;
-  features: string[];
-  highlight?: boolean;
-  href: string;
-}) {
-  return (
-    <div className="relative group z-20">
-      <div className="pointer-events-none absolute -inset-1 rounded-[32px] bg-white/10 blur-2xl opacity-30 transition group-hover:opacity-60" />
-
-      <div
-        className={[
-          "relative rounded-[32px] border border-white/12 bg-white/10 p-8 backdrop-blur-2xl",
-          "shadow-[0_30px_90px_-60px_rgba(0,0,0,0.9)]",
-          "transition duration-300 group-hover:-translate-y-2 group-hover:bg-white/14",
-          highlight ? "ring-1 ring-white/25" : "",
-        ].join(" ")}
-      >
-        {highlight && (
-          <div className="absolute -top-4 left-8 rounded-full bg-white px-4 py-1 text-xs font-medium text-black">
-            Recomendado
-          </div>
-        )}
-
-        <h3 className="text-2xl font-semibold tracking-tight">{title}</h3>
-        <p className="mt-2 text-sm text-white/75">{subtitle}</p>
-
-        <div className="mt-6">
-          {oldPrice ? (
-            <p className="text-sm text-white/50 line-through">Antes {oldPrice}</p>
-          ) : (
-            <p className="text-sm text-white/50">&nbsp;</p>
-          )}
-
-          <p className="mt-1 text-3xl font-semibold">{price}</p>
-
-          <span className="inline-block mt-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/80">
-            HOY
-          </span>
-        </div>
-
-        <div className="mt-8 h-px w-full bg-white/12" />
-
-        <ul className="mt-6 space-y-3 text-sm text-white/85">
-          {features.map((item, idx) => (
-            <li key={`${title}-${idx}`} className="flex items-start gap-3">
-              <Bullet />
-              <span>{item}</span>
-            </li>
-          ))}
-        </ul>
-
-        <Link
-          href={href}
-          className={[
-            "mt-10 block w-full rounded-full py-3 text-center text-sm font-medium transition",
-            highlight
-              ? "bg-white text-black hover:bg-white/90"
-              : "border border-white/20 bg-white/10 hover:bg-white/18",
-          ].join(" ")}
-        >
-          Ver plan
-        </Link>
-      </div>
-    </div>
-  );
-}
-
+/* ===== Medios de pago dark/glass (misma estética) ===== */
 function PaymentCardDark({
   title,
   subtitle,
@@ -220,16 +134,12 @@ function DarkBgSection({
 }) {
   return (
     <section id={id} className="relative overflow-hidden text-white">
-      {/* BG image */}
       <div
         className="absolute inset-0 z-0 bg-cover bg-center"
         style={{ backgroundImage: `url(${bgImage})` }}
       />
-      {/* Overlay */}
       <div className="absolute inset-0 z-[1] bg-black/55" />
-      {/* Champagne tint */}
       <div className="absolute inset-0 z-[2] bg-gradient-to-b from-[#f6e7d2]/10 via-transparent to-[#f6e7d2]/8" />
-      {/* Warm glow */}
       <div className="pointer-events-none absolute inset-0 z-[3]">
         <div className="absolute -top-44 left-1/2 h-[560px] w-[560px] -translate-x-1/2 rounded-full bg-[#f6e7d2]/10 blur-3xl" />
         <div className="absolute -bottom-44 right-[-160px] h-[560px] w-[560px] rounded-full bg-[#f6e7d2]/10 blur-3xl" />
@@ -269,11 +179,13 @@ export default function HomePage() {
   const whatsappLink =
     "https://wa.me/573102345742?text=Hola%20%F0%9F%92%97%20Quiero%20cotizar%20una%20invitaci%C3%B3n%20digital%20con%20S%C3%AD%2C%20Forever";
 
+  // ✅ Menú actualizado (Planes vuelve a ser ruta y agregamos Tarjetas de presentación)
   const NAV_ITEMS = useMemo(
     () => [
       { label: "Catálogo", href: "#catalogo" },
-      { label: "Planes", href: "#planes" },
+      { label: "Planes", href: "/planes" },
       { label: "Medios de pago", href: "#medios-de-pago" },
+      { label: "Tarjetas de presentación", href: "/tarjetas-presentacion" },
       { label: "15 años", href: "/15-anos" },
       { label: "Cumpleaños", href: "/cumpleanos" },
       { label: "Contacto", href: "/contacto" },
@@ -329,7 +241,10 @@ export default function HomePage() {
       {/* NAV */}
       <header className="fixed left-0 right-0 top-0 z-40">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-          <Link href="/" className={`${headingFont.className} text-sm font-semibold tracking-tight`}>
+          <Link
+            href="/"
+            className={`${headingFont.className} text-sm font-semibold tracking-tight`}
+          >
             {brand}
           </Link>
 
@@ -387,7 +302,9 @@ export default function HomePage() {
             />
             <div className="absolute right-0 top-0 h-full w-[86%] max-w-sm border-l border-white/10 bg-black/35 backdrop-blur-2xl">
               <div className="flex items-center justify-between px-6 py-5">
-                <div className={`${headingFont.className} text-sm font-semibold`}>{brand}</div>
+                <div className={`${headingFont.className} text-sm font-semibold`}>
+                  {brand}
+                </div>
                 <button
                   aria-label="Cerrar menú"
                   onClick={() => setMenuOpen(false)}
@@ -402,6 +319,7 @@ export default function HomePage() {
 
               <div className="px-6 pb-6">
                 <div className="h-px w-full bg-white/10" />
+
                 <nav className="mt-6 flex flex-col gap-1">
                   {NAV_ITEMS.map((item) =>
                     item.href.startsWith("#") ? (
@@ -437,6 +355,7 @@ export default function HomePage() {
                   >
                     Cotizar ahora
                   </a>
+
                   <button
                     onClick={() => handleNavClick("#catalogo")}
                     className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur hover:bg-white/15 transition"
@@ -474,7 +393,7 @@ export default function HomePage() {
             className={`${headingFont.className} select-none text-center leading-none tracking-tight`}
             style={{ fontSize: "clamp(4rem, 14vw, 11rem)", color: "rgba(255,255,255,0.14)" }}
           >
-            {hero.bigWord}
+            FOREVER
           </p>
         </div>
 
@@ -494,7 +413,6 @@ export default function HomePage() {
             >
               {hero.ctaPrimary}
             </a>
-
             <GlassButton href="#catalogo">{hero.ctaSecondary}</GlassButton>
           </div>
         </div>
@@ -509,15 +427,19 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 1) CATÁLOGO PRIMERO */}
+      {/* CATÁLOGO */}
       <section id="catalogo" className="relative overflow-hidden bg-white">
         <div className="relative mx-auto max-w-7xl px-6 py-20">
           <div className="mb-12 text-center">
-            <p className="text-2xl uppercase text-black font-mono font-semibold">Catálogo</p>
+            <p className="text-2xl uppercase text-black font-mono font-semibold">
+              Catálogo
+            </p>
             <h2 className={`${headingFont.className} mt-4 text-3xl sm:text-4xl text-black`}>
               Elige tu estilo
             </h2>
-            <p className="mt-4 text-black">Diseños listos para personalizar con tus fotos y datos.</p>
+            <p className="mt-4 text-black">
+              Diseños listos para personalizar con tus fotos y datos.
+            </p>
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -575,97 +497,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 2) PLANES (oscuro + bg + glass) */}
-      <DarkBgSection
-        id="planes"
-        title="Elige tu plan ideal"
-        subtitle="Planes premium con diseño editorial, animaciones y confirmación de asistencia."
-        bgImage="https://i.pinimg.com/736x/4e/1b/ac/4e1bac6e5654a5f192c97d1a9049cec8.jpg"
-      >
-        <div className="grid gap-10 md:grid-cols-3">
-          <PlanCardDark
-            title="Plan Premium"
-            subtitle="La experiencia más completa y personalizada"
-            oldPrice="$499.900"
-            price="$349.900"
-            highlight
-            href="/planes"
-            features={[
-              "Portada video carrusel",
-              "Cuenta regresiva",
-              "Canción de los novios",
-              "Lista de canciones",
-              "Animaciones",
-              "Nombre de invitados (personalizado)",
-              "Mensajes y frases",
-              "Itinerario",
-              "Ubicación (mapa)",
-              "Dress Code",
-              "Lista de regalos",
-              "Compartir fotos",
-              "Confirmación con base de datos + dashboard",
-            ]}
-          />
-
-          <PlanCardDark
-            title="Plan Oro"
-            subtitle="Equilibrio perfecto entre diseño y precio"
-            oldPrice="$360.000"
-            price="$249.900"
-            href="/planes"
-            features={[
-              "Portada",
-              "Cuenta regresiva",
-              "Animaciones",
-              "Canción de los novios",
-              "Lista de canciones",
-              "Mensajes y frases",
-              "Itinerario",
-              "Ubicación (evento)",
-              "Compartir fotos",
-              "Dress Code",
-              "Lista de regalos",
-              "Confirmación (WhatsApp)",
-            ]}
-          />
-
-          <PlanCardDark
-            title="Plan Básico"
-            subtitle="Lo esencial para una invitación elegante"
-            price="$129.900"
-            href="/planes"
-            features={[
-              "Portada carrusel",
-              "Canción de los novios",
-              "Mensajes y frases",
-              "Cuenta regresiva",
-              "Ubicación (evento)",
-              "Galería 4 fotos",
-              "Dress Code",
-              "Lista de regalos",
-              "Confirmación (WhatsApp)",
-            ]}
-          />
-        </div>
-
-        <div className="mt-10 flex justify-center">
-          <a
-            href={whatsappLink}
-            target="_blank"
-            rel="noreferrer"
-            className="rounded-full bg-white px-7 py-3 text-sm font-semibold text-black hover:bg-white/90 transition"
-          >
-            Cotizar por WhatsApp
-          </a>
-        </div>
-      </DarkBgSection>
-
-      {/* 3) MEDIOS DE PAGO (oscuro + bg + glass) */}
+      {/* MEDIOS DE PAGO (glass + bg) */}
       <DarkBgSection
         id="medios-de-pago"
         title="Medios de pago"
         subtitle="Pagos rápidos y seguros para separar tu invitación."
-        bgImage="https://i.pinimg.com/736x/96/94/22/96942268a67d8941e267e7a46998d5d2.jpg"
+        bgImage="https://i.pinimg.com/736x/6f/89/f3/6f89f3a099d84749ff585328fc149620.jpg"
       >
         <div className="grid gap-6 md:grid-cols-3">
           <PaymentCardDark title="Nequi" subtitle="Transferencia inmediata" badge="Popular" />
