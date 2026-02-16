@@ -185,7 +185,7 @@ export default function HomePage() {
       { label: "Catálogo", href: "#catalogo" },
       { label: "Planes", href: "/planes" },
       { label: "Medios de pago", href: "#medios-de-pago" },
-      { label: "Tarjetas de presentación", href: "/tarjetasdepresentacion" },
+      { label: "Tarjetas de presentación", href: "/tarjetas/tarjetasdepresentacion" },
       { label: "15 años", href: "/quince" },
       { label: "Cumpleaños", href: "/cumpleanos" },
       { label: "Contacto", href: "/contacto" },

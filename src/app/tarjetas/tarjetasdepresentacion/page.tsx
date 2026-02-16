@@ -10,37 +10,58 @@ const bodyFont = Plus_Jakarta_Sans({
   weight: ["400", "500", "600", "700"],
 });
 
-type CardModel = {
-  id: string;
+type BusinessCard = {
+  slug: string;
   title: string;
   style: string;
   image: string;
   tag?: string;
 };
 
-const BUSINESS_CARDS: CardModel[] = [
+const BUSINESS_CARDS: BusinessCard[] = [
   {
-    id: "business-minimal",
-    title: "Minimal Pro",
-    style: "Clean • Ejecutivo",
+    slug: "veterinario",
+    title: "Veterinario",
+    style: "Clean • Profesional",
     tag: "Más vendido",
     image:
-      "https://i.pinimg.com/736x/1f/01/04/1f010495feaea5b6f995fa0947695a3e.jpg",
+      "https://i.pinimg.com/736x/a2/f3/55/a2f35520592cc2202868ae0f16cf91a0.jpg",
   },
   {
-    id: "business-dark",
-    title: "Noir Business",
-    style: "Dark • Elegante",
-    image:
-      "https://i.pinimg.com/736x/64/c9/8f/64c98fd0bec1aca61bfb8c7cbb6cdd97.jpg",
-  },
-  {
-    id: "business-modern",
-    title: "Modern Link",
-    style: "Moderno • Social",
+    slug: "manicurista",
+    title: "Manicurista",
+    style: "Elegante • Glam",
     tag: "Nuevo",
     image:
-      "https://i.pinimg.com/736x/ca/af/a8/caafa8476e86fb72906ae1b72f0d7bff.jpg",
+      "https://i.pinimg.com/736x/f3/6b/88/f36b88e2f808c945f2a4e0b9cc57f013.jpg",
+  },
+  {
+    slug: "fruver",
+    title: "Fruver",
+    style: "Moderno • Social",
+    image:
+      "https://i.pinimg.com/736x/1a/a8/94/1aa89439ae9c29dceb1eb20c71879679.jpg",
+  },
+  {
+    slug: "drogueria",
+    title: "Droguería",
+    style: "Minimal • Corporativo",
+    image:
+      "https://i.pinimg.com/736x/b0/5c/50/b05c50f5854859b2616e21d8127acabd.jpg",
+  },
+  {
+    slug: "mudanza",
+    title: "Mudanza",
+    style: "Directo • Comercial",
+    image:
+      "https://i.pinimg.com/736x/ea/22/a0/ea22a03b1dca4d795043c5975957dcfe.jpg",
+  },
+  {
+    slug: "servicios",
+    title: "Servicios",
+    style: "Versátil • Profesional",
+    image:
+      "https://i.pinimg.com/1200x/6c/14/d4/6c14d4ff5ce77a9b0ad6ffb2fed4ad71.jpg",
   },
 ];
 
@@ -61,18 +82,17 @@ function GlassButton({
   );
 }
 
-export default function BusinessCardsPage() {
+export default function TarjetasDePresentacionPage() {
   const [year, setYear] = useState(2026);
   useEffect(() => setYear(new Date().getFullYear()), []);
 
   const brand = "Sí, Forever";
 
   const hero = {
-    bigWord: "PRO",
     kicker: "TARJETAS DIGITALES",
     title: "Tarjetas de presentación premium",
     subtitle:
-      "Comparte tu negocio con estilo. Enlaces directos, redes sociales y contacto inmediato.",
+      "Comparte tu negocio con estilo. WhatsApp, contacto y enlaces directos.",
     ctaPrimary: "Crear la mía",
     ctaSecondary: "Ver modelos",
   };
@@ -80,14 +100,13 @@ export default function BusinessCardsPage() {
   const whatsappLink =
     "https://wa.me/573102345742?text=Hola%20Quiero%20crear%20una%20tarjeta%20de%20presentaci%C3%B3n%20digital";
 
-  // ✅ NAVBAR IGUAL A LAS OTRAS
   const NAV_ITEMS = useMemo(
     () => [
       { label: "Inicio", href: "/" },
       { label: "Planes", href: "/planes" },
       { label: "Medios de pago", href: "/#medios-de-pago" },
-      { label: "Tarjetas de presentación", href: "/tarjetas-presentacion" },
-      { label: "15 años", href: "/15-anos" },
+      { label: "Tarjetas de presentación", href: "/tarjetasdepresentacion" },
+      { label: "15 años", href: "/quince" },
       { label: "Cumpleaños", href: "/cumpleanos" },
       { label: "Contacto", href: "/contacto" },
     ],
@@ -115,7 +134,6 @@ export default function BusinessCardsPage() {
   ];
 
   const [bgIndex, setBgIndex] = useState(0);
-
   useEffect(() => {
     const id = setInterval(
       () => setBgIndex((i) => (i + 1) % HERO_BGS.length),
@@ -126,7 +144,6 @@ export default function BusinessCardsPage() {
 
   return (
     <main className={`${bodyFont.className} text-white`}>
-      
       {/* NAVBAR */}
       <header className="fixed left-0 right-0 top-0 z-40">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
@@ -139,7 +156,11 @@ export default function BusinessCardsPage() {
 
           <nav className="hidden items-center gap-8 text-sm text-white/80 md:flex">
             {NAV_ITEMS.map((item) => (
-              <Link key={item.label} href={item.href} className="hover:text-white transition">
+              <Link
+                key={item.label}
+                href={item.href}
+                className="hover:text-white transition"
+              >
                 {item.label}
               </Link>
             ))}
@@ -148,6 +169,7 @@ export default function BusinessCardsPage() {
           <button
             onClick={() => setMenuOpen(true)}
             className="md:hidden inline-flex items-center justify-center rounded-full border border-white/20 bg-white/10 p-2 backdrop-blur"
+            aria-label="Abrir menú"
           >
             ☰
           </button>
@@ -158,11 +180,14 @@ export default function BusinessCardsPage() {
             <button
               onClick={() => setMenuOpen(false)}
               className="absolute inset-0 bg-black/60"
+              aria-label="Cerrar menú"
             />
             <div className="absolute right-0 top-0 h-full w-[85%] max-w-sm bg-black/40 backdrop-blur-2xl border-l border-white/10 p-6">
               <div className="flex justify-between items-center mb-6">
                 <span className="font-semibold">{brand}</span>
-                <button onClick={() => setMenuOpen(false)}>✕</button>
+                <button onClick={() => setMenuOpen(false)} aria-label="Cerrar">
+                  ✕
+                </button>
               </div>
 
               <div className="flex flex-col gap-4">
@@ -177,6 +202,22 @@ export default function BusinessCardsPage() {
                   </Link>
                 ))}
               </div>
+
+              <div className="mt-8 grid gap-3">
+                <a
+                  href={whatsappLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => setMenuOpen(false)}
+                  className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-black hover:bg-white/90 transition"
+                >
+                  Cotizar ahora
+                </a>
+              </div>
+
+              <p className="mt-6 text-xs text-white/55">
+                Menú · {year} · {brand}
+              </p>
             </div>
           </div>
         )}
@@ -194,48 +235,64 @@ export default function BusinessCardsPage() {
           <p className="text-xs tracking-[0.3em] text-white/70">
             {hero.kicker}
           </p>
-
-          <h1 className={`${headingFont.className} mt-6 text-4xl md:text-6xl`}>
+          <h1
+            className={`${headingFont.className} mt-6 text-4xl md:text-6xl`}
+          >
             {hero.title}
           </h1>
-
-          <p className="mt-4 max-w-xl text-white/80">
-            {hero.subtitle}
-          </p>
+          <p className="mt-4 max-w-xl text-white/80">{hero.subtitle}</p>
 
           <div className="mt-8 flex gap-4 flex-wrap justify-center">
             <a
               href={whatsappLink}
               target="_blank"
+              rel="noreferrer"
               className="rounded-full bg-white px-7 py-3 text-sm font-semibold text-black hover:bg-white/90 transition"
             >
               {hero.ctaPrimary}
             </a>
 
-            <GlassButton href="#modelos">
-              {hero.ctaSecondary}
-            </GlassButton>
+            <GlassButton href="#modelos">{hero.ctaSecondary}</GlassButton>
           </div>
         </div>
       </section>
 
       {/* MODELOS */}
       <section id="modelos" className="bg-white text-black py-20 px-6">
-        <div className="max-w-7xl mx-auto grid gap-6 md:grid-cols-3">
+        <div className="max-w-7xl mx-auto grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {BUSINESS_CARDS.map((item) => (
             <div
-              key={item.id}
-              className="relative rounded-[28px] overflow-hidden shadow-xl"
+              key={item.slug}
+              className="group relative rounded-[28px] overflow-hidden shadow-xl"
             >
               <img
                 src={item.image}
                 alt={item.title}
-                className="w-full h-80 object-cover"
+                className="w-full h-80 object-cover transition-transform duration-700 group-hover:scale-[1.05]"
               />
-              <div className="absolute inset-0 bg-black/50" />
-              <div className="absolute bottom-0 p-6 text-white">
+
+              <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/50 to-black/90" />
+
+              {item.tag && (
+                <div className="absolute left-5 top-5">
+                  <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold text-white ring-1 ring-white/25 backdrop-blur">
+                    {item.tag}
+                  </span>
+                </div>
+              )}
+
+              <div className="absolute bottom-0 p-6 text-white w-full">
                 <h3 className="text-xl font-semibold">{item.title}</h3>
                 <p className="text-sm text-white/70">{item.style}</p>
+
+                <div className="mt-4">
+                  <Link
+                    href={`/tarjetasdepresentacion/${item.slug}`}
+                    className="inline-flex w-full items-center justify-center rounded-full bg-white/15 px-5 py-2 text-sm font-semibold text-white ring-1 ring-white/30 backdrop-blur hover:bg-white/25 transition"
+                  >
+                    Ver
+                  </Link>
+                </div>
               </div>
             </div>
           ))}
