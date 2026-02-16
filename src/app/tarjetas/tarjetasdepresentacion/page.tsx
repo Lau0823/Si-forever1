@@ -25,7 +25,7 @@ const BUSINESS_CARDS: BusinessCard[] = [
     style: "Clean • Profesional",
     tag: "Más vendido",
     image:
-      "https://i.pinimg.com/736x/a2/f3/55/a2f35520592cc2202868ae0f16cf91a0.jpg",
+      "https://i.pinimg.com/1200x/86/1b/d9/861bd983707080c74cfdd63ae4f3161e.jpg",
   },
   {
     slug: "manicurista",
@@ -33,7 +33,7 @@ const BUSINESS_CARDS: BusinessCard[] = [
     style: "Elegante • Glam",
     tag: "Nuevo",
     image:
-      "https://i.pinimg.com/736x/f3/6b/88/f36b88e2f808c945f2a4e0b9cc57f013.jpg",
+      "https://i.pinimg.com/736x/68/b0/b7/68b0b7f098d216fb295305534c85f1e0.jpg",
   },
   {
     slug: "fruver",
