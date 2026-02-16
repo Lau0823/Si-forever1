@@ -90,11 +90,11 @@ function ManicuristaCard({
           </div>
 
           {/* Nombre */}
-          <h2 className="text-center text-2xl font-semibold text-white">
+          <h2 className="text-center text-2xl font-semibold text-black">
             {businessName}
           </h2>
 
-          <p className="mt-2 text-center text-sm text-white/80 leading-relaxed">
+          <p className="mt-2 text-center text-sm text-black leading-relaxed">
             {description}
           </p>
 
@@ -108,8 +108,8 @@ function ManicuristaCard({
                   transition
                   ${
                     selectedService === s
-                      ? "bg-rose-300 text-white border-rose-300"
-                      : "bg-white/30 text-white border-white/40 hover:bg-rose-200/70 hover:border-rose-200"
+                      ? "bg-rose-300 text-black border-rose-300"
+                      : "bg-white/30 text-black border-white/40 hover:bg-rose-200/70 hover:border-rose-200"
                   }`}
               >
                 {s}
