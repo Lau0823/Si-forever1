@@ -19,7 +19,7 @@ const sans = Inter({
 
 export const metadata: Metadata = {
   title: "Invitación",
-  description: "Invitación de matrimonio",
+  description: "productos digitales",
 };
 
 export default function RootLayout({
