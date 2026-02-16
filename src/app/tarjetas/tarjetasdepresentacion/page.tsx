@@ -287,7 +287,7 @@ export default function TarjetasDePresentacionPage() {
 
                 <div className="mt-4">
                   <Link
-                    href={`/tarjetasdepresentacion/${item.slug}`}
+                    href={`/tarjetas/tarjetasdepresentacion/${item.slug}`}
                     className="inline-flex w-full items-center justify-center rounded-full bg-white/15 px-5 py-2 text-sm font-semibold text-white ring-1 ring-white/30 backdrop-blur hover:bg-white/25 transition"
                   >
                     Ver
