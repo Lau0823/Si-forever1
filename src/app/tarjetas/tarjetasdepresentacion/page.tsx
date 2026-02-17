@@ -43,11 +43,11 @@ const BUSINESS_CARDS: BusinessCard[] = [
       "https://i.pinimg.com/736x/1a/a8/94/1aa89439ae9c29dceb1eb20c71879679.jpg",
   },
   {
-    slug: "drogueria",
-    title: "Droguería",
+    slug: "fotografo",
+    title: "fotografo",
     style: "Minimal • Corporativo",
     image:
-      "https://i.pinimg.com/736x/b0/5c/50/b05c50f5854859b2616e21d8127acabd.jpg",
+      "https://i.pinimg.com/1200x/c9/51/ae/c951ae732c02d44a9106027d64be8089.jpg",
   },
   {
     slug: "mudanza",
