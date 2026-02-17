@@ -47,7 +47,7 @@ const BUSINESS_CARDS: BusinessCard[] = [
     title: "fotografo",
     style: "Minimal • Corporativo",
     image:
-      "https://i.pinimg.com/1200x/c9/51/ae/c951ae732c02d44a9106027d64be8089.jpg",
+      "/image.png",
   },
   {
     slug: "mudanza",
