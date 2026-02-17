@@ -50,11 +50,11 @@ const BUSINESS_CARDS: BusinessCard[] = [
       "/image.png",
   },
   {
-    slug: "mudanza",
-    title: "Mudanza",
+    slug: "artesana",
+    title: "artesana",
     style: "Directo • Comercial",
     image:
-      "https://i.pinimg.com/736x/ea/22/a0/ea22a03b1dca4d795043c5975957dcfe.jpg",
+      "https://i.pinimg.com/736x/03/f9/84/03f9841d2116e6336a389d0f0715a5f2.jpg",
   },
   {
     slug: "servicios",
