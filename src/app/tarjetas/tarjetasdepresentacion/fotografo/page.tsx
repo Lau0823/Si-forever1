@@ -219,7 +219,7 @@ function PhotographerCard({
           </a>
 
           <a
-            href={`https://www.instagram.com/${instagram}/`}
+            href={`https://www.instagram.com/juanmoralesfotografo/`}
             target="_blank"
             className="block py-3 rounded-full border border-white/30 hover:bg-yellow-400 hover:text-black transition-all duration-300"
           >
