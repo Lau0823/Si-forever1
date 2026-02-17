@@ -49,7 +49,7 @@ function PhotographerCard({
 
   const images = [
     "/nueva.jpeg",
-    "/image.png",
+    
     "/lluvia.png",
     "/quince.png",
     "/caballo.png",
