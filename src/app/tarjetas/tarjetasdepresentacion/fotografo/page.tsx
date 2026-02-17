@@ -122,7 +122,7 @@ function PhotographerCard({
           </h2>
 
           <p className="text-sm text-white/70 mt-2">
-            Fotógrafo de bodas & videógrafo cinematográfico
+            Fotógrafo de bodas & videógrafo cinematográfico <br />
             3173159272 <br />
           </p>
 
