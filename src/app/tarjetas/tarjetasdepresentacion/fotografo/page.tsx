@@ -37,36 +37,33 @@ function PhotographerCard({
     "Bodas",
     "XV Años",
     "Eventos Sociales",
-    
     "Editorial",
   ];
 
   const [selectedService, setSelectedService] = useState(services[0]);
+  const [index, setIndex] = useState(0);
 
   const whatsappUrl = `${whatsappBase}?text=${encodeURIComponent(
-    `Hola Juan 👋 quiero reservar el servicio de fotografia para un evento de ${selectedService}`
+    `Hola Juan 👋 quiero reservar el servicio de fotografía para ${selectedService}`
   )}`;
 
   const images = [
     "/nueva.jpeg",
     "/image.png",
-  "/lluvia.png",
- 
+    "/lluvia.png",
     "/quince.png",
-    
     "/caballo.png",
   ];
 
-  const [index, setIndex] = useState(0);
-
+  // Auto carrusel
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % images.length);
     }, 4000);
     return () => clearInterval(interval);
-  }, []);
+  }, [images.length]);
 
-  // 🔥 Contador animado premium
+  // Contador animado premium
   const Counter = ({ value }: { value: number }) => {
     const [count, setCount] = useState(0);
 
@@ -96,6 +93,7 @@ function PhotographerCard({
       className="min-h-screen flex items-center justify-center bg-cover bg-center relative px-4 py-16"
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
+      {/* Overlay cinematográfico */}
       <div className="absolute inset-0 bg-black/85 backdrop-blur-sm" />
 
       <motion.div
@@ -104,7 +102,7 @@ function PhotographerCard({
         transition={{ duration: 0.8 }}
         className="relative z-10 w-full max-w-xl rounded-3xl bg-white/10 backdrop-blur-2xl border border-white/20 shadow-[0_30px_120px_rgba(0,0,0,0.8)] p-6 sm:p-10 text-white"
       >
-        {/* Perfil */}
+        {/* PERFIL */}
         <div className="flex flex-col items-center text-center">
           <motion.div
             whileHover={{ scale: 1.08 }}
@@ -122,11 +120,18 @@ function PhotographerCard({
           </h2>
 
           <p className="text-sm text-white/70 mt-2">
-            Fotógrafo de bodas & videógrafo cinematográfico <br />
-            3173159272 <br />
+            Fotógrafo de bodas & videógrafo cinematográfico
           </p>
 
-          {/* Estadísticas animadas */}
+          {/* BOTÓN LLAMAR */}
+          <a
+            href={`tel:57${cleanPhone}`}
+            className="mt-4 inline-block px-6 py-2 rounded-full border border-white/30 text-sm tracking-widest transition-all duration-300 hover:bg-yellow-400 hover:text-black hover:border-yellow-400"
+          >
+            📞 {phone}
+          </a>
+
+          {/* ESTADÍSTICAS */}
           <div className="flex justify-center gap-8 mt-6 text-center">
             <div>
               <p className="text-yellow-400 font-semibold text-lg drop-shadow-[0_0_8px_rgba(255,215,0,0.7)]">
@@ -151,16 +156,14 @@ function PhotographerCard({
           </div>
 
           <p className="text-xs text-white/60 mt-4 leading-relaxed">
-           
             JF Producciones <br />
-            
             Experiencia +300 bodas & XV años
           </p>
         </div>
 
         <div className="w-full h-px bg-gradient-to-r from-transparent via-white/40 to-transparent my-6" />
 
-        {/* Carrusel cinematográfico */}
+        {/* CARRUSEL */}
         <div className="relative">
           <AnimatePresence mode="wait">
             <motion.img
@@ -188,7 +191,7 @@ function PhotographerCard({
           </div>
         </div>
 
-        {/* Selector de servicio */}
+        {/* SELECTOR SERVICIO */}
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           {services.map((service) => (
             <button
@@ -205,7 +208,7 @@ function PhotographerCard({
           ))}
         </div>
 
-        {/* Botones */}
+        {/* BOTONES ACCIÓN */}
         <div className="space-y-3 mt-8 text-center">
           <a
             href={whatsappUrl}
@@ -216,7 +219,7 @@ function PhotographerCard({
           </a>
 
           <a
-            href={`https://www.instagram.com/juanmoralesfotografo/`}
+            href={`https://www.instagram.com/${instagram}/`}
             target="_blank"
             className="block py-3 rounded-full border border-white/30 hover:bg-yellow-400 hover:text-black transition-all duration-300"
           >
