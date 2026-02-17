@@ -37,19 +37,21 @@ function PhotographerCard({
     "Bodas",
     "XV Años",
     "Eventos Sociales",
-    "Maternidad",
+    
     "Editorial",
   ];
 
   const [selectedService, setSelectedService] = useState(services[0]);
 
   const whatsappUrl = `${whatsappBase}?text=${encodeURIComponent(
-    `Hola Juan 👋 quiero reservar el servicio de ${selectedService}`
+    `Hola Juan 👋 quiero reservar el servicio de fotografia para un evento de ${selectedService}`
   )}`;
 
   const images = [
-    "/quince.png",
     "/novios.png",
+ "/image.png",
+    "/quince.png",
+    
     "/caballo.png",
   ];
 
