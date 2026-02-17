@@ -123,7 +123,7 @@ function PhotographerCard({
 
           <p className="text-sm text-white/70 mt-2">
             Fotógrafo de bodas & videógrafo cinematográfico
-            
+            3173159272 <br />
           </p>
 
           {/* Estadísticas animadas */}
@@ -153,7 +153,7 @@ function PhotographerCard({
           <p className="text-xs text-white/60 mt-4 leading-relaxed">
            
             JF Producciones <br />
-            3173159272 <br />
+            
             Experiencia +300 bodas & XV años
           </p>
         </div>
