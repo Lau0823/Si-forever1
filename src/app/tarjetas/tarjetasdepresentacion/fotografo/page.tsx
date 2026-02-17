@@ -8,7 +8,7 @@ export default function Page() {
     <PhotographerCard
       backgroundImage="https://i.pinimg.com/736x/b9/fb/4e/b9fb4e70ca132d974e9a4717e77f8b68.jpg"
       profileImage="/i.png"
-      name="Juan Felipe Morales"
+      name="JUAN FELIPE MORALES"
       phone="3173159272"
       instagram="juanmoralesfotografo"
     />
@@ -48,8 +48,10 @@ function PhotographerCard({
   )}`;
 
   const images = [
-    "/novios.png",
- "/image.png",
+    "/nueva.jpeg",
+    "/image.png",
+  "/lluvia.png",
+ 
     "/quince.png",
     
     "/caballo.png",
@@ -121,6 +123,7 @@ function PhotographerCard({
 
           <p className="text-sm text-white/70 mt-2">
             Fotógrafo de bodas & videógrafo cinematográfico
+            
           </p>
 
           {/* Estadísticas animadas */}
@@ -150,6 +153,7 @@ function PhotographerCard({
           <p className="text-xs text-white/60 mt-4 leading-relaxed">
            
             JF Producciones <br />
+            3173159272 <br />
             Experiencia +300 bodas & XV años
           </p>
         </div>
@@ -212,7 +216,7 @@ function PhotographerCard({
           </a>
 
           <a
-            href={`https://www.instagram.com/${instagram}/`}
+            href={`https://www.instagram.com/juanmoralesfotografo/`}
             target="_blank"
             className="block py-3 rounded-full border border-white/30 hover:bg-yellow-400 hover:text-black transition-all duration-300"
           >
