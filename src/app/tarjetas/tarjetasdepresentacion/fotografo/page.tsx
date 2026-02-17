@@ -146,7 +146,7 @@ function PhotographerCard({
           </div>
 
           <p className="text-xs text-white/60 mt-4 leading-relaxed">
-            Basado en CDMX 🇲🇽 <br />
+           
             JF Producciones <br />
             Experiencia +300 bodas & XV años
           </p>
