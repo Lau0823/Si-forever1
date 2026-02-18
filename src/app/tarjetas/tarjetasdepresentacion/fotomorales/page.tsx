@@ -1,11 +1,15 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Page() {
   return <MainExperience />;
 }
+
+/* ===============================
+   EXPERIENCE SCREEN
+================================== */
 
 function MainExperience() {
   const [started, setStarted] = useState(false);
@@ -21,12 +25,10 @@ function MainExperience() {
 
   return (
     <>
-      {/* AUDIO */}
       <audio ref={audioRef} loop>
         <source src="/music.mp3" type="audio/mpeg" />
       </audio>
 
-      {/* PANTALLA INICIAL */}
       <AnimatePresence>
         {!started && (
           <motion.div
@@ -35,44 +37,22 @@ function MainExperience() {
               backgroundImage:
                 "url(https://i.pinimg.com/736x/3a/b3/32/3ab332c5828b78dbf351ca909c92fa42.jpg)",
             }}
-            initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1 }}
           >
             <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
 
-            <div className="relative z-10 flex flex-col items-center text-center">
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1.2 }}
-                className="text-4xl md:text-5xl font-light tracking-[12px] text-white mb-16"
-              >
+            <div className="relative z-10 text-center">
+              <h1 className="text-4xl md:text-5xl tracking-[12px] font-light text-white mb-16">
                 FOTO MORALES
-              </motion.h1>
+              </h1>
 
-              <motion.button
-                whileHover={{ scale: 1.08 }}
-                whileTap={{ scale: 0.95 }}
+              <button
                 onClick={handleStart}
-                className="
-                  px-16 py-5
-                  rounded-full
-                  text-white
-                  tracking-[8px]
-                  text-sm
-                  border border-white/30
-                  bg-white/10
-                  backdrop-blur-2xl
-                  shadow-[0_8px_40px_rgba(0,0,0,0.6)]
-                  hover:bg-yellow-400
-                  hover:text-black
-                  hover:border-yellow-400
-                  transition-all duration-500
-                "
+                className="px-16 py-5 rounded-full border border-white/30 bg-white/10 backdrop-blur-2xl text-white tracking-[8px] hover:bg-yellow-400 hover:text-black transition-all duration-500"
               >
                 ENTRAR
-              </motion.button>
+              </button>
             </div>
           </motion.div>
         )}
@@ -82,6 +62,10 @@ function MainExperience() {
     </>
   );
 }
+
+/* ===============================
+   MAIN CARD
+================================== */
 
 function FotomoralesCard() {
   const phone = "3173159272";
@@ -127,6 +111,34 @@ function FotomoralesCard() {
     `Hola 👋 quiero cotizar el servicio de ${selectedService} con FOTO MORALES`
   )}`;
 
+  /* ===============================
+     CONTADOR ANIMADO
+  ================================== */
+
+  const Counter = ({ value }: { value: number }) => {
+    const [count, setCount] = useState(0);
+
+    useEffect(() => {
+      let start = 0;
+      const duration = 1500;
+      const increment = value / (duration / 16);
+
+      const timer = setInterval(() => {
+        start += increment;
+        if (start >= value) {
+          setCount(value);
+          clearInterval(timer);
+        } else {
+          setCount(Math.floor(start));
+        }
+      }, 16);
+
+      return () => clearInterval(timer);
+    }, [value]);
+
+    return <span>{count}</span>;
+  };
+
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center relative px-4 py-20"
@@ -137,33 +149,53 @@ function FotomoralesCard() {
     >
       <div className="absolute inset-0 bg-black/80 backdrop-blur-lg" />
 
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        className="relative z-10 w-full max-w-6xl rounded-3xl bg-white/10 backdrop-blur-3xl border border-white/20 shadow-[0_60px_140px_rgba(0,0,0,0.95)] p-6 sm:p-14 text-white"
-      >
+      <div className="relative z-10 w-full max-w-6xl rounded-3xl bg-white/10 backdrop-blur-3xl border border-white/20 shadow-[0_60px_140px_rgba(0,0,0,0.95)] p-6 sm:p-14 text-white">
+
         {/* HEADER */}
-        <div className="flex flex-col items-center text-center">
+        <div className="text-center">
           <h2 className="text-4xl tracking-[10px] font-light">
             FOTO MORALES
           </h2>
 
           <a
             href={`tel:57${cleanPhone}`}
-            className="mt-6 px-8 py-2 rounded-full border border-white/30 text-sm tracking-widest hover:bg-yellow-400 hover:text-black transition-all duration-500"
+            className="mt-6 inline-block px-8 py-2 rounded-full border border-white/30 hover:bg-yellow-400 hover:text-black transition"
           >
             📞 {phone}
           </a>
+
+          {/* ESTADÍSTICAS */}
+          <div className="flex justify-center gap-10 mt-8">
+            <div>
+              <p className="text-yellow-400 text-xl font-semibold">
+                <Counter value={2779} />
+              </p>
+              <p className="text-xs text-white/60">Seguidores</p>
+            </div>
+
+            <div>
+              <p className="text-yellow-400 text-xl font-semibold">
+                <Counter value={2539} />
+              </p>
+              <p className="text-xs text-white/60">Seguidos</p>
+            </div>
+
+            <div>
+              <p className="text-yellow-400 text-xl font-semibold">
+                <Counter value={562} />
+              </p>
+              <p className="text-xs text-white/60">Proyectos</p>
+            </div>
+          </div>
         </div>
 
         {/* SERVICIOS */}
-        <div className="mt-10 flex flex-wrap justify-center gap-4">
+        <div className="mt-12 flex flex-wrap justify-center gap-4">
           {services.map((service) => (
             <button
               key={service}
               onClick={() => setSelectedService(service)}
-              className={`px-6 py-2 text-xs tracking-widest rounded-full border transition-all duration-500 ${
+              className={`px-6 py-2 text-xs tracking-widest rounded-full border transition ${
                 selectedService === service
                   ? "bg-yellow-400 text-black border-yellow-400"
                   : "border-white/30 hover:bg-yellow-400 hover:text-black"
@@ -175,34 +207,34 @@ function FotomoralesCard() {
         </div>
 
         {/* GALERÍA */}
-        <div className="mt-16 relative">
+        <div className="mt-16">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {visibleImages.map((item, i) => (
-              <motion.div
+              <div
                 key={i}
-                whileHover={{ scale: 1.05 }}
-                className="relative rounded-2xl overflow-hidden cursor-pointer group"
                 onClick={() => setSelectedImage(item.src)}
+                className="relative rounded-2xl overflow-hidden cursor-pointer group"
               >
                 <img
                   src={item.src}
                   className="w-full h-80 object-cover transition duration-700 group-hover:scale-110"
                 />
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 flex items-end p-4">
-                  <span className="text-sm tracking-widest text-yellow-400">
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-end p-4">
+                  <span className="text-yellow-400 text-sm tracking-widest">
                     {item.label}
                   </span>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
 
+          {/* FLECHAS */}
           <div className="flex justify-between mt-10">
             <button
               onClick={prev}
               disabled={startIndex === 0}
-              className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center hover:bg-yellow-400 hover:text-black transition disabled:opacity-30"
+              className="w-12 h-12 rounded-full border border-white/30 hover:bg-yellow-400 hover:text-black transition disabled:opacity-30"
             >
               ←
             </button>
@@ -210,7 +242,7 @@ function FotomoralesCard() {
             <button
               onClick={next}
               disabled={startIndex + 4 >= gallery.length}
-              className="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center hover:bg-yellow-400 hover:text-black transition disabled:opacity-30"
+              className="w-12 h-12 rounded-full border border-white/30 hover:bg-yellow-400 hover:text-black transition disabled:opacity-30"
             >
               →
             </button>
@@ -222,7 +254,7 @@ function FotomoralesCard() {
           <a
             href={whatsappUrl}
             target="_blank"
-            className="block py-4 rounded-full bg-yellow-400 text-black font-semibold tracking-widest hover:bg-yellow-300 transition-all duration-500"
+            className="block py-4 rounded-full bg-yellow-400 text-black font-semibold tracking-widest hover:bg-yellow-300 transition"
           >
             COTIZAR SERVICIO
           </a>
@@ -230,18 +262,18 @@ function FotomoralesCard() {
           <a
             href="https://www.instagram.com/juanmoralesfotografo/"
             target="_blank"
-            className="block py-4 rounded-full border border-white/30 hover:bg-yellow-400 hover:text-black transition-all duration-500 tracking-widest"
+            className="block py-4 rounded-full border border-white/30 hover:bg-yellow-400 hover:text-black transition tracking-widest"
           >
             INSTAGRAM
           </a>
         </div>
-      </motion.div>
+      </div>
 
       {/* MODAL */}
       <AnimatePresence>
         {selectedImage && (
           <motion.div
-            className="fixed inset-0 bg-black/95 backdrop-blur-lg flex items-center justify-center z-50 p-6"
+            className="fixed inset-0 bg-black/95 flex items-center justify-center z-50 p-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -252,8 +284,7 @@ function FotomoralesCard() {
               initial={{ scale: 0.7 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.7 }}
-              transition={{ duration: 0.5 }}
-              className="max-h-[90vh] rounded-2xl shadow-2xl"
+              className="max-h-[90vh] rounded-2xl"
             />
           </motion.div>
         )}

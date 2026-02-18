@@ -57,11 +57,11 @@ const BUSINESS_CARDS: BusinessCard[] = [
       "https://i.pinimg.com/736x/03/f9/84/03f9841d2116e6336a389d0f0715a5f2.jpg",
   },
   {
-    slug: "servicios",
-    title: "Servicios",
+    slug: "fotomorales",
+    title: "fotomorales",
     style: "Versátil • Profesional",
     image:
-      "https://i.pinimg.com/1200x/6c/14/d4/6c14d4ff5ce77a9b0ad6ffb2fed4ad71.jpg",
+      "https://i.pinimg.com/736x/6b/42/83/6b4283d13d9d2827cb087b180e489397.jpg",
   },
 ];
 
