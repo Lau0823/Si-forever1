@@ -15,23 +15,21 @@ function MainExperience() {
   const [started, setStarted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const handleStart = () => {
-    if (audioRef.current) {
-      audioRef.current.volume = 0.5;
-      audioRef.current.play().catch(() => {});
+  const handleStart = async () => {
+    try {
+      if (audioRef.current) {
+        audioRef.current.volume = 0.5;
+        await audioRef.current.play();
+      }
+      setStarted(true);
+    } catch (error) {
+      setStarted(true);
     }
-    setStarted(true);
   };
 
   return (
     <>
-      {/* AUDIO LOCAL */}
-      <audio
-        ref={audioRef}
-        src="/audio/ TOY HERMOSO.MP3"
-        loop
-        preload="auto"
-      />
+      <audio ref={audioRef} src="/audio/Amigos.MP3" loop preload="auto" />
 
       <AnimatePresence>
         {!started && (
@@ -39,24 +37,28 @@ function MainExperience() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 flex items-center justify-center bg-cover bg-center z-50"
-            style={{
-              backgroundImage:
-                "url(https://i.pinimg.com/736x/3a/b3/32/3ab332c5828b78dbf351ca909c92fa42.jpg)",
-            }}
+            className="fixed inset-0 flex items-center justify-center bg-black z-50 overflow-hidden"
           >
-            <div className="absolute inset-0 bg-black/70 backdrop-blur-md" />
+            {/* LOGO COMO FONDO GLASS */}
+            <div className="absolute inset-0 flex items-center justify-center opacity-10">
+              <img
+                src="/logofm.jpeg"
+                className="w-[500px] blur-sm"
+              />
+            </div>
+
+            <div className="absolute inset-0 bg-black/70 backdrop-blur-xl" />
 
             <div className="relative z-10 text-center space-y-16">
               <h1 className="text-4xl md:text-5xl tracking-[14px] font-light text-white">
-                FOTO MORALES
+                FM FOTO MORALES
               </h1>
 
               <motion.button
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleStart}
-                className="px-16 py-5 rounded-full border border-white/30 bg-white/10 backdrop-blur-2xl text-white tracking-[8px] hover:bg-yellow-400 hover:text-black transition-all duration-500 shadow-2xl"
+                className="px-16 py-5 rounded-full border border-white/30 bg-white/10 backdrop-blur-2xl text-white tracking-[8px] hover:bg-white hover:text-black transition-all duration-500 shadow-2xl"
               >
                 ENTRAR
               </motion.button>
@@ -71,11 +73,53 @@ function MainExperience() {
 }
 
 /* ===============================
+   CONFETTI LED REDONDO
+================================== */
+
+function Confetti() {
+  const pieces = Array.from({ length: 50 });
+  const colors = ["#facc15", "#22d3ee", "#f472b6", "#4ade80", "#fb923c"];
+
+  return (
+    <div className="fixed inset-0 pointer-events-none z-40 overflow-hidden">
+      {pieces.map((_, i) => {
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        return (
+          <motion.div
+            key={i}
+            initial={{
+              y: -20,
+              x: Math.random() * window.innerWidth,
+              opacity: 1,
+            }}
+            animate={{
+              y: window.innerHeight + 20,
+              opacity: 0,
+            }}
+            transition={{
+              duration: 3 + Math.random() * 2,
+              ease: "easeOut",
+            }}
+            className="absolute rounded-full"
+            style={{
+              width: 8,
+              height: 8,
+              backgroundColor: color,
+              boxShadow: `0 0 12px ${color}`,
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
+/* ===============================
    MAIN CARD
 ================================== */
 
 function FotomoralesCard() {
-  const phone = "3173159272";
+  const phone = "3107788099";
   const cleanPhone = phone.replace(/\D/g, "");
   const whatsappBase = `https://wa.me/57${cleanPhone}`;
 
@@ -84,186 +128,97 @@ function FotomoralesCard() {
     "PROMS",
     "QUINCE AÑOS",
     "BODAS",
-    "EVENTOS",
+    "TOGAS Y BIRRETES",
   ];
 
   const gallery = [
-    "https://i.pinimg.com/736x/4a/a8/17/4aa817a331b82530c10af20aceafeabd.jpg",
-    "https://i.pinimg.com/736x/6c/c8/04/6cc8041f1fd609403a8f759d32fc1906.jpg",
-    "https://i.pinimg.com/1200x/ab/1f/e9/ab1fe9fa2bc6bbc35fe6f918b3c946d3.jpg",
-    "https://i.pinimg.com/1200x/07/4a/f1/074af19376f100b5f2b9b74c852512aa.jpg",
-    "https://i.pinimg.com/736x/10/2b/33/102b3376adc8443c4a5369474a0eb9b6.jpg",
-    "https://i.pinimg.com/736x/1b/5b/69/1b5b699b19507277d628a45e00c418fc.jpg",
+    "/toga.jpeg",
+    "/fm3.jpeg",
+    "/fm1.jpeg",
+    "/fm2.jpeg",
+    "/fm4.jpeg",
+    "/fm5.jpeg",
+    
   ];
 
   const [selectedService, setSelectedService] = useState(services[0]);
   const [startIndex, setStartIndex] = useState(0);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [showConfetti, setShowConfetti] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowConfetti(false), 4000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const visibleImages = gallery.slice(startIndex, startIndex + 4);
-
-  const next = () => {
-    if (startIndex + 4 < gallery.length) {
-      setStartIndex(startIndex + 4);
-    }
-  };
-
-  const prev = () => {
-    if (startIndex - 4 >= 0) {
-      setStartIndex(startIndex - 4);
-    }
-  };
 
   const whatsappUrl = `${whatsappBase}?text=${encodeURIComponent(
     `Hola 👋 quiero cotizar el servicio de ${selectedService}`
   )}`;
-
-  const Counter = ({ value }: { value: number }) => {
-    const [count, setCount] = useState(0);
-
-    useEffect(() => {
-      let start = 0;
-      const duration = 1500;
-      const increment = value / (duration / 16);
-
-      const timer = setInterval(() => {
-        start += increment;
-        if (start >= value) {
-          setCount(value);
-          clearInterval(timer);
-        } else {
-          setCount(Math.floor(start));
-        }
-      }, 16);
-
-      return () => clearInterval(timer);
-    }, [value]);
-
-    return <span>{count}</span>;
-  };
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 80 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1 }}
-      className="min-h-screen flex items-center justify-center bg-cover bg-center relative px-4 py-20"
-      style={{
-        backgroundImage:
-          "url(https://i.pinimg.com/736x/3a/b3/32/3ab332c5828b78dbf351ca909c92fa42.jpg)",
-      }}
+      className="min-h-screen flex items-center justify-center relative px-4 py-20 overflow-hidden"
     >
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-xl" />
+      {showConfetti && <Confetti />}
 
-      <div className="relative z-10 w-full max-w-6xl rounded-3xl bg-white/10 backdrop-blur-3xl border border-white/20 shadow-[0_60px_140px_rgba(0,0,0,0.95)] p-8 sm:p-14 text-white">
+      <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black" />
+
+      <div className="relative z-10 w-full max-w-6xl rounded-3xl bg-white/10 backdrop-blur-3xl border border-white/20 shadow-2xl p-6 sm:p-14 text-white">
 
         {/* PERFIL */}
         <div className="flex flex-col items-center text-center">
-          <div className="w-28 h-28 rounded-full overflow-hidden border border-yellow-400/40 shadow-[0_0_25px_rgba(255,215,0,0.4)]">
-            <img
-              src="https://i.pinimg.com/736x/bf/56/18/bf561847d27a2890ab1277db34d732de.jpg"
-              alt="Perfil"
-              className="w-full h-full object-cover"
-            />
+          <div className="w-28 h-28 rounded-full overflow-hidden border border-white shadow-xl">
+            <img src="/logofm.jpeg" className="w-full h-full object-cover" />
           </div>
 
           <h2 className="text-4xl tracking-[10px] font-light mt-6">
             FOTO MORALES
           </h2>
+        </div>
 
-          <div className="flex gap-10 mt-6">
-            <div>
-              <p className="text-yellow-400 text-xl font-semibold">
-                <Counter value={2779} />
-              </p>
-              <p className="text-xs text-white/60">Seguidores</p>
+        {/* GALERÍA VERTICAL MÁS ANCHA */}
+        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6">
+          {visibleImages.map((src, i) => (
+            <motion.div
+              key={i}
+              whileHover={{ scale: 1.05 }}
+              className="rounded-2xl overflow-hidden cursor-pointer group"
+              onClick={() => setSelectedImage(src)}
+            >
+              <img
+                src={src}
+                className="w-full aspect-[3/4] object-cover transition duration-700 group-hover:scale-110"
+              />
+            </motion.div>
+          ))}
+        </div>
+
+        {/* CARRUSEL TEXTO MEJORADO */}
+        <div className="mt-20 overflow-hidden border-t border-white/10 pt-6">
+          <motion.div
+            animate={{ x: ["100%", "-100%"] }}
+            transition={{ repeat: Infinity, duration: 14, ease: "linear" }}
+            className="whitespace-nowrap text-yellow-400 tracking-widest text-sm"
+          >
+            ✨ PAGA FÁCIL POR NEQUI • BANCOLOMBIA • ESCANEA NUESTRO CÓDIGO QR • TRANSFERENCIAS SEGURAS ✨
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8 mt-8">
+            <div className="rounded-2xl bg-white/5 p-6 text-center hover:scale-105 transition">
+              <img src="/bc.jpeg" className="w-56 mx-auto rounded-xl" />
             </div>
 
-            <div>
-              <p className="text-yellow-400 text-xl font-semibold">
-                <Counter value={2539} />
-              </p>
-              <p className="text-xs text-white/60">Seguidos</p>
-            </div>
-
-            <div>
-              <p className="text-yellow-400 text-xl font-semibold">
-                <Counter value={562} />
-              </p>
-              <p className="text-xs text-white/60">Proyectos</p>
+            <div className="rounded-2xl bg-white/5 p-6 text-center hover:scale-105 transition">
+              <img src="/qrnequi.jpeg" className="w-56 mx-auto rounded-xl" />
             </div>
           </div>
         </div>
 
-        {/* SERVICIOS */}
-        <div className="mt-12 flex flex-wrap justify-center gap-4">
-          {services.map((service) => (
-            <button
-              key={service}
-              onClick={() => setSelectedService(service)}
-              className={`px-6 py-2 text-xs tracking-widest rounded-full border transition ${
-                selectedService === service
-                  ? "bg-yellow-400 text-black border-yellow-400"
-                  : "border-white/30 hover:bg-yellow-400 hover:text-black"
-              }`}
-            >
-              {service}
-            </button>
-          ))}
-        </div>
-
-        {/* GALERÍA */}
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6">
-          {visibleImages.map((src, i) => (
-            <div
-              key={i}
-              onClick={() => setSelectedImage(src)}
-              className="rounded-2xl overflow-hidden cursor-pointer group"
-            >
-              <img
-                src={src}
-                className="w-full h-80 object-cover transition duration-700 group-hover:scale-110"
-              />
-            </div>
-          ))}
-        </div>
-
-        {/* FLECHAS */}
-        <div className="flex justify-between mt-10">
-          <button
-            onClick={prev}
-            disabled={startIndex === 0}
-            className="w-12 h-12 rounded-full border border-white/30 hover:bg-yellow-400 hover:text-black transition disabled:opacity-30"
-          >
-            ←
-          </button>
-          <button
-            onClick={next}
-            disabled={startIndex + 4 >= gallery.length}
-            className="w-12 h-12 rounded-full border border-white/30 hover:bg-yellow-400 hover:text-black transition disabled:opacity-30"
-          >
-            →
-          </button>
-        </div>
-
-        {/* BOTONES */}
-        <div className="mt-14 text-center space-y-4">
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            className="block py-4 rounded-full bg-yellow-400 text-black font-semibold tracking-widest hover:bg-yellow-300 transition"
-          >
-            COTIZAR SERVICIO
-          </a>
-
-          <a
-            href="https://www.instagram.com/juanmoralesfotografo/"
-            target="_blank"
-            className="block py-4 rounded-full border border-white/30 hover:bg-yellow-400 hover:text-black transition tracking-widest"
-          >
-            INSTAGRAM
-          </a>
-        </div>
       </div>
 
       <AnimatePresence>
