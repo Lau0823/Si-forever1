@@ -1,4 +1,4 @@
-
+import HomeFab from "@/components/HomeFab";
 import "./globals.css";
 import type { Metadata } from "next";
 import { DM_Serif_Display, Inter } from "next/font/google";
@@ -31,7 +31,7 @@ export default function RootLayout({
     <html lang="es" className={`${serif.variable} ${sans.variable}`}>
       <body className="min-h-screen bg-neutral-950 text-neutral-50 antialiased">
         {children}
-    
+        <HomeFab />
       </body>
     </html>
   );
