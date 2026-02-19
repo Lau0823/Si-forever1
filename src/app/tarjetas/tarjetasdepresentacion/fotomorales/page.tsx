@@ -1,245 +1,223 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Page() {
-  return <MainExperience />;
+  return <FotomoralesPremium />;
 }
 
-/* ===============================
-   EXPERIENCE SCREEN
-================================== */
-
-function MainExperience() {
-  const [started, setStarted] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  const handleStart = async () => {
-    try {
-      if (audioRef.current) {
-        audioRef.current.volume = 0.5;
-        await audioRef.current.play();
-      }
-      setStarted(true);
-    } catch (error) {
-      setStarted(true);
-    }
-  };
-
-  return (
-    <>
-      <audio ref={audioRef} src="/audio/Amigos.MP3" loop preload="auto" />
-
-      <AnimatePresence>
-        {!started && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 flex items-center justify-center bg-black z-50 overflow-hidden"
-          >
-            {/* LOGO COMO FONDO GLASS */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-10">
-              <img
-                src="/logofm.jpeg"
-                className="w-[500px] blur-sm"
-              />
-            </div>
-
-            <div className="absolute inset-0 bg-black/70 backdrop-blur-xl" />
-
-            <div className="relative z-10 text-center space-y-16">
-              <h1 className="text-4xl md:text-5xl tracking-[14px] font-light text-white">
-                FM FOTO MORALES
-              </h1>
-
-              <motion.button
-                whileHover={{ scale: 1.08 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleStart}
-                className="px-16 py-5 rounded-full border border-white/30 bg-white/10 backdrop-blur-2xl text-white tracking-[8px] hover:bg-white hover:text-black transition-all duration-500 shadow-2xl"
-              >
-                ENTRAR
-              </motion.button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {started && <FotomoralesCard />}
-    </>
-  );
-}
-
-/* ===============================
-   CONFETTI LED REDONDO
-================================== */
-
-function Confetti() {
-  const pieces = Array.from({ length: 50 });
-  const colors = ["#facc15", "#22d3ee", "#f472b6", "#4ade80", "#fb923c"];
-
-  return (
-    <div className="fixed inset-0 pointer-events-none z-40 overflow-hidden">
-      {pieces.map((_, i) => {
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        return (
-          <motion.div
-            key={i}
-            initial={{
-              y: -20,
-              x: Math.random() * window.innerWidth,
-              opacity: 1,
-            }}
-            animate={{
-              y: window.innerHeight + 20,
-              opacity: 0,
-            }}
-            transition={{
-              duration: 3 + Math.random() * 2,
-              ease: "easeOut",
-            }}
-            className="absolute rounded-full"
-            style={{
-              width: 8,
-              height: 8,
-              backgroundColor: color,
-              boxShadow: `0 0 12px ${color}`,
-            }}
-          />
-        );
-      })}
-    </div>
-  );
-}
-
-/* ===============================
-   MAIN CARD
-================================== */
-
-function FotomoralesCard() {
-  const phone = "3107788099";
+function FotomoralesPremium() {
+  const phone = "3173159272";
+  const instagram = "juanmoralesfotografo";
   const cleanPhone = phone.replace(/\D/g, "");
   const whatsappBase = `https://wa.me/57${cleanPhone}`;
 
   const services = [
-    "GRADOS",
-    "PROMS",
-    "QUINCE AÑOS",
-    "BODAS",
-    "TOGAS Y BIRRETES",
+    "Bodas",
+    "XV Años",
+    "Eventos Sociales",
+    "Editorial",
   ];
 
-  const gallery = [
-    "/toga.jpeg",
-    "/fm3.jpeg",
-    "/fm1.jpeg",
-    "/fm2.jpeg",
-    "/fm4.jpeg",
-    "/fm5.jpeg",
-    
+  const images = [
+    "/nueva.jpeg",
+    "/lluvia.png",
+    "/quince.png",
+    "/caballo.png",
   ];
 
   const [selectedService, setSelectedService] = useState(services[0]);
-  const [startIndex, setStartIndex] = useState(0);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [showConfetti, setShowConfetti] = useState(true);
+  const [index, setIndex] = useState(0);
+
+  /* ===============================
+     AUTO CARRUSEL
+  ============================== */
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowConfetti(false), 4000);
-    return () => clearTimeout(timer);
-  }, []);
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % images.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [images.length]);
 
-  const visibleImages = gallery.slice(startIndex, startIndex + 4);
+  /* ===============================
+     CONTADOR PREMIUM
+  ============================== */
+
+  const Counter = ({ value }: { value: number }) => {
+    const [count, setCount] = useState(0);
+
+    useEffect(() => {
+      let start = 0;
+      const duration = 1500;
+      const increment = value / (duration / 16);
+
+      const timer = setInterval(() => {
+        start += increment;
+        if (start >= value) {
+          setCount(value);
+          clearInterval(timer);
+        } else {
+          setCount(Math.floor(start));
+        }
+      }, 16);
+
+      return () => clearInterval(timer);
+    }, [value]);
+
+    return <span>{count}</span>;
+  };
 
   const whatsappUrl = `${whatsappBase}?text=${encodeURIComponent(
-    `Hola 👋 quiero cotizar el servicio de ${selectedService}`
+    `Hola Juan 👋 quiero reservar el servicio de fotografía para ${selectedService}`
   )}`;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 80 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 1 }}
-      className="min-h-screen flex items-center justify-center relative px-4 py-20 overflow-hidden"
-    >
-      {showConfetti && <Confetti />}
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 py-16">
 
-      <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black" />
+      {/* BG CINEMATOGRÁFICO */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage:
+            "url(https://i.pinimg.com/736x/b9/fb/4e/b9fb4e70ca132d974e9a4717e77f8b68.jpg)",
+        }}
+      />
 
-      <div className="relative z-10 w-full max-w-6xl rounded-3xl bg-white/10 backdrop-blur-3xl border border-white/20 shadow-2xl p-6 sm:p-14 text-white">
+      <div className="absolute inset-0 bg-black/85 backdrop-blur-sm" />
 
+      {/* TARJETA GLASS */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 40 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="relative z-10 w-full max-w-xl rounded-3xl bg-white/10 backdrop-blur-2xl border border-white/20 shadow-[0_30px_120px_rgba(0,0,0,0.8)] p-6 sm:p-10 text-white"
+      >
         {/* PERFIL */}
         <div className="flex flex-col items-center text-center">
-          <div className="w-28 h-28 rounded-full overflow-hidden border border-white shadow-xl">
-            <img src="/logofm.jpeg" className="w-full h-full object-cover" />
-          </div>
+          <motion.div
+            whileHover={{ scale: 1.08 }}
+            className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border border-yellow-400/40 shadow-lg"
+          >
+            <img
+              src="/i.png"
+              alt="Fotógrafo"
+              className="w-full h-full object-cover"
+            />
+          </motion.div>
 
-          <h2 className="text-4xl tracking-[10px] font-light mt-6">
-            FOTO MORALES
+          <h2 className="mt-6 text-xl sm:text-2xl font-light tracking-widest">
+            JUAN FELIPE MORALES
           </h2>
+
+          <p className="text-sm text-white/70 mt-2">
+            Fotógrafo de bodas & videógrafo cinematográfico
+          </p>
+
+          {/* BOTÓN LLAMAR GLASS */}
+          <a
+            href={`tel:57${cleanPhone}`}
+            className="mt-4 inline-block px-6 py-2 rounded-full border border-white/30 text-sm tracking-widest bg-white/10 backdrop-blur-lg hover:bg-yellow-400 hover:text-black hover:border-yellow-400 transition-all duration-300"
+          >
+            📞 {phone}
+          </a>
+
+          {/* ESTADÍSTICAS */}
+          <div className="flex justify-center gap-8 mt-6 text-center">
+            <div>
+              <p className="text-yellow-400 font-semibold text-lg drop-shadow-[0_0_8px_rgba(255,215,0,0.7)]">
+                <Counter value={562} />
+              </p>
+              <p className="text-xs text-white/50">Publicaciones</p>
+            </div>
+
+            <div>
+              <p className="text-yellow-400 font-semibold text-lg drop-shadow-[0_0_8px_rgba(255,215,0,0.7)]">
+                <Counter value={2779} />
+              </p>
+              <p className="text-xs text-white/50">Seguidores</p>
+            </div>
+
+            <div>
+              <p className="text-yellow-400 font-semibold text-lg drop-shadow-[0_0_8px_rgba(255,215,0,0.7)]">
+                <Counter value={2539} />
+              </p>
+              <p className="text-xs text-white/50">Seguidos</p>
+            </div>
+          </div>
         </div>
 
-        {/* GALERÍA VERTICAL MÁS ANCHA */}
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6">
-          {visibleImages.map((src, i) => (
-            <motion.div
-              key={i}
-              whileHover={{ scale: 1.05 }}
-              className="rounded-2xl overflow-hidden cursor-pointer group"
-              onClick={() => setSelectedImage(src)}
-            >
-              <img
-                src={src}
-                className="w-full aspect-[3/4] object-cover transition duration-700 group-hover:scale-110"
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/40 to-transparent my-6" />
+
+        {/* CARRUSEL */}
+        <div className="relative">
+          <AnimatePresence mode="wait">
+            <motion.img
+              key={index}
+              src={images[index]}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.6 }}
+              className="w-full h-56 sm:h-72 object-cover rounded-2xl"
+            />
+          </AnimatePresence>
+
+          <div className="flex justify-center mt-4 gap-2">
+            {images.map((_, i) => (
+              <div
+                key={i}
+                className={`h-2 w-2 rounded-full transition-all duration-300 ${
+                  i === index
+                    ? "bg-yellow-400 scale-110"
+                    : "bg-white/40"
+                }`}
               />
-            </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* SELECTOR SERVICIO */}
+        <div className="mt-6 flex flex-wrap justify-center gap-2">
+          {services.map((service) => (
+            <button
+              key={service}
+              onClick={() => setSelectedService(service)}
+              className={`px-4 py-2 text-xs rounded-full border backdrop-blur-md bg-white/10 transition-all duration-300 ${
+                selectedService === service
+                  ? "bg-yellow-400 text-black border-yellow-400"
+                  : "border-white/30 hover:bg-yellow-400 hover:text-black"
+              }`}
+            >
+              {service}
+            </button>
           ))}
         </div>
 
-        {/* CARRUSEL TEXTO MEJORADO */}
-        <div className="mt-20 overflow-hidden border-t border-white/10 pt-6">
-          <motion.div
-            animate={{ x: ["100%", "-100%"] }}
-            transition={{ repeat: Infinity, duration: 14, ease: "linear" }}
-            className="whitespace-nowrap text-yellow-400 tracking-widest text-sm"
+        {/* BOTONES ACCIÓN */}
+        <div className="space-y-3 mt-8 text-center">
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            className="block py-3 rounded-full bg-yellow-400 text-black font-semibold hover:bg-yellow-300 transition-all duration-300 shadow-lg"
           >
-            ✨ PAGA FÁCIL POR NEQUI • BANCOLOMBIA • ESCANEA NUESTRO CÓDIGO QR • TRANSFERENCIAS SEGURAS ✨
-          </motion.div>
+            Reservar Servicio
+          </a>
 
-          <div className="grid md:grid-cols-2 gap-8 mt-8">
-            <div className="rounded-2xl bg-white/5 p-6 text-center hover:scale-105 transition">
-              <img src="/bc.jpeg" className="w-56 mx-auto rounded-xl" />
-            </div>
-
-            <div className="rounded-2xl bg-white/5 p-6 text-center hover:scale-105 transition">
-              <img src="/qrnequi.jpeg" className="w-56 mx-auto rounded-xl" />
-            </div>
-          </div>
+          <a
+            href={`https://www.instagram.com/${instagram}/`}
+            target="_blank"
+            className="block py-3 rounded-full border border-white/30 bg-white/10 backdrop-blur-lg hover:bg-yellow-400 hover:text-black transition-all duration-300"
+          >
+            Instagram
+          </a>
         </div>
 
-      </div>
-
-      <AnimatePresence>
-        {selectedImage && (
-          <motion.div
-            className="fixed inset-0 bg-black/95 flex items-center justify-center z-50 p-6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setSelectedImage(null)}
-          >
-            <motion.img
-              src={selectedImage}
-              initial={{ scale: 0.7 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.7 }}
-              className="max-h-[90vh] rounded-2xl shadow-2xl"
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
+        <p className="text-center text-[10px] text-white/40 mt-8 tracking-[3px]">
+          CINEMATIC EXPERIENCE
+        </p>
+      </motion.div>
+    </div>
   );
 }

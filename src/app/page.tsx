@@ -169,7 +169,7 @@ export default function HomePage() {
   const hero = {
     bigWord: "FOREVER",
     kicker: "INVITACIONES DIGITALES",
-    title: "Soluciones Digitales",
+    title: "Tarjetas premium para bodas",
     subtitle:
       "Femenino + editorial + moderno. Fondo dinámico y botones glass, pero con un hero limpio y estético.",
     ctaPrimary: "Cotizar ahora",
