@@ -624,7 +624,7 @@ export default function Page() {
   const venueAddress = "Villavicencio — Vereda Apiay / vía Puerto López";
 
   // ✅ AUDIO: se dispara al abrir
-  const audioSrc = "/audio/Río Roma - Caminar de Tu Mano (Official Video) ft. Fonseca [1] copy.MP3";
+  const audioSrc = "/audio/Río Roma - Caminar de Tu Mano (Official Video) ft. Fonseca [1].MP3";
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [audioError, setAudioError] = useState<string | null>(null);
 
