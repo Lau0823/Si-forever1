@@ -133,7 +133,7 @@ const WEDDING = {
 
   gifts: [
     { label: 'Amazon', url: 'https://www.amazon.com/', note: 'Opciones para dar regalo a los Novios' },
-    { label: 'Casaideas', url: 'https://www.casaideas.com.co/', note: 'Puedes regalarnos articulos que estan aqui, con nuestro codigo de usuario y ayudarnos a tener  las cosas para nuestro nuevo hogar ' },
+    { label: 'Casaideas', url: 'https://www.casaideas.com.co/', note: 'Puedes regalarnos articulos que estan aqui, con nuestro codigo de usuario y ayudarnos a tener  las cosa spara nuestro nuevo hogar ' },
     { label: 'Nequi', url: '#', note: 'Nequi: 300 000 0000 , Dona aqui tu aporte para construir nuestro nuevo Hogar.' },
   ],
 

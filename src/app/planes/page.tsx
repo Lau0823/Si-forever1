@@ -34,7 +34,7 @@ export default function Page() {
         "FECHA DE LA BODA",
         "TABLERO cuenta regresiva / días, horas, minutos y segundos (interactivo)",
         "Itinerario",
-        "Lugar de la boda",
+        "Lugar de la boda (Google maps)",
         "Confirmación de asistencia con botón de WhatsApp",
         "Código de vestuario",
         "Lista de regalos",
@@ -50,7 +50,7 @@ export default function Page() {
       items: [
         "TABLERO cuenta regresiva / días, horas, minutos y segundos (interactivo)",
         "Itinerario",
-        "Lugar de la boda",
+        "Lugar de la boda (Google maps)",
         "Confirmación de asistencia con botón de WhatsApp",
         "Código de vestuario",
         "Lista de regalos",
@@ -69,7 +69,7 @@ export default function Page() {
       items: [
         "TABLERO cuenta regresiva / días, horas, minutos y segundos (interactivo)",
         "Itinerario",
-        "Lugar de la boda",
+        "Lugar de la boda (Google maps)",
         "Confirmación de asistencia con botón de WhatsApp",
         "Código de vestuario",
         "Lista de regalos",
