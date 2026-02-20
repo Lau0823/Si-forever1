@@ -287,7 +287,7 @@ export default function Page() {
     "https://i.pinimg.com/1200x/06/a4/dd/06a4dd27969325bdec82d7f4ef09ed7a.jpg",
   ];
 
-  const paperName = "Periódico de Boda";
+  const paperName = "llego el día";
   const paperDate = "SÁBADO · 10 MAYO, 2026";
   const paperRegion = "VILLAVICENCIO";
   const bigHeadline = coupleName;
