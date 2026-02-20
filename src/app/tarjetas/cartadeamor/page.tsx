@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
 
 const serif = Playfair_Display({ subsets: ["latin"], weight: ["500", "600", "700"] });
@@ -15,9 +15,42 @@ export default function WeddingInviteCardStyle() {
   // ✅ Imágenes
   const PHOTOS = {
     heroLeftBg: "https://i.pinimg.com/736x/46/96/80/469680bec8a2451d909321f0b218554e.jpg",
-    heroRightPhoto: "https://i.pinimg.com/736x/46/96/80/469680bec8a2451d909321f0b218554e.jpg",
+    heroRightPhoto: "https://i.pinimg.com/736x/5f/10/7e/5f107e7aff7412fd655597ebfa9f59b2.jpg",
     bannerTwo: "https://i.pinimg.com/736x/46/96/80/469680bec8a2451d909321f0b218554e.jpg",
   };
+
+  // ✅ Intermedio: Audio (recomendado: archivo en /public)
+  const AUDIO = {
+    src: "/audio/Río Roma - Caminar de Tu Mano (Official Video) ft. Fonseca [1] copy.MP3", // <-- pon aquí tu mp3 (ej: /audio/perfect.mp3)
+    title: "Nuestra canción",
+    artist: "Artista",
+  };
+
+  // ✅ Versículo (editable)
+  const VERSE = {
+    ref: "1 Corintios 13:7",
+    text: "Todo lo disculpa, todo lo cree, todo lo espera, todo lo soporta.",
+  };
+
+  // ✅ Mini galerías (puedes cambiar fotos y textos)
+  const GALLERIES = useMemo(
+    () => ({
+      historia: [
+        { src: PHOTOS.heroRightPhoto, title: "Nos conocimos", desc: "El inicio de todo" },
+        { src: PHOTOS.heroRightPhoto, title: "Primera cita", desc: "Risas y café" },
+        { src: PHOTOS.heroRightPhoto, title: "La propuesta", desc: "Un sí para siempre" },
+      ],
+      padres: [
+        { src: PHOTOS.heroRightPhoto, title: "Padres de la novia", desc: "Nombre & Nombre" },
+        { src: PHOTOS.heroRightPhoto, title: "Padres del novio", desc: "Nombre & Nombre" },
+      ],
+      padrinos: [
+        { src: PHOTOS.heroRightPhoto, title: "Padrinos", desc: "Nombre & Nombre" },
+        { src: PHOTOS.heroRightPhoto, title: "Testigos", desc: "Nombre & Nombre" },
+      ],
+    }),
+    [PHOTOS.heroRightPhoto]
+  );
 
   // ✅ Links
   const mapsLink = "https://maps.google.com/?q=Hacienda+El+Rosal";
@@ -28,16 +61,7 @@ export default function WeddingInviteCardStyle() {
 
   // ✅ Lista de regalos para MODAL
   const giftIdeas = useMemo(
-    () => [
-      "Lavadora",
-      "Secadora",
-      "Aspiradora",
-      "Plancha",
-      "TV Smart",
-      "Ropa de cama matrimonial",
-      "Licuadora",
-      "Juego de ollas",
-    ],
+    () => ["Lavadora", "Secadora", "Aspiradora", "Plancha", "TV Smart", "Ropa de cama matrimonial", "Licuadora", "Juego de ollas"],
     []
   );
 
@@ -120,6 +144,62 @@ export default function WeddingInviteCardStyle() {
   // ✅ Modal de regalos
   const [giftModalOpen, setGiftModalOpen] = useState(false);
 
+  // ✅ Intermedio: abrir invitación + música
+  const [inviteOpen, setInviteOpen] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [muted, setMuted] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // ✅ Galería tabs
+  const [galleryTab, setGalleryTab] = useState<"historia" | "padres" | "padrinos">("historia");
+
+  // Init audio
+  useEffect(() => {
+    const el = new Audio(AUDIO.src);
+    el.loop = true;
+    el.preload = "auto";
+    audioRef.current = el;
+
+    const onPlay = () => setIsPlaying(true);
+    const onPause = () => setIsPlaying(false);
+    el.addEventListener("play", onPlay);
+    el.addEventListener("pause", onPause);
+
+    return () => {
+      el.pause();
+      el.removeEventListener("play", onPlay);
+      el.removeEventListener("pause", onPause);
+      audioRef.current = null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+    audioRef.current.muted = muted;
+  }, [muted]);
+
+  const openInvite = async () => {
+    setInviteOpen(true);
+    // Autoplay suele requerir gesto del usuario: esto ya es un click 👍
+    try {
+      await audioRef.current?.play();
+    } catch {
+      // Si el navegador bloquea, el usuario puede darle Play manual
+    }
+  };
+
+  const togglePlay = async () => {
+    if (!audioRef.current) return;
+    if (audioRef.current.paused) {
+      try {
+        await audioRef.current.play();
+      } catch {}
+    } else {
+      audioRef.current.pause();
+    }
+  };
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setGiftModalOpen(false);
@@ -159,6 +239,40 @@ export default function WeddingInviteCardStyle() {
         ))}
       </div>
 
+      {/* ✅ INTERMEDIO OVERLAY (bloquea y abre invitación) */}
+      {!inviteOpen ? (
+        <div className="interOverlay" role="dialog" aria-modal="true" aria-label="Abrir invitación">
+          <div className="interCard">
+            <p className="text-[11px] uppercase tracking-[0.35em] text-black/55">PLAN ROMANCE </p>
+            <h2 className={`${serif.className} mt-3 text-3xl sm:text-4xl font-semibold leading-[1.05]`}>
+              {couple.one} <span className="text-[#b21d2a]">♥</span> {couple.two}
+            </h2>
+            <p className="mt-3 text-sm text-black/65">
+              Presiona para abrir la invitación. Al abrir, sonará{" "}
+              <span className="font-semibold text-black/75">{AUDIO.title}</span>.
+            </p>
+
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <button onClick={openInvite} type="button" className="red-btn rounded-full px-6 py-3 text-sm font-semibold w-full sm:w-auto">
+                Abrir invitación 
+              </button>
+
+              <button
+                onClick={() => setMuted((v) => !v)}
+                type="button"
+                className="outline-btn rounded-full px-6 py-3 text-sm font-semibold w-full sm:w-auto"
+              >
+                {muted ? "Activar sonido" : "Abrir sin sonido"}
+              </button>
+            </div>
+
+            <div className="mt-5 text-xs text-black/45">
+              Tip: si tu navegador bloquea el audio, usa el botón Play dentro de la invitación.
+            </div>
+          </div>
+        </div>
+      ) : null}
+
       {/* MODAL REGALOS */}
       {giftModalOpen ? (
         <div className="modalOverlay" role="dialog" aria-modal="true" aria-label="Lista de regalos">
@@ -188,12 +302,7 @@ export default function WeddingInviteCardStyle() {
             </div>
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <a
-                href={nequiWhatsapp}
-                target="_blank"
-                rel="noreferrer"
-                className="outline-btn flex-1 rounded-full px-6 py-3 text-center text-sm font-semibold"
-              >
+              <a href={nequiWhatsapp} target="_blank" rel="noreferrer" className="outline-btn flex-1 rounded-full px-6 py-3 text-center text-sm font-semibold">
                 Donar por Nequi →
               </a>
 
@@ -218,12 +327,33 @@ export default function WeddingInviteCardStyle() {
         </div>
       ) : null}
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pb-12 pt-8 sm:pt-10">
+      <div className={`mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pb-12 pt-8 sm:pt-10 ${!inviteOpen ? "blur-sm pointer-events-none select-none" : ""}`}>
         {/* ✅ PRIMERO: BANNER HERO */}
         <section className="overflow-hidden rounded-[34px] ring-1 ring-[#b21d2a]/15 bg-white shadow-[0_22px_90px_rgba(0,0,0,0.11)]">
           <div className="relative">
             <img src={PHOTOS.bannerTwo} alt="Banner" className="h-[430px] w-full object-cover sm:h-[520px] lg:h-[620px]" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-black/10" />
+
+            {/* ✅ mini audio bar */}
+            <div className="absolute left-4 right-4 top-4 z-10">
+              <div className="rounded-full bg-white/15 ring-1 ring-white/15 backdrop-blur-xl px-3 py-2 flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="text-[10px] uppercase tracking-[0.35em] text-white/70">Reproduciendo</p>
+                  <p className="text-xs text-white/90 truncate">
+                    {AUDIO.title} · <span className="text-white/70">{AUDIO.artist}</span>
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button onClick={togglePlay} type="button" className="audioBtn" aria-label={isPlaying ? "Pausar" : "Reproducir"}>
+                    {isPlaying ? "❚❚" : "▶"}
+                  </button>
+                  <button onClick={() => setMuted((v) => !v)} type="button" className="audioBtn" aria-label={muted ? "Activar sonido" : "Silenciar"}>
+                    {muted ? "🔈" : "🔇"}
+                  </button>
+                </div>
+              </div>
+            </div>
+
             <div className="absolute inset-0 p-6 sm:p-10 lg:p-12 flex items-end">
               <div className="w-full">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -237,9 +367,7 @@ export default function WeddingInviteCardStyle() {
                   {couple.one} <span className="text-white/90">♥</span> {couple.two}
                 </h1>
 
-                <p className="mt-3 max-w-2xl text-sm sm:text-base text-white/85">
-                  Nos encantaría que nos acompañes en el inicio de nuestra historia.
-                </p>
+                <p className="mt-3 max-w-2xl text-sm sm:text-base text-white/85">Nos encantaría que nos acompañes en el inicio de nuestra historia.</p>
 
                 <div className="mt-6 flex flex-wrap gap-2">
                   <HeroPill label="Días" value={mounted ? (countdown.done ? "0" : String(countdown.d)) : "—"} />
@@ -252,8 +380,8 @@ export default function WeddingInviteCardStyle() {
                   <a href="#rsvp" className="outline-btn heroBtn flex-1 rounded-full px-6 py-3 text-center text-sm font-semibold">
                     Confirmar asistencia
                   </a>
-                  <a href="#info" className="outline-btn heroBtn flex-1 rounded-full px-6 py-3 text-center text-sm font-semibold">
-                    Ver detalles
+                  <a href="#historia" className="outline-btn heroBtn flex-1 rounded-full px-6 py-3 text-center text-sm font-semibold">
+                    Ver galería
                   </a>
                   <button type="button" onClick={() => setGiftModalOpen(true)} className="red-btn flex-1 rounded-full px-6 py-3 text-center text-sm font-semibold">
                     Ver lista de regalos ♥
@@ -264,6 +392,72 @@ export default function WeddingInviteCardStyle() {
           </div>
         </section>
 
+        {/* ✅ NUEVO: Versículo (naipe) */}
+        <section className="mt-7">
+          <PlayingCard initials={initials} variant="default">
+            <p className="text-[11px] uppercase tracking-[0.35em] text-black/55">Versículo</p>
+            <h2 className={`${serif.className} mt-4 text-3xl sm:text-4xl font-semibold leading-[1.1]`}>
+              {VERSE.ref} <span className="text-[#b21d2a]">♥</span>
+            </h2>
+            <p className="mt-4 text-sm text-black/70 max-w-2xl leading-relaxed">“{VERSE.text}”</p>
+          </PlayingCard>
+        </section>
+
+        {/* ✅ NUEVO: Mini galería (historia/padres/padrinos) */}
+        <section id="historia" className="mt-7">
+          <PlayingCard initials={initials} variant="default">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-[11px] uppercase tracking-[0.35em] text-black/55">Mini galería</p>
+                <h3 className={`${serif.className} mt-3 text-2xl sm:text-3xl font-semibold`}>Un pedacito de nosotros</h3>
+                <p className="mt-2 text-sm text-black/60"></p>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => setGalleryTab("historia")}
+                  className={`tabBtn ${galleryTab === "historia" ? "tabOn" : ""}`}
+                >
+                  Nuestra historia
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setGalleryTab("padres")}
+                  className={`tabBtn ${galleryTab === "padres" ? "tabOn" : ""}`}
+                >
+                  Padres
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setGalleryTab("padrinos")}
+                  className={`tabBtn ${galleryTab === "padrinos" ? "tabOn" : ""}`}
+                >
+                  Padrinos
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-6 galleryRow">
+              {(GALLERIES[galleryTab] ?? []).map((item, idx) => (
+                <div key={`${galleryTab}-${idx}`} className="galleryItem">
+                  <div className="galleryImgWrap">
+                    <img src={item.src} alt={item.title} className="galleryImg" />
+                  </div>
+                  <div className="mt-3">
+                    <p className="text-sm font-semibold text-black/75">{item.title}</p>
+                    <p className="text-xs text-black/55 mt-1">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-5 text-xs text-black/45">
+              Tip: si quieres que sea “tipo carrusel”, esto ya es scroll horizontal suave (mobile queda precioso).
+            </div>
+          </PlayingCard>
+        </section>
+
         {/* ✅ TODAS LAS CARDS COMO NAIPE (y una invertida roja) */}
         <section className="mt-7 grid gap-5 lg:grid-cols-2">
           {/* Card 1 */}
@@ -272,29 +466,19 @@ export default function WeddingInviteCardStyle() {
             <h2 className={`${serif.className} mt-4 text-3xl sm:text-4xl font-semibold leading-[1.1]`}>
               {couple.one} <span className="text-[#b21d2a]">♥</span> {couple.two}
             </h2>
-            <p className="mt-4 text-sm text-black/65 max-w-md">
-              Una invitación inspirada en naipes, minimal y moderna.
-            </p>
+            <p className="mt-4 text-sm text-black/65 max-w-md">Una invitación inspirada en naipes, minimal y moderna.</p>
 
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <button
-                type="button"
-                onClick={() => setSongOpen((v) => !v)}
-                className="outline-btn flex-1 rounded-full px-6 py-3 text-center text-sm font-semibold"
-              >
+              <button type="button" onClick={() => setSongOpen((v) => !v)} className="outline-btn flex-1 rounded-full px-6 py-3 text-center text-sm font-semibold">
                 {songOpen ? "Cerrar sugerencia" : "Sugerir canción"}
               </button>
 
-              <button
-                type="button"
-                onClick={() => setGiftModalOpen(true)}
-                className="outline-btn flex-1 rounded-full px-6 py-3 text-center text-sm font-semibold"
-              >
+              <button type="button" onClick={() => setGiftModalOpen(true)} className="outline-btn flex-1 rounded-full px-6 py-3 text-center text-sm font-semibold">
                 Regalos
               </button>
             </div>
 
-            {/* ✅ Form de canción: SOLO AQUÍ (una sola vez) */}
+            {/* ✅ Form de canción: SOLO AQUÍ */}
             {songOpen ? (
               <div className="mt-6 rounded-[22px] bg-white/60 p-5 ring-1 ring-black/10">
                 <p className="text-[11px] uppercase tracking-[0.35em] text-black/55">Playlist</p>
@@ -325,15 +509,12 @@ export default function WeddingInviteCardStyle() {
             ) : null}
           </PlayingCard>
 
-          {/* ✅ Card 2 (invertida) */}
+          {/* Card 2 (invertida) */}
           <PlayingCard initials={initials} variant="inverted">
             <p className="text-[11px] uppercase tracking-[0.35em] text-white/80">Tarjeta especial</p>
             <h3 className={`${serif.className} mt-4 text-3xl sm:text-4xl font-semibold leading-[1.1] text-white`}>
               Todo al rojo <span className="text-white/90">♥</span>
             </h3>
-            <p className="mt-4 text-sm text-white/85 max-w-md">
-              
-            </p>
 
             <div className="mt-7 grid gap-3 sm:grid-cols-2">
               <a href="#rsvp" className="inv-btn rounded-full px-6 py-3 text-center text-sm font-semibold">
@@ -346,14 +527,12 @@ export default function WeddingInviteCardStyle() {
 
             <div className="mt-6 rounded-[22px] bg-white/10 p-5 ring-1 ring-white/15">
               <p className="text-[11px] uppercase tracking-[0.35em] text-white/80">Tip</p>
-              <p className="mt-2 text-sm text-white/85">
-                 Ven listo para bailar (aunque no sepas).
-              </p>
+              <p className="mt-2 text-sm text-white/85">Ven listo para bailar (aunque no sepas).</p>
             </div>
           </PlayingCard>
         </section>
 
-        {/* INFO (todas como naipe) */}
+        {/* INFO */}
         <section id="info" className="mt-10 grid gap-5 lg:grid-cols-3">
           <PlayingCard initials={initials} variant="default">
             <InfoInner title="Lugar" subtitle="Dónde será" icon="📍">
@@ -386,16 +565,28 @@ export default function WeddingInviteCardStyle() {
           <PlayingCard initials={initials} variant="default">
             <InfoInner title="Itinerario" subtitle="Horario" icon="⏳">
               <ul className="text-sm text-black/70 space-y-2">
-                <li className="flex items-center justify-between"><span>Ceremonia</span><span className="font-semibold text-black/70">4:00 pm</span></li>
-                <li className="flex items-center justify-between"><span>Brindis</span><span className="font-semibold text-black/70">5:00 pm</span></li>
-                <li className="flex items-center justify-between"><span>Recepción</span><span className="font-semibold text-black/70">6:00 pm</span></li>
-                <li className="flex items-center justify-between"><span>Fiesta</span><span className="font-semibold text-black/70">8:00 pm</span></li>
+                <li className="flex items-center justify-between">
+                  <span>Ceremonia</span>
+                  <span className="font-semibold text-black/70">4:00 pm</span>
+                </li>
+                <li className="flex items-center justify-between">
+                  <span>Brindis</span>
+                  <span className="font-semibold text-black/70">5:00 pm</span>
+                </li>
+                <li className="flex items-center justify-between">
+                  <span>Recepción</span>
+                  <span className="font-semibold text-black/70">6:00 pm</span>
+                </li>
+                <li className="flex items-center justify-between">
+                  <span>Fiesta</span>
+                  <span className="font-semibold text-black/70">8:00 pm</span>
+                </li>
               </ul>
             </InfoInner>
           </PlayingCard>
         </section>
 
-        {/* RSVP (naipe) */}
+        {/* RSVP */}
         <section className="mt-10">
           <PlayingCard initials={initials} variant="default">
             <div id="rsvp" className="p-0">
@@ -411,7 +602,12 @@ export default function WeddingInviteCardStyle() {
 
               <div className="mt-7 grid gap-3 sm:grid-cols-2">
                 <Field label="Nombre" value={rsvp.name} onChange={(v) => setRsvp((p) => ({ ...p, name: v }))} placeholder="Tu nombre" />
-                <Field label="Número de invitados" value={rsvp.guests} onChange={(v) => setRsvp((p) => ({ ...p, guests: v }))} placeholder="1" />
+                <Field
+                  label="Número de invitados"
+                  value={rsvp.guests}
+                  onChange={(v) => setRsvp((p) => ({ ...p, guests: v }))}
+                  placeholder="1"
+                />
 
                 <div className="sm:col-span-2">
                   <label className="block text-xs font-semibold text-black/60 mb-2">¿Asistes?</label>
@@ -440,9 +636,9 @@ export default function WeddingInviteCardStyle() {
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <a
                   href={`https://wa.me/57${nequiNumber}?text=${encodeURIComponent(
-                    `RSVP 💌\nNombre: ${rsvp.name || "(sin nombre)"}\nInvitados: ${rsvp.guests}\nAsiste: ${
-                      rsvp.attending === "yes" ? "Sí" : "No"
-                    }\nNota: ${rsvp.note || "-"}`
+                    `RSVP 💌\nNombre: ${rsvp.name || "(sin nombre)"}\nInvitados: ${rsvp.guests}\nAsiste: ${rsvp.attending === "yes" ? "Sí" : "No"}\nNota: ${
+                      rsvp.note || "-"
+                    }`
                   )}`}
                   target="_blank"
                   rel="noreferrer"
@@ -455,10 +651,6 @@ export default function WeddingInviteCardStyle() {
                   Lista de regalos ♥
                 </button>
               </div>
-
-              <p className="mt-4 text-xs text-black/50">
-                
-              </p>
             </div>
           </PlayingCard>
         </section>
@@ -473,6 +665,110 @@ export default function WeddingInviteCardStyle() {
         :root {
           --red: #b21d2a;
           --redRing: rgba(178, 29, 42, 0.28);
+        }
+
+        /* ✅ INTERMEDIO overlay */
+        .interOverlay {
+          position: fixed;
+          inset: 0;
+          z-index: 60;
+          display: grid;
+          place-items: center;
+          padding: 18px;
+          background: radial-gradient(1200px 800px at 50% 30%, rgba(178, 29, 42, 0.18), rgba(0, 0, 0, 0.55));
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+        }
+        .interCard {
+          width: min(720px, 100%);
+          border-radius: 30px;
+          background: rgba(255, 255, 255, 0.92);
+          border: 1px solid rgba(178, 29, 42, 0.18);
+          box-shadow: 0 28px 120px rgba(0, 0, 0, 0.25);
+          padding: 22px;
+        }
+        @media (min-width: 640px) {
+          .interCard {
+            padding: 28px;
+          }
+        }
+
+        /* ✅ audio buttons */
+        .audioBtn {
+          height: 34px;
+          width: 34px;
+          border-radius: 9999px;
+          border: 1px solid rgba(255, 255, 255, 0.25);
+          background: rgba(0, 0, 0, 0.18);
+          color: rgba(255, 255, 255, 0.95);
+          display: grid;
+          place-items: center;
+          font-size: 12px;
+        }
+        .audioBtn:hover {
+          background: rgba(0, 0, 0, 0.26);
+        }
+
+        /* ✅ tabs */
+        .tabBtn {
+          border-radius: 9999px;
+          padding: 10px 14px;
+          font-size: 12px;
+          font-weight: 800;
+          background: rgba(255, 255, 255, 0.6);
+          border: 1px solid rgba(17, 17, 17, 0.12);
+          color: rgba(17, 17, 17, 0.62);
+          backdrop-filter: blur(14px);
+          -webkit-backdrop-filter: blur(14px);
+          transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .tabBtn:hover {
+          background: rgba(255, 255, 255, 0.8);
+          border-color: rgba(178, 29, 42, 0.28);
+        }
+        .tabOn {
+          background: rgba(178, 29, 42, 0.1);
+          border-color: rgba(178, 29, 42, 0.28);
+          color: rgba(178, 29, 42, 0.92);
+          box-shadow: 0 10px 26px rgba(178, 29, 42, 0.08);
+        }
+
+        /* ✅ gallery */
+        .galleryRow {
+          display: grid;
+          grid-auto-flow: column;
+          grid-auto-columns: minmax(220px, 1fr);
+          gap: 14px;
+          overflow-x: auto;
+          padding-bottom: 6px;
+          scroll-snap-type: x mandatory;
+          -webkit-overflow-scrolling: touch;
+        }
+        .galleryRow::-webkit-scrollbar {
+          height: 8px;
+        }
+        .galleryRow::-webkit-scrollbar-thumb {
+          background: rgba(0, 0, 0, 0.12);
+          border-radius: 9999px;
+        }
+        .galleryItem {
+          scroll-snap-align: start;
+          border-radius: 22px;
+          background: rgba(255, 255, 255, 0.72);
+          border: 1px solid rgba(0, 0, 0, 0.08);
+          padding: 12px;
+        }
+        .galleryImgWrap {
+          border-radius: 18px;
+          overflow: hidden;
+          border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        .galleryImg {
+          width: 100%;
+          height: 160px;
+          object-fit: cover;
+          display: block;
+          transform: scale(1.01);
         }
 
         /* ✅ BOTÓN outline */
@@ -498,7 +794,7 @@ export default function WeddingInviteCardStyle() {
           transform: scale(0.985);
         }
 
-        /* ✅ botón rojo (solo regalos) */
+        /* ✅ botón rojo */
         .red-btn {
           background: var(--red);
           color: rgba(255, 255, 255, 0.98);
@@ -682,7 +978,8 @@ export default function WeddingInviteCardStyle() {
           .outline-btn,
           .red-btn,
           .inv-btn,
-          .toggle {
+          .toggle,
+          .tabBtn {
             transition: none !important;
           }
         }
@@ -705,11 +1002,9 @@ function PlayingCard({
 
   return (
     <div className={`cardBase ${isInv ? "cardInv" : "cardDef"}`}>
-      {/* marco */}
       <div className={`cardFrame ${isInv ? "cardFrameInv" : "cardFrameDef"}`} />
       <div className={`cardFrame2 ${isInv ? "cardFrame2Inv" : "cardFrame2Def"}`} />
 
-      {/* corners like playing card */}
       <div className={`corner cornerTL ${isInv ? "cornerInv" : ""}`}>
         <div className="cornerTxt">{initials}</div>
         <div className="cornerSuit">♥</div>
@@ -719,7 +1014,6 @@ function PlayingCard({
         <div className="cornerSuit">♥</div>
       </div>
 
-      {/* center faint mark */}
       <div className={`centerMark ${isInv ? "centerMarkInv" : ""}`}>
         <span className={`${serif.className} centerInitials`}>{initials}</span>
         <span className="centerHeart">♥</span>
@@ -843,17 +1137,7 @@ function HeroPill({ label, value }: { label: string; value: string }) {
   );
 }
 
-function InfoInner({
-  title,
-  subtitle,
-  icon,
-  children,
-}: {
-  title: string;
-  subtitle: string;
-  icon: string;
-  children: React.ReactNode;
-}) {
+function InfoInner({ title, subtitle, icon, children }: { title: string; subtitle: string; icon: string; children: React.ReactNode }) {
   return (
     <>
       <div className="flex items-start justify-between gap-3">
@@ -868,17 +1152,7 @@ function InfoInner({
   );
 }
 
-function Field({
-  label,
-  value,
-  onChange,
-  placeholder,
-}: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  placeholder?: string;
-}) {
+function Field({ label, value, onChange, placeholder }: { label: string; value: string; onChange: (v: string) => void; placeholder?: string }) {
   return (
     <div>
       <label className="block text-xs font-semibold text-black/60 mb-2">{label}</label>
