@@ -630,9 +630,7 @@ export default function Page() {
                   </div>
                 </div>
 
-                <div className="pointer-events-none absolute -top-3 left-1/2 -translate-x-1/2 rounded-full border border-neutral-900/25 bg-[#fffdf7] px-4 py-2 text-[11px] font-semibold tracking-[0.22em] uppercase text-neutral-800 shadow-sm">
-                  Edición especial
-                </div>
+                
               </div>
             </div>
           </div>
