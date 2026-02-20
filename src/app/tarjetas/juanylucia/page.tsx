@@ -200,7 +200,7 @@ function GiftModal({
                 Lista de regalos
               </div>
               <div className="mt-1 text-sm text-neutral-700">
-                Si deseas bendecirnos, aquí tienes algunas ideas 🤍
+                Si deseas bendecirnos, aquí tienes algunas ideas 
               </div>
             </div>
             <button
@@ -623,7 +623,7 @@ export default function Page() {
                         <p className="mt-3 text-xs text-red-600 text-center">{audioError}</p>
                       ) : (
                         <p className="mt-3 text-xs text-neutral-700 text-center">
-                          Tip: si tu audio tiene espacios, usa <span className="font-mono">%20</span> o renómbralo.
+                       
                         </p>
                       )}
                     </div>
