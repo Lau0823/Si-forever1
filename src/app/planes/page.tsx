@@ -25,8 +25,8 @@ type Heart = {
 export default function Page() {
   const plans: Plan[] = [
     {
-      title: "Básico",
-      subtitle: "(Aura)",
+      title: "AURA",
+      subtitle: "(Básico)",
       price: "$129.900",
       oldPrice: "$179.900",
       demoUrl: "/tarjetas/lauyantonio",
@@ -44,7 +44,7 @@ export default function Page() {
       ],
     },
     {
-      title: "Intermedio",
+      title: "ROMANCE",
       subtitle: "Más elegido",
       price: "$249.900",
       oldPrice: "$329.900",
@@ -65,7 +65,7 @@ export default function Page() {
       ],
     },
     {
-      title: "Premium",
+      title: "PLAN GRAND LOVE",
       subtitle: "Experiencia completa",
       price: "$349.900",
       oldPrice: "$449.900",
