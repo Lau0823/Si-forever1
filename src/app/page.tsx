@@ -27,14 +27,7 @@ const INVITATIONS: Invitation[] = [
     image:
       "https://i.pinimg.com/736x/3b/0b/3e/3b0b3e875c7d88bd74e4c31036f86b78.jpg",
   },
-  {
-    id: "camiloyjohana",
-    title: "Votos en Blanco",
-    style: "Minimal • Clean",
-    tag: "Nuevo",
-    image:
-      "https://i.pinimg.com/736x/23/99/ec/2399ec56b1d6da2e55ee2426bd61897d.jpg",
-  },
+ 
   {
     id: "cartadeamor",
     title: "Carta de Amor",
@@ -62,6 +55,16 @@ const INVITATIONS: Invitation[] = [
     style: "Natural • Editorial",
     image:
       "https://i.pinimg.com/1200x/28/80/b0/2880b0579a6b1f3280266cb423e98f05.jpg",
+  },
+
+
+   {
+    id: "camiloyjohana",
+    title: "Votos en Blanco",
+    style: "Minimal • Clean",
+    tag: "Nuevo",
+    image:
+      "https://i.pinimg.com/736x/23/99/ec/2399ec56b1d6da2e55ee2426bd61897d.jpg",
   },
 ];
 
