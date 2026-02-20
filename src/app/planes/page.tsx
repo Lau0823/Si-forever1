@@ -3,9 +3,13 @@
 import { useEffect, useState } from "react";
 
 type Plan = {
-  name: string;
-  features: string[];
+  title: string;
+  subtitle: string;
+  price: string;
+  oldPrice: string;
+  items: string[];
   featured?: boolean;
+  extraNote?: string;
 };
 
 type Heart = {
@@ -20,38 +24,62 @@ type Heart = {
 export default function Page() {
   const plans: Plan[] = [
     {
-      name: "Plan Aura",
-      features: [
-        "Diseño digital premium",
-        "Mapa ceremonia y recepción",
-        "Dress code sugerido",
-        "Cuenta regresiva",
+      title: "Básico",
+      subtitle: "(Aura)",
+      price: "$129.900",
+      oldPrice: "$179.900",
+      extraNote: "Si desean agregar canción personalizada tiene un valor adicional de $30.000",
+      items: [
+        "Banner con foto y nombre de los novios",
+        "FECHA DE LA BODA",
+        "TABLERO cuenta regresiva / días, horas, minutos y segundos (interactivo)",
         "Itinerario",
-        "Link de regalos",
-        "RSVP por WhatsApp",
+        "Lugar de la boda",
+        "Confirmación de asistencia con botón de WhatsApp",
+        "Código de vestuario",
+        "Lista de regalos",
+        "Canción sugerida PARA EL DÍA DE LA BODA",
       ],
     },
     {
-      name: "Plan Romance",
+      title: "Intermedio",
+      subtitle: "Más elegido",
+      price: "$249.900",
+      oldPrice: "$329.900",
       featured: true,
-      features: [
-        "Todo lo del Plan Aura",
-        "Canción personalizada",
-        "Banner protagonista",
-        "Formulario sugerir canciones",
-        "Confirmación automatizada",
-        "Diseño editorial elegante",
+      items: [
+        "TABLERO cuenta regresiva / días, horas, minutos y segundos (interactivo)",
+        "Itinerario",
+        "Lugar de la boda",
+        "Confirmación de asistencia con botón de WhatsApp",
+        "Código de vestuario",
+        "Lista de regalos",
+        "Canción sugerida PARA EL DÍA DE LA BODA",
+        "Lluvia de animación (corazones, pétalos, arroz, confeti)",
+        "Botón abrir invitación + canción mientras se visualiza la tarjeta",
+        "Mini galería de nuestra historia o padres y padrinos",
+        "+ Versículo",
       ],
     },
     {
-      name: "Plan Grand Love",
-      features: [
-        "Todo lo del Plan Romance",
-        "Diseño 100% exclusivo",
-        "Animaciones avanzadas",
-        "Base de datos RSVP descargable",
-        "Soporte prioritario",
-        "Ajustes ilimitados",
+      title: "Premium",
+      subtitle: "Experiencia completa",
+      price: "$349.900",
+      oldPrice: "$449.900",
+      items: [
+        "TABLERO cuenta regresiva / días, horas, minutos y segundos (interactivo)",
+        "Itinerario",
+        "Lugar de la boda",
+        "Confirmación de asistencia con botón de WhatsApp",
+        "Código de vestuario",
+        "Lista de regalos",
+        "Canción sugerida PARA EL DÍA DE LA BODA",
+        "Lluvia de animación (corazones, pétalos, arroz, confeti)",
+        "Botón abrir invitación + canción mientras se visualiza la tarjeta",
+        "Galería de nuestra historia",
+        "Galería fotos padres, padrinos y damas + dedicatoria",
+        "+ Versículo + frase",
+        "Juego interactivo acerca de la pareja",
       ],
     },
   ];
@@ -77,8 +105,8 @@ export default function Page() {
     return () => clearInterval(interval);
   }, []);
 
-  const openWhatsApp = (plan: string) => {
-    const message = `Hola, quiero cotizar el ${plan} 💍`;
+  const openWhatsApp = (planTitle: string) => {
+    const message = `Hola, quiero cotizar el plan ${planTitle} 💍`;
     const url = `https://wa.me/573102345742?text=${encodeURIComponent(
       message
     )}`;
@@ -87,17 +115,11 @@ export default function Page() {
 
   return (
     <main className="relative min-h-screen bg-neutral-100 overflow-hidden px-6 py-24">
-      {/* Animaciones */}
       <style jsx global>{`
         @keyframes heartfall {
-          0% {
-            transform: translateY(-40px) rotate(0deg);
-          }
-          100% {
-            transform: translateY(120vh) rotate(15deg);
-          }
+          0% { transform: translateY(-40px) rotate(0deg); }
+          100% { transform: translateY(120vh) rotate(18deg); }
         }
-
         .heart {
           position: absolute;
           top: -40px;
@@ -126,73 +148,71 @@ export default function Page() {
         ))}
       </div>
 
-      {/* Header */}
-      <div className="text-center mb-16 relative z-10">
-        <h1 className="text-4xl font-semibold text-gray-900">
-          Elige tu experiencia
+      <header className="relative z-10 text-center mb-14">
+        <h1 className="text-4xl font-semibold text-neutral-900">
+          Elige tu plan
         </h1>
-        <p className="text-gray-600 mt-3">
-          Invitaciones digitales premium para bodas inolvidables
+        <p className="mt-3 text-sm text-neutral-600">
+          Promoción especial por tiempo limitado 💍
         </p>
-      </div>
+      </header>
 
-      {/* Cards */}
-      <div className="relative z-10 grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+      <section className="relative z-10 grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
         {plans.map((plan) => (
           <div
-            key={plan.name}
-            className={`relative rounded-3xl p-8 transition duration-300 hover:-translate-y-2 ${
+            key={plan.title}
+            className={`relative rounded-3xl p-8 transition hover:-translate-y-2 ${
               plan.featured
-                ? "text-white shadow-2xl"
-                : "bg-white/40 backdrop-blur-xl border border-white/50 shadow-xl text-red-800"
+                ? "bg-[#7a0f1c] text-white shadow-2xl scale-105"
+                : "bg-white/40 backdrop-blur-xl border border-white/50 text-red-800 shadow-xl"
             }`}
-            style={
-              plan.featured
-                ? {
-                    backgroundImage:
-                      "url('https://i.pinimg.com/736x/db/1b/b3/db1bb39ce65e36e3068a300cffac44b3.jpg')", // ← AQUÍ PONES TU IMAGEN
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }
-                : {}
-            }
           >
-            {/* Overlay rojo oscuro elegante */}
             {plan.featured && (
-              <div className="absolute inset-0 bg-[#7a0f1c]/90 rounded-3xl"></div>
+              <div className="mb-4 text-xs bg-white/20 px-3 py-1 rounded-full inline-block">
+                Más elegido
+              </div>
             )}
 
-            <div className="relative z-10">
-              {plan.featured && (
-                <div className="mb-4 text-xs bg-white/20 px-3 py-1 rounded-full inline-block">
-                  Más elegido
-                </div>
-              )}
+            <h3 className="text-2xl font-semibold mb-2">
+              {plan.title}{" "}
+              <span className="text-sm opacity-80">
+                {plan.subtitle}
+              </span>
+            </h3>
 
-              <h3 className="text-2xl font-semibold mb-6">
-                {plan.name}
-              </h3>
+            {/* Precio con rebaja */}
+            <p className="text-sm line-through opacity-70">
+              {plan.oldPrice}
+            </p>
+            <p className="text-3xl font-bold mb-6">
+              {plan.price}
+            </p>
 
-              <ul className="space-y-3 mb-8 text-sm">
-                {plan.features.map((feature) => (
-                  <li key={feature}>• {feature}</li>
-                ))}
-              </ul>
+            <ul className="space-y-3 text-sm mb-6">
+              {plan.items.map((item) => (
+                <li key={item}>• {item}</li>
+              ))}
+            </ul>
 
-              <button
-                onClick={() => openWhatsApp(plan.name)}
-                className={`w-full py-3 rounded-xl font-semibold transition ${
-                  plan.featured
-                    ? "bg-white text-[#7a0f1c] hover:bg-gray-100"
-                    : "bg-red-700 text-white hover:bg-red-800"
-                }`}
-              >
-                Cotizar
-              </button>
-            </div>
+            {plan.extraNote && (
+              <p className="text-xs font-medium mb-4">
+                {plan.extraNote}
+              </p>
+            )}
+
+            <button
+              onClick={() => openWhatsApp(plan.title)}
+              className={`w-full py-3 rounded-xl font-semibold transition ${
+                plan.featured
+                  ? "bg-white text-[#7a0f1c] hover:bg-gray-100"
+                  : "bg-red-700 text-white hover:bg-red-800"
+              }`}
+            >
+              Cotizar
+            </button>
           </div>
         ))}
-      </div>
+      </section>
     </main>
   );
 }
