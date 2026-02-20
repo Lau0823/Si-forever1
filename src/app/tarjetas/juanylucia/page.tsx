@@ -553,7 +553,7 @@ export default function Page() {
   const venueAddress = "Villavicencio — Vereda Apiay / vía Puerto López";
 
   // ✅ AUDIO: se dispara en "Extra Extra"
-  const audioSrc = "/audio/cancion.mp3"; // ✅ recomendado (renombra tu mp3 así)
+  const audioSrc = "/audio/Kurt - La Mujer Perfecta (Lyric Video) [1].MP3"; // ✅ recomendado (renombra tu mp3 así)
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [audioError, setAudioError] = useState<string | null>(null);
 
