@@ -183,7 +183,7 @@ export default function HomePage() {
   const NAV_ITEMS = useMemo(
     () => [
       { label: "Catálogo", href: "#catalogo" },
-  
+      { label: "Planes", href: "/planes" },
       { label: "Medios de pago", href: "#medios-de-pago" },
       { label: "Tarjetas de presentación", href: "/tarjetas/tarjetasdepresentacion" },
       { label: "15 años", href: "/quince" },
