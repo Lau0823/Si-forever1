@@ -132,9 +132,9 @@ const WEDDING = {
   ] satisfies PolaroidGroup[],
 
   gifts: [
-    { label: 'Amazon', url: 'https://www.amazon.com/', note: 'Lista de regalos (ejemplo)' },
-    { label: 'Casaideas', url: 'https://www.casaideas.com.co/', note: 'Mesa de regalos (ejemplo)' },
-    { label: 'Nequi', url: '#', note: 'Nequi: 300 000 0000' },
+    { label: 'Amazon', url: 'https://www.amazon.com/', note: 'Opciones para dar regalo a los Novios' },
+    { label: 'Casaideas', url: 'https://www.casaideas.com.co/', note: 'Puedes regalarnos articulos que estan aqui, con nuestro codigo de usuario y ayudarnos a tener  las cosas para nuestro nuevo hogar ' },
+    { label: 'Nequi', url: '#', note: 'Nequi: 300 000 0000 , Dona aqui tu aporte para construir nuestro nuevo Hogar.' },
   ],
 
   rsvp: {
@@ -143,7 +143,7 @@ const WEDDING = {
     bridePhone: '573001112233',
     groomPhone: '573009998877',
     defaultMessage:
-      'Hola! Confirmo mi asistencia a su boda. ✨\n\nNombre: {NOMBRE}\nAsistiré: {ASISTE}\nPersonas: {CANT}\nRestricciones/alergias: {ALERGIAS}\nMensaje: {MENSAJE}',
+      'Hola! Confirmo mi asistencia a su boda. \n\nNombre: {NOMBRE}\nAsistiré: {ASISTE}\nPersonas: {CANT}\nRestricciones/alergias: {ALERGIAS}\nMensaje: {MENSAJE}',
   },
 
   quiz: {
@@ -156,9 +156,7 @@ const WEDDING = {
       { id: 'q3', text: '¿Quién dijo “te amo” primero?', answer: 'ambos' },
       { id: 'q4', text: '¿Quién cocina mejor?', answer: 'novio' },
       { id: 'q5', text: '¿Quién es más romántico?', answer: 'novia' },
-      { id: 'q6', text: '¿Quién planea mejor los viajes?', answer: 'ambos' },
-      { id: 'q7', text: '¿Quién es el más desordenado?', answer: 'novio' },
-      { id: 'q8', text: '¿Quién pagó la cuenta en la primera cita?', answer: 'novio' },
+     
     ] satisfies QuizQuestion[],
   },
 };
@@ -275,7 +273,7 @@ function GalleryTwoPerView({ images }: { images: string[] }) {
     <Card className="p-5">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <div className="text-sm font-medium text-slate-900">Momentos de nuestro viaje</div>
+          <div className="text-sm font-medium text-slate-900">Momentos de nuestra historia</div>
           <div className="mt-1 text-xs text-slate-500">Cambia con las flechas</div>
         </div>
 
@@ -284,7 +282,7 @@ function GalleryTwoPerView({ images }: { images: string[] }) {
             onClick={() => canPrev && setPage((p) => p - 1)}
             className={cn(
               'rounded-xl border px-3 py-2 text-sm font-medium transition',
-              canPrev ? 'border-slate-200 bg-white text-slate-900 hover:bg-slate-50' : 'border-slate-200/60 bg-slate-50 text-slate-400 cursor-not-allowed'
+              canPrev ? 'border-slate-200 bg-black text-white hover:bg-slate-50' : 'border-slate-200/60 bg-slate-50 text-slate-400 cursor-not-allowed'
             )}
             aria-label="Anterior"
           >
@@ -294,7 +292,7 @@ function GalleryTwoPerView({ images }: { images: string[] }) {
             onClick={() => canNext && setPage((p) => p + 1)}
             className={cn(
               'rounded-xl border px-3 py-2 text-sm font-medium transition',
-              canNext ? 'border-slate-200 bg-white text-slate-900 hover:bg-slate-50' : 'border-slate-200/60 bg-slate-50 text-slate-400 cursor-not-allowed'
+              canNext ? 'border-slate-200 bg-black text-white hover:bg-slate-50' : 'border-slate-200/60 bg-slate-50 text-slate-400 cursor-not-allowed'
             )}
             aria-label="Siguiente"
           >
@@ -530,7 +528,7 @@ function RSVP({
               rel="noreferrer"
               className="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
             >
-              Enviar a la novia 💬
+              Enviar a la novia 
             </a>
 
             <a
@@ -539,7 +537,7 @@ function RSVP({
               rel="noreferrer"
               className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50"
             >
-              Enviar al novio 💬
+              Enviar al novio 
             </a>
           </div>
 
@@ -861,7 +859,7 @@ export default function WeddingInvitePage() {
                     className="rounded-2xl border border-white/25 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur hover:bg-white/15"
                     aria-label="Control música"
                   >
-                    {isPlaying ? 'Pausar música ⏸️' : 'Reproducir música ▶️'}
+                    {isPlaying ? 'Pausar música ⏸' : 'Reproducir música ▶'}
                   </button>
                 </div>
 
@@ -873,8 +871,8 @@ export default function WeddingInvitePage() {
 
                   <div className="mt-4 flex flex-wrap items-center gap-2">
                     <Badge>{mounted ? `📅 ${weddingDatePretty}` : '📅 Cargando…'}</Badge>
-                    <Badge>🧳 Dress code: Elegante</Badge>
-                    <Badge>🛟 Tema: Crucero</Badge>
+                    <Badge> Dress code: Traje  y vestido de coctel</Badge>
+                    
                   </div>
                 </div>
 
@@ -890,13 +888,13 @@ export default function WeddingInvitePage() {
 
                 <div className="mt-2 flex flex-col gap-3 sm:flex-row">
                   <a href="#lugares" className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100">
-                    Ver ubicación ⛵
+                    Ver ubicación 
                   </a>
                   <a
                     href="#rsvp"
                     className="inline-flex items-center justify-center rounded-2xl border border-white/25 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur hover:bg-white/15"
                   >
-                    Confirmar asistencia 💬
+                    Confirmar asistencia 
                   </a>
                 </div>
               </div>
@@ -948,7 +946,7 @@ export default function WeddingInvitePage() {
 
                   <div className="mt-5 grid gap-3 sm:grid-cols-2">
                     <button onClick={toggleAudio} className="rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800">
-                      {isPlaying ? 'Pausar ⏸️' : 'Reproducir ▶️'}
+                      {isPlaying ? 'Pausar ⏸' : 'Reproducir ▶'}
                     </button>
                     <button
                       onClick={() => {
@@ -959,7 +957,7 @@ export default function WeddingInvitePage() {
                       }}
                       className="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50"
                     >
-                      Reiniciar 🔁
+                      Reiniciar 
                     </button>
                   </div>
                 </Card>
