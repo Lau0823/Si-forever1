@@ -52,19 +52,21 @@ function GlassCover({
   onGifts: () => void;
 }) {
   const btnBlack =
-    "rounded-full bg-black px-5 py-3 text-[12px] font-semibold tracking-[0.18em] uppercase text-white transition hover:bg-black/90 active:scale-[0.99] disabled:opacity-50";
+    "rounded-full bg-black px-5 py-3 text-[12px] font-semibold tracking-[0.18em] uppercase text-white transition hover:bg-black/90 active:scale-[0.99]";
 
   return (
     <div className="relative overflow-hidden rounded-[34px] border border-black/10 bg-white shadow-[0_30px_90px_rgba(0,0,0,0.12)]">
-      {/* BACK LAYER: BG + letras/patrón editable */}
+      {/* BACK LAYER */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(0,0,0,0.06),transparent_55%),radial-gradient(circle_at_82%_30%,rgba(0,0,0,0.05),transparent_52%)]" />
         <div className="absolute -top-12 left-1/2 -translate-x-1/2 whitespace-nowrap select-none opacity-[0.07]">
-          <div className="text-[120px] sm:text-[170px] font-black tracking-tight">SI FOREVER · SI FOREVER · SI FOREVER</div>
+          <div className="text-[120px] sm:text-[170px] font-black tracking-tight">
+            SI FOREVER · SI FOREVER · SI FOREVER
+          </div>
         </div>
       </div>
 
-      {/* TOP STRIP minimal */}
+      {/* TOP STRIP */}
       <div className="relative z-10 flex items-center justify-between px-5 py-4 text-[11px]">
         <span className="font-semibold tracking-[0.22em] uppercase text-black/60">{paperRegion}</span>
         <span className="font-semibold tracking-[0.18em] uppercase text-black/55">{paperDate}</span>
@@ -81,7 +83,9 @@ function GlassCover({
           <div className="px-6 pb-7 pt-6 text-center sm:px-10 sm:pb-9">
             <div className="text-[11px] font-semibold tracking-[0.22em] uppercase text-black/60">{cityLine}</div>
 
-            <h1 className="mt-3 text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-black">{coupleName}</h1>
+            <h1 className="mt-3 text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-black">
+              {coupleName}
+            </h1>
 
             <div className="mt-2 font-serif text-xl sm:text-2xl tracking-wide text-black/80">Se casan</div>
 
@@ -101,17 +105,17 @@ function GlassCover({
               <button type="button" onClick={onOpen} className={btnBlack}>
                 Abrir
               </button>
-
               <button type="button" onClick={onDress} className={btnBlack}>
                 Dress code
               </button>
-
               <button type="button" onClick={onGifts} className={btnBlack}>
                 Regalos
               </button>
             </div>
 
-            <div className="mt-6 text-[11px] font-semibold tracking-[0.22em] uppercase text-black/45">Vista previa · Extra Extra</div>
+            <div className="mt-6 text-[11px] font-semibold tracking-[0.22em] uppercase text-black/45">
+              Vista previa · Extra Extra
+            </div>
           </div>
         </div>
       </div>
@@ -190,7 +194,6 @@ function RiceRainInCard({ show, density = 160 }: { show: boolean; density?: numb
 
 /* =========================
    HERO Banner (pantalla completa + scroll)
-   - botones negros + letras blancas
 ========================= */
 function HeroBanner({
   images,
@@ -214,6 +217,9 @@ function HeroBanner({
   const prev = () => setIdx((i) => (i - 1 + images.length) % images.length);
   const next = () => setIdx((i) => (i + 1) % images.length);
 
+  const btnCircle =
+    "inline-flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition hover:bg-black/90 active:scale-[0.98]";
+
   return (
     <section className="relative h-[100svh] w-full overflow-hidden rounded-[34px] border border-black/10 shadow-[0_30px_90px_rgba(0,0,0,0.18)]">
       <div className="absolute inset-0">
@@ -225,28 +231,18 @@ function HeroBanner({
 
       <div className="relative z-10 flex h-full items-end p-5 sm:p-8">
         <div className="max-w-2xl">
-          <div className="inline-flex items-center rounded-full border border-white/20 bg-black/55 px-3 py-1 text-[11px] font-semibold tracking-[0.16em] uppercase text-white backdrop-blur-md">
+          <div className="inline-flex items-center rounded-full bg-black/70 px-3 py-1 text-[11px] font-semibold tracking-[0.16em] uppercase text-white backdrop-blur-md">
             {subtitle}
           </div>
 
           <h2 className="mt-4 text-4xl font-black tracking-tight text-white sm:text-6xl">{title}</h2>
 
           <div className="mt-5 flex items-center gap-2">
-            <button
-              type="button"
-              onClick={prev}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition hover:bg-black/90 active:scale-[0.98]"
-              aria-label="Anterior"
-            >
+            <button type="button" onClick={prev} className={btnCircle} aria-label="Anterior">
               <span className="text-xl leading-none">‹</span>
             </button>
 
-            <button
-              type="button"
-              onClick={next}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition hover:bg-black/90 active:scale-[0.98]"
-              aria-label="Siguiente"
-            >
+            <button type="button" onClick={next} className={btnCircle} aria-label="Siguiente">
               <span className="text-xl leading-none">›</span>
             </button>
 
@@ -257,120 +253,137 @@ function HeroBanner({
         </div>
       </div>
 
-      <div className="absolute bottom-5 right-5 z-10 rounded-full bg-black/70 px-3 py-2 backdrop-blur-md">
-        <div className="flex items-center gap-2">
-          {images.map((_, i) => (
-            <button
-              key={`hero-dot-${i}`}
-              type="button"
-              onClick={() => setIdx(i)}
-              className={cn(
-                "h-2 w-2 rounded-full bg-black ring-1 ring-white/60 transition hover:ring-white active:scale-[0.98]",
-                i === idx && "ring-2 ring-white"
-              )}
-              aria-label={`Ir a foto ${i + 1}`}
-            />
-          ))}
-        </div>
-      </div>
-
       <div className="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 z-10">
-        <div className="rounded-full bg-black/70 px-4 py-2 text-[10px] font-semibold tracking-[0.18em] uppercase text-white backdrop-blur-md">Desliza</div>
+        <div className="rounded-full bg-black/70 px-4 py-2 text-[10px] font-semibold tracking-[0.18em] uppercase text-white backdrop-blur-md">
+          Desliza
+        </div>
       </div>
     </section>
   );
 }
 
 /* =========================
-   Modal: Dress code + carrusel (editable + imágenes)
+   Dress code: SOLO MOSTRAR SUGERENCIAS
+   ✅ Galería deslizable (swipe) + lightbox
 ========================= */
-type DressIdea = {
+type DressSuggestion = {
   title: string;
   note?: string;
   imageUrl?: string;
-  imageFileUrl?: string;
 };
 
-function DressCodeIdeasModal({
+function DressCodeShowcaseModal({
   open,
   onClose,
   dressCodeTitle,
   dressCodeNote,
-  ideas,
-  setIdeas,
+  suggestions,
 }: {
   open: boolean;
   onClose: () => void;
   dressCodeTitle: string;
   dressCodeNote: string;
-  ideas: DressIdea[];
-  setIdeas: React.Dispatch<React.SetStateAction<DressIdea[]>>;
+  suggestions: DressSuggestion[];
 }) {
   const [idx, setIdx] = useState(0);
-  const [newIdea, setNewIdea] = useState({
-    title: "",
-    note: "",
-    imageUrl: "",
-    imageFileUrl: "",
-  });
+  const has = suggestions.length > 0;
+
+  // Lightbox
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIdx, setLightboxIdx] = useState(0);
+
+  // Swipe gallery refs
+  const scrollerRef = useRef<HTMLDivElement | null>(null);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (!open) return;
     setIdx(0);
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    setLightboxOpen(false);
+    setLightboxIdx(0);
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (lightboxOpen) setLightboxOpen(false);
+        else onClose();
+      }
+      if (!has) return;
+      if (e.key === "ArrowLeft") setIdx((p) => (p - 1 + suggestions.length) % suggestions.length);
+      if (e.key === "ArrowRight") setIdx((p) => (p + 1) % suggestions.length);
+    };
+
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, onClose, has, suggestions.length, lightboxOpen]);
+
+  // Scroll to the current slide when idx changes
+  useEffect(() => {
+    if (!open) return;
+    const el = scrollerRef.current;
+    if (!el) return;
+
+    const slide = el.querySelector<HTMLElement>(`[data-slide="${idx}"]`);
+    if (!slide) return;
+
+    slide.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+  }, [idx, open]);
+
+  // Update idx from scroll position (snap)
+  const onScroll = () => {
+    const el = scrollerRef.current;
+    if (!el || !has) return;
+
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => {
+      const slides = Array.from(el.querySelectorAll<HTMLElement>("[data-slide]"));
+      if (!slides.length) return;
+
+      const elRect = el.getBoundingClientRect();
+      const center = elRect.left + elRect.width / 2;
+
+      let best = 0;
+      let bestDist = Infinity;
+
+      slides.forEach((s) => {
+        const r = s.getBoundingClientRect();
+        const sCenter = r.left + r.width / 2;
+        const dist = Math.abs(sCenter - center);
+        if (dist < bestDist) {
+          bestDist = dist;
+          best = Number(s.dataset.slide || 0);
+        }
+      });
+
+      setIdx(best);
+    });
+  };
 
   if (!open) return null;
 
-  const hasIdeas = ideas.length > 0;
-  const current = hasIdeas ? ideas[idx] : undefined;
-
-  const prev = () => hasIdeas && setIdx((i) => (i - 1 + ideas.length) % ideas.length);
-  const next = () => hasIdeas && setIdx((i) => (i + 1) % ideas.length);
-
-  const onPickImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const blobUrl = URL.createObjectURL(file);
-    setNewIdea((p) => ({ ...p, imageFileUrl: blobUrl }));
-  };
-
-  const addIdea = () => {
-    const t = newIdea.title.trim();
-    if (!t) return;
-
-    setIdeas((prevIdeas) => [
-      ...prevIdeas,
-      {
-        title: t,
-        note: newIdea.note.trim() || undefined,
-        imageUrl: newIdea.imageUrl.trim() || undefined,
-        imageFileUrl: newIdea.imageFileUrl || undefined,
-      },
-    ]);
-
-    setTimeout(() => setIdx(ideas.length), 0);
-    setNewIdea({ title: "", note: "", imageUrl: "", imageFileUrl: "" });
-  };
-
-  const removeCurrent = () => {
-    if (!hasIdeas) return;
-    const toRemove = ideas[idx];
-    if (toRemove?.imageFileUrl) URL.revokeObjectURL(toRemove.imageFileUrl);
-
-    setIdeas((prevIdeas) => prevIdeas.filter((_, i) => i !== idx));
-    setIdx((i) => Math.max(0, i - 1));
-  };
+  const current = has ? suggestions[idx] : undefined;
 
   const btnBlack =
     "inline-flex items-center justify-center rounded-full bg-black px-5 py-3 text-[12px] font-semibold tracking-[0.16em] uppercase text-white transition hover:bg-black/90 active:scale-[0.99] disabled:opacity-50";
+  const navBtn =
+    "inline-flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition hover:bg-black/90 active:scale-[0.98] disabled:opacity-40";
+
+  const openLightbox = (i: number) => {
+    setLightboxIdx(i);
+    setLightboxOpen(true);
+  };
+
+  const lbPrev = () => has && setLightboxIdx((p) => (p - 1 + suggestions.length) % suggestions.length);
+  const lbNext = () => has && setLightboxIdx((p) => (p + 1) % suggestions.length);
 
   return (
     <div className="fixed inset-0 z-[98]">
-      {/* overlay (sigue siendo negro) */}
-      <button type="button" onClick={onClose} className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" aria-label="Cerrar" />
+      <button
+        type="button"
+        onClick={onClose}
+        className="absolute inset-0 bg-black/70 backdrop-blur-[2px]"
+        aria-label="Cerrar"
+      />
 
       <div className="relative mx-auto mt-10 w-[min(980px,94vw)]">
         <div className="paperTexture relative overflow-hidden rounded-[28px] border border-black/10 bg-white shadow-[0_30px_90px_rgba(0,0,0,0.28)]">
@@ -381,122 +394,122 @@ function DressCodeIdeasModal({
               <div className="mt-1 text-sm text-black/70">{dressCodeNote}</div>
             </div>
 
-            <button type="button" onClick={onClose} className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition hover:bg-black/90 active:scale-[0.99]" aria-label="Cerrar modal">
+            <button
+              type="button"
+              onClick={onClose}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition hover:bg-black/90"
+              aria-label="Cerrar modal"
+            >
               <span className="text-xl leading-none">×</span>
             </button>
           </div>
 
-          <div className="grid gap-5 px-5 py-5 lg:grid-cols-[1.1fr_0.9fr]">
-            {/* Carrusel */}
+          <div className="grid gap-5 px-5 py-5 lg:grid-cols-[1.25fr_0.75fr]">
+            {/* ✅ Galería deslizable */}
             <div className="rounded-[24px] border border-black/10 bg-white/70 p-4">
               <div className="flex items-center justify-between">
-                <div className="text-[11px] font-semibold tracking-[0.16em] uppercase text-black/70">Ideas</div>
-                <div className="text-[11px] text-black/50 tabular-nums">{hasIdeas ? `${idx + 1}/${ideas.length}` : "0/0"}</div>
+                <div className="text-[11px] font-semibold tracking-[0.16em] uppercase text-black/70">Galería</div>
+                <div className="text-[11px] text-black/50 tabular-nums">{has ? `${idx + 1}/${suggestions.length}` : "0/0"}</div>
               </div>
 
-              <div className="mt-4 relative overflow-hidden rounded-[18px] border border-black/10 bg-black/5">
-                <div className="relative aspect-[16/10]">
-                  {current?.imageUrl || current?.imageFileUrl ? (
-                    current?.imageFileUrl ? (
-                      <img src={current.imageFileUrl} alt={current.title} className="absolute inset-0 h-full w-full object-cover" />
-                    ) : (
-                      <Image src={current!.imageUrl!} alt={current!.title} fill className="object-cover" />
-                    )
-                  ) : (
-                    <div className="absolute inset-0 grid place-items-center px-6 text-center">
-                      <div className="text-sm font-semibold text-black">{current?.title || "Aún no hay ideas"}</div>
-                      <div className="mt-2 text-sm text-black/60">{current?.note || "Agrega una idea con texto y opcional imagen."}</div>
-                    </div>
+              <div className="mt-4 relative">
+                {/* Flechas */}
+                <div className="absolute left-2 top-1/2 z-10 -translate-y-1/2">
+                  <button type="button" onClick={() => setIdx((p) => (p - 1 + suggestions.length) % suggestions.length)} disabled={!has} className={navBtn} aria-label="Anterior">
+                    ‹
+                  </button>
+                </div>
+                <div className="absolute right-2 top-1/2 z-10 -translate-y-1/2">
+                  <button type="button" onClick={() => setIdx((p) => (p + 1) % suggestions.length)} disabled={!has} className={navBtn} aria-label="Siguiente">
+                    ›
+                  </button>
+                </div>
+
+                {/* Scroller */}
+                <div
+                  ref={scrollerRef}
+                  onScroll={onScroll}
+                  className={cn(
+                    "flex gap-4 overflow-x-auto scroll-smooth pb-2",
+                    "snap-x snap-mandatory",
+                    "[-webkit-overflow-scrolling:touch]"
                   )}
+                  style={{
+                    scrollbarWidth: "none",
+                  }}
+                >
+                  <style>{`
+                    .hide-scroll::-webkit-scrollbar { display: none; }
+                  `}</style>
+
+                  {(has ? suggestions : [{ title: "Sin sugerencias" }]).map((s, i) => (
+                    <button
+                      key={`slide-${i}`}
+                      type="button"
+                      data-slide={i}
+                      onClick={() => has && openLightbox(i)}
+                      className={cn(
+                        "hide-scroll snap-center shrink-0",
+                        "w-[86%] sm:w-[72%] lg:w-[78%]",
+                        "overflow-hidden rounded-[18px] border border-black/10 bg-black/5",
+                        "transition",
+                        i === idx ? "ring-2 ring-black" : "hover:ring-2 hover:ring-black/40"
+                      )}
+                    >
+                      <div className="relative aspect-[16/10]">
+                        {s.imageUrl ? (
+                          <Image src={s.imageUrl} alt={s.title} fill className="object-cover" />
+                        ) : (
+                          <div className="absolute inset-0 grid place-items-center px-6 text-center">
+                            <div className="text-sm font-semibold text-black">{s.title}</div>
+                          </div>
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-black/0 to-black/0" />
+                        <div className="absolute bottom-3 left-3 right-3">
+                          <div className="rounded-2xl bg-black/55 px-3 py-2 text-left backdrop-blur-md">
+                            <div className="text-sm font-semibold text-white">{s.title}</div>
+                            {s.note && <div className="mt-1 text-xs text-white/80">{s.note}</div>}
+                            <div className="mt-2 text-[10px] font-semibold tracking-[0.16em] uppercase text-white/70">
+                              Toca para ver grande
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+                  ))}
                 </div>
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-black/0 to-black/0" />
-
-                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-                  <button
-                    type="button"
-                    onClick={prev}
-                    disabled={!hasIdeas}
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition hover:bg-black/90 disabled:opacity-40"
-                    aria-label="Anterior"
-                  >
-                    <span className="text-xl leading-none">‹</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={next}
-                    disabled={!hasIdeas}
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition hover:bg-black/90 disabled:opacity-40"
-                    aria-label="Siguiente"
-                  >
-                    <span className="text-xl leading-none">›</span>
-                  </button>
-                </div>
+                {/* Dots */}
+                {has && (
+                  <div className="mt-3 flex items-center justify-center gap-2">
+                    {suggestions.map((_, i) => (
+                      <button
+                        key={`dot-${i}`}
+                        type="button"
+                        onClick={() => setIdx(i)}
+                        className={cn(
+                          "h-2 w-2 rounded-full transition",
+                          i === idx ? "bg-black" : "bg-black/25 hover:bg-black/60"
+                        )}
+                        aria-label={`Ir a imagen ${i + 1}`}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
-
-              {hasIdeas && (
-                <div className="mt-4">
-                  <div className="text-base font-semibold text-black">{current?.title}</div>
-                  {current?.note && <div className="mt-1 text-sm text-black/70">{current.note}</div>}
-                  <button type="button" onClick={removeCurrent} className="mt-3 text-xs font-semibold tracking-[0.14em] uppercase text-black/60 hover:text-black">
-                    Eliminar
-                  </button>
-                </div>
-              )}
             </div>
 
-            {/* Form agregar */}
+            {/* Texto lateral (opcional, elegante) */}
             <div className="rounded-[24px] border border-black/10 bg-white/70 p-4">
-              <div className="text-[11px] font-semibold tracking-[0.16em] uppercase text-black/70">Agregar idea</div>
+              <div className="text-[11px] font-semibold tracking-[0.16em] uppercase text-black/70">Detalle</div>
 
-              <div className="mt-3 grid gap-3">
-                <div>
-                  <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-black/60">Título</label>
-                  <input
-                    value={newIdea.title}
-                    onChange={(e) => setNewIdea((p) => ({ ...p, title: e.target.value }))}
-                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-3 py-3 text-sm outline-none focus:border-black/30"
-                    placeholder="Ej: Vestido largo en tonos neutros"
-                  />
-                </div>
+              <div className="mt-4 rounded-2xl border border-black/10 bg-white p-4">
+                <div className="text-base font-semibold text-black">{current?.title || "Sin sugerencias"}</div>
+                <div className="mt-2 text-sm text-black/70 leading-6">{current?.note || "Agrega tus imágenes en el array dressSuggestions."}</div>
+              </div>
 
-                <div>
-                  <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-black/60">Nota (opcional)</label>
-                  <input
-                    value={newIdea.note}
-                    onChange={(e) => setNewIdea((p) => ({ ...p, note: e.target.value }))}
-                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-3 py-3 text-sm outline-none focus:border-black/30"
-                    placeholder="Ej: evitar blanco / evitar tenis"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-black/60">URL imagen (opcional)</label>
-                  <input
-                    value={newIdea.imageUrl}
-                    onChange={(e) => setNewIdea((p) => ({ ...p, imageUrl: e.target.value }))}
-                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-3 py-3 text-sm outline-none focus:border-black/30"
-                    placeholder="https://..."
-                  />
-                </div>
-
-                <div>
-                  <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-black/60">Subir imagen (opcional)</label>
-                  <input type="file" accept="image/*" onChange={onPickImage} className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-3 py-3 text-sm outline-none focus:border-black/30" />
-
-                  {newIdea.imageFileUrl && (
-                    <div className="mt-2 overflow-hidden rounded-2xl border border-black/10">
-                      <img src={newIdea.imageFileUrl} alt="Preview" className="h-40 w-full object-cover" />
-                    </div>
-                  )}
-                </div>
-
-                <button type="button" onClick={addIdea} className={cn(btnBlack, "mt-1 w-full")} disabled={!newIdea.title.trim()}>
-                  Guardar
-                </button>
-
-                <div className="text-xs text-black/55 leading-5">Tip: URL o subir imagen (solo sesión actual).</div>
+              <div className="mt-4 text-xs text-black/55 leading-6">
+                Tip: Puedes deslizar con el dedo (móvil) o con el mouse (desktop). También con flechas del teclado.
               </div>
             </div>
           </div>
@@ -508,6 +521,61 @@ function DressCodeIdeasModal({
           </div>
         </div>
       </div>
+
+      {/* ✅ Lightbox */}
+      {lightboxOpen && has && (
+        <div className="fixed inset-0 z-[120]">
+          <button
+            type="button"
+            onClick={() => setLightboxOpen(false)}
+            className="absolute inset-0 bg-black/85 backdrop-blur-[2px]"
+            aria-label="Cerrar imagen"
+          />
+
+          <div className="relative mx-auto mt-10 w-[min(1100px,94vw)]">
+            <div className="relative overflow-hidden rounded-[26px] border border-white/10 bg-black shadow-[0_30px_90px_rgba(0,0,0,0.55)]">
+              <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+                <div className="text-xs font-semibold tracking-[0.20em] uppercase text-white/70">
+                  Imagen {lightboxIdx + 1}/{suggestions.length}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setLightboxOpen(false)}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/15"
+                  aria-label="Cerrar"
+                >
+                  <span className="text-xl leading-none">×</span>
+                </button>
+              </div>
+
+              <div className="relative aspect-[16/10] bg-black">
+                <Image
+                  src={suggestions[lightboxIdx].imageUrl || ""}
+                  alt={suggestions[lightboxIdx].title}
+                  fill
+                  className="object-contain"
+                />
+
+                <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                  <button type="button" onClick={lbPrev} className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/15">
+                    ‹
+                  </button>
+                </div>
+                <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                  <button type="button" onClick={lbNext} className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/15">
+                    ›
+                  </button>
+                </div>
+
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/0 to-black/0 p-4">
+                  <div className="text-white text-base font-semibold">{suggestions[lightboxIdx].title}</div>
+                  {suggestions[lightboxIdx].note && <div className="mt-1 text-white/80 text-sm">{suggestions[lightboxIdx].note}</div>}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -539,7 +607,12 @@ function GiftModal({ open, onClose, gifts }: { open: boolean; onClose: () => voi
               <div className="mt-1 text-sm text-black/65">Si deseas bendecirnos, aquí tienes algunas ideas</div>
             </div>
 
-            <button type="button" onClick={onClose} className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition hover:bg-black/90 active:scale-[0.99]" aria-label="Cerrar modal">
+            <button
+              type="button"
+              onClick={onClose}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition hover:bg-black/90"
+              aria-label="Cerrar modal"
+            >
               <span className="text-xl leading-none">×</span>
             </button>
           </div>
@@ -554,7 +627,9 @@ function GiftModal({ open, onClose, gifts }: { open: boolean; onClose: () => voi
               ))}
             </div>
 
-            <div className="mt-5 rounded-2xl border border-black/10 bg-white/70 p-4 text-sm leading-6 text-black/70">Si prefieres, también puedes apoyarnos con un detalle libre. Gracias 🤍</div>
+            <div className="mt-5 rounded-2xl border border-black/10 bg-white/70 p-4 text-sm leading-6 text-black/70">
+              Si prefieres, también puedes apoyarnos con un detalle libre. Gracias 🤍
+            </div>
           </div>
 
           <div className="border-t border-black/10 px-5 py-4">
@@ -580,7 +655,7 @@ export default function Page() {
   const venueName = "Finca Palo & Rosa";
   const venueAddress = "Villavicencio — Vereda Apiay / vía Puerto López";
 
-  // ✅ AUDIO: se dispara al abrir
+  // ✅ AUDIO
   const audioSrc = "/audio/Río Roma - Caminar de Tu Mano (Official Video) ft. Fonseca [1].MP3";
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [audioError, setAudioError] = useState<string | null>(null);
@@ -591,6 +666,9 @@ export default function Page() {
 
   // WhatsApp sugerir canción
   const songPhone = rsvpPhoneNovio;
+
+  // ✅ Imagen de referencia para “Ubicación”
+  const suggestionImage = "https://i.pinimg.com/736x/29/fa/cc/29facc3d5d0ce36318b6507e79a13864.jpg";
 
   // Banner (fotos)
   const bannerImages = [
@@ -630,16 +708,30 @@ export default function Page() {
   const bibleVerseText = "Por encima de todo, vístanse de amor, que es el vínculo perfecto.";
   const bibleVerseRef = "Colosenses 3:14";
 
-  // Dress code
+  // ✅ DRESS CODE: SOLO MOSTRAR SUGERENCIAS
   const dressCodeTitle = "Formal / Cóctel";
   const dressCodeNote = "Tonos neutros y elegantes. Evitar blanco y tenis.";
   const [dressOpen, setDressOpen] = useState(false);
-  const [dressIdeas, setDressIdeas] = useState<DressIdea[]>([
-    { title: "Ella: vestido largo o midi", note: "Champagne, beige, terracota, verde oliva, negro." },
-    { title: "Él: traje o blazer", note: "Camisa clara, zapatos formales. Corbata opcional." },
-  ]);
 
-  // ✅ Sugerir canción (card)
+  const dressSuggestions: DressSuggestion[] = [
+    {
+      title: "Ella — Vestido midi o largo (neutros)",
+      note: "Champagne, beige, terracota, verde oliva o negro.",
+      imageUrl: "https://i.pinimg.com/736x/06/b7/ed/06b7ed5e9a3486dd26a6fe44a80f3474.jpg",
+    },
+    {
+      title: "Él — Blazer / traje (sobrio)",
+      note: "Camisa clara, zapatos formales. Corbata opcional.",
+      imageUrl: "https://i.pinimg.com/736x/69/2f/5c/692f5c0e944a1db942a521af79a3150d.jpg",
+    },
+    {
+      title: "Accesorios y detalles",
+      note: "Evita tenis. Mejor tacón medio o zapato cerrado.",
+      imageUrl: "https://i.pinimg.com/736x/d6/0d/a8/d60da8ca881ec520b402c46bdef64155.jpg",
+    },
+  ];
+
+  // ✅ Sugerir canción
   const [song, setSong] = useState({ name: "", artist: "", link: "" });
   const sendSong = () => {
     const text = encodeURIComponent(
@@ -742,7 +834,7 @@ export default function Page() {
   // Modal regalos
   const [giftOpen, setGiftOpen] = useState(false);
 
-  // ✅ OPEN (Extra Extra)
+  // ✅ OPEN
   const onOpen = async () => {
     setRevealed(true);
     setRiceInCard(true);
@@ -772,22 +864,15 @@ export default function Page() {
   const card = "rounded-[26px] border border-black/10 bg-white/70 shadow-[0_18px_55px_rgba(0,0,0,0.10)]";
   const kicker = "text-[11px] font-semibold tracking-[0.20em] uppercase text-black/70";
 
-  // ✅ Card negra (la sección “Canción”)
   const cardDark = "rounded-[26px] border border-white/10 bg-black text-white shadow-[0_18px_55px_rgba(0,0,0,0.22)]";
   const kickerDark = "text-[11px] font-semibold tracking-[0.20em] uppercase text-white/70";
 
-  // ✅ BOTONES: todos negros + letras blancas
   const btnBlack =
     "inline-flex items-center justify-center rounded-full bg-black px-5 py-3 text-[12px] font-semibold tracking-[0.16em] uppercase text-white transition hover:bg-black/90 active:scale-[0.99] disabled:opacity-50";
-  const btnBlackLg =
-    "inline-flex items-center justify-center rounded-full bg-black px-6 py-4 text-[12px] font-semibold tracking-[0.16em] uppercase text-white transition hover:bg-black/90 active:scale-[0.99] disabled:opacity-50";
 
-  const glassBtn = btnBlack;
-  const glassBtnDark = btnBlackLg;
+  const pill =
+    "rounded-full border border-black/10 bg-white/65 px-3 py-1 text-[11px] font-semibold tracking-[0.16em] uppercase text-black/80";
 
-  const pill = "rounded-full border border-black/10 bg-white/65 px-3 py-1 text-[11px] font-semibold tracking-[0.16em] uppercase text-black/80";
-
-  // Inputs dark (para la card negra)
   const inputDark =
     "mt-1 w-full rounded-2xl border border-white/15 bg-white/5 px-3 py-3 text-sm text-white outline-none placeholder:text-white/35 focus:border-white/35";
 
@@ -837,25 +922,20 @@ export default function Page() {
           background-size: 26px 26px, 100% 240px;
           background-position: 0 0, 0 0;
         }
-        .innerGlow{
-          box-shadow:
-            inset 0 1px 0 rgba(255,255,255,0.75),
-            inset 0 -1px 0 rgba(0,0,0,0.05);
-        }
       `}</style>
 
       <GiftModal open={giftOpen} onClose={() => setGiftOpen(false)} gifts={regalos} />
 
-      <DressCodeIdeasModal
+      {/* ✅ Dress code modal SOLO VIEW + GALERÍA */}
+      <DressCodeShowcaseModal
         open={dressOpen}
         onClose={() => setDressOpen(false)}
         dressCodeTitle={dressCodeTitle}
         dressCodeNote={dressCodeNote}
-        ideas={dressIdeas}
-        setIdeas={setDressIdeas}
+        suggestions={dressSuggestions}
       />
 
-      {/* ===== Portada GLASS ===== */}
+      {/* ===== Portada ===== */}
       {!revealed && (
         <div className="fixed inset-0 z-[90] overflow-auto bg-neutral-100">
           <div className="min-h-screen grid place-items-center px-4 py-10">
@@ -888,12 +968,10 @@ export default function Page() {
             {/* Top strip */}
             <div className="flex flex-col gap-2 border-b border-black/10 px-4 py-3 text-[11px] sm:flex-row sm:items-center sm:justify-between">
               <span className="font-semibold tracking-[0.20em] uppercase text-black/60">{paperRegion}</span>
-
               <div className="flex flex-wrap items-center gap-2">
                 <span className={pill}>{weddingDateLabel}</span>
                 <span className={pill}>{ceremonyTimeLabel}</span>
               </div>
-
               <span className="font-semibold tracking-[0.16em] uppercase text-black/55">{paperDate}</span>
             </div>
 
@@ -913,15 +991,18 @@ export default function Page() {
 
                 <div className="mx-auto mt-5 w-[min(980px,92vw)] rounded-[22px] border border-black/10 bg-white/60 p-3 backdrop-blur-xl shadow-[0_22px_70px_rgba(0,0,0,0.10)]">
                   <div className="flex flex-wrap items-center justify-center gap-2">
-                    <button type="button" onClick={() => setGiftOpen(true)} className={glassBtn}>
+                    <button type="button" onClick={() => setGiftOpen(true)} className={btnBlack}>
                       Regalos
                     </button>
-
-                    <button type="button" onClick={() => setDressOpen(true)} className={glassBtn}>
+                    <button type="button" onClick={() => setDressOpen(true)} className={btnBlack}>
                       Dress code
                     </button>
-
-                    <a href={`https://www.google.com/maps/search/?api=1&query=${mapsQuery}`} target="_blank" rel="noreferrer" className={glassBtn}>
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${mapsQuery}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={btnBlack}
+                    >
                       Ubicación
                     </a>
                   </div>
@@ -931,7 +1012,7 @@ export default function Page() {
               </div>
             </header>
 
-            {/* Banner full screen */}
+            {/* Banner */}
             <div id="hero-banner" className="px-4 pb-8">
               <HeroBanner images={bannerImages} title={coupleName} subtitle={`${weddingDateLabel} · ${ceremonyTimeLabel}`} />
             </div>
@@ -1015,7 +1096,7 @@ export default function Page() {
                     <p className="mt-4 text-sm leading-7 text-black/75">{cuerpoNota}</p>
                   </div>
 
-                  {/* ✅ Card negra: Sugiere una canción */}
+                  {/* Card negra */}
                   <div className={cn(cardDark, "p-6")}>
                     <div className={cn(kickerDark, "text-center")}>Canción</div>
                     <p className="mt-3 text-sm text-white/70 leading-6 text-center">¿Qué canción no puede faltar?</p>
@@ -1051,7 +1132,12 @@ export default function Page() {
                         />
                       </div>
 
-                      <button type="button" onClick={sendSong} className={cn(glassBtn, "mt-1 w-full")} disabled={!song.name.trim()}>
+                      <button
+                        type="button"
+                        onClick={sendSong}
+                        className={cn(btnBlack, "mt-1 w-full")}
+                        disabled={!song.name.trim()}
+                      >
                         Enviar
                       </button>
                     </div>
@@ -1070,7 +1156,10 @@ export default function Page() {
                     <div className={cn(kicker, "text-center")}>Itinerario</div>
                     <div className="mt-4 grid gap-2">
                       {itinerario.map((x, i) => (
-                        <div key={`it-${i}-${x.hora}-${x.evento}`} className="flex items-center justify-between gap-4 rounded-2xl border border-black/10 bg-white px-4 py-3">
+                        <div
+                          key={`it-${i}-${x.hora}-${x.evento}`}
+                          className="flex items-center justify-between gap-4 rounded-2xl border border-black/10 bg-white px-4 py-3"
+                        >
                           <div className="text-sm font-semibold text-black">{x.hora}</div>
                           <div className="text-sm text-black/75">{x.evento}</div>
                         </div>
@@ -1078,19 +1167,32 @@ export default function Page() {
                     </div>
                   </div>
 
+                  {/* Ubicación con imagen */}
                   <div className={cn(card, "p-5")}>
                     <div className={cn(kicker, "text-center")}>Ubicación</div>
+
+                    <div className="mt-4 overflow-hidden rounded-2xl border border-black/10 bg-white">
+                      <div className="relative aspect-[16/10]">
+                        <Image src={suggestionImage} alt="Referencia / Cómo llegar" fill className="object-cover" />
+                      </div>
+                    </div>
 
                     <div className="mt-4 rounded-2xl border border-black/10 bg-white p-4">
                       <div className="text-[11px] font-semibold tracking-[0.16em] uppercase text-black/65">{venueName}</div>
                       <div className="mt-2 text-sm text-black/70">{venueAddress}</div>
                     </div>
 
-                    <a href={`https://www.google.com/maps/search/?api=1&query=${mapsQuery}`} target="_blank" rel="noreferrer" className={cn(glassBtn, "mt-4 w-full")}>
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${mapsQuery}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={cn(btnBlack, "mt-4 w-full")}
+                    >
                       Ver mapa
                     </a>
                   </div>
 
+                  {/* Dress code */}
                   <div className={cn(card, "p-5")}>
                     <div className={cn(kicker, "text-center")}>Dress code</div>
                     <div className="mt-3 text-center">
@@ -1098,8 +1200,8 @@ export default function Page() {
                       <p className="mt-2 text-sm text-black/65 leading-6">{dressCodeNote}</p>
                     </div>
 
-                    <button type="button" onClick={() => setDressOpen(true)} className={cn(glassBtn, "mt-4 w-full")}>
-                      Ver ideas
+                    <button type="button" onClick={() => setDressOpen(true)} className={cn(btnBlack, "mt-4 w-full")}>
+                      Ver sugerencias
                     </button>
                   </div>
 
@@ -1107,7 +1209,7 @@ export default function Page() {
                     <div className={cn(kicker, "text-center")}>Regalos</div>
                     <p className="mt-3 text-sm text-black/65 leading-6 text-center">Si deseas bendecirnos, mira la lista.</p>
 
-                    <button type="button" onClick={() => setGiftOpen(true)} className={cn(glassBtn, "mt-4 w-full")}>
+                    <button type="button" onClick={() => setGiftOpen(true)} className={cn(btnBlack, "mt-4 w-full")}>
                       Ver lista
                     </button>
                   </div>
@@ -1188,11 +1290,11 @@ export default function Page() {
                     </div>
 
                     <div className="mt-2 grid gap-3 sm:grid-cols-2">
-                      <button type="button" onClick={() => sendWhatsApp(rsvpPhoneNovio)} className={glassBtn} disabled={!form.nombre.trim()}>
+                      <button type="button" onClick={() => sendWhatsApp(rsvpPhoneNovio)} className={btnBlack} disabled={!form.nombre.trim()}>
                         Enviar al novio
                       </button>
 
-                      <button type="button" onClick={() => sendWhatsApp(rsvpPhoneNovia)} className={glassBtn} disabled={!form.nombre.trim()}>
+                      <button type="button" onClick={() => sendWhatsApp(rsvpPhoneNovia)} className={btnBlack} disabled={!form.nombre.trim()}>
                         Enviar a la novia
                       </button>
                     </div>
@@ -1211,10 +1313,14 @@ export default function Page() {
         </div>
       </div>
 
-      {/* ✅ botón discreto por si quieres volver a la portada */}
+      {/* Botón volver a portada */}
       {revealed && (
         <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-[80]">
-          <button type="button" onClick={() => setRevealed(false)} className="rounded-full bg-black px-4 py-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-white shadow-sm hover:bg-black/90">
+          <button
+            type="button"
+            onClick={() => setRevealed(false)}
+            className="rounded-full bg-black px-4 py-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-white shadow-sm hover:bg-black/90"
+          >
             Portada
           </button>
         </div>
