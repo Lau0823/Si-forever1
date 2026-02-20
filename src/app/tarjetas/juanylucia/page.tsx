@@ -30,12 +30,12 @@ function RiceRainInCard({ show, density = 140 }: { show: boolean; density?: numb
       const left = Math.random() * 100; // %
       const delay = Math.random() * 0.35; // s
       const dur = 1.6 + Math.random() * 1.3; // s
-      const w = 4 + Math.random() * 5; // px
-      const h = w * (1.8 + Math.random() * 1.6);
+      const w = 3.5 + Math.random() * 4.5; // px
+      const h = w * (2.0 + Math.random() * 1.4);
       const rot0 = Math.random() * 360;
       const spin = 260 + Math.random() * 700;
       const drift = (Math.random() - 0.5) * 220; // px
-      const wobble = 10 + Math.random() * 18; // px
+      const wobble = 8 + Math.random() * 18; // px
       const opacity = 0.55 + Math.random() * 0.45;
       const blur = Math.random() < 0.18 ? 0.7 : 0;
       const color = colors[Math.floor(Math.random() * colors.length)];
@@ -164,7 +164,7 @@ function PhotoCarousel({ images, autoMs = 3800 }: { images: string[]; autoMs?: n
 }
 
 /* =========================
-   Modal lista de regalos (flotante, vintage)
+   Modal lista de regalos
 ========================= */
 function GiftModal({
   open,
@@ -271,20 +271,23 @@ export default function Page() {
   const ceremonyTimeLabel = "4:00 p.m.";
   const venueName = "Finca Palo & Rosa";
   const venueAddress = "Villavicencio — Vereda Apiay / vía Puerto López";
-  const rsvpPhone = "573116533163";
 
-  // ✅ Audio (IMPORTANTE: si tiene espacios, usa %20 o renómbralo)
+  // ✅ WhatsApp (dos números: novio / novia)
+  const rsvpPhoneNovio = "573116533163"; // <-- cambia aquí
+  const rsvpPhoneNovia = "57XXXXXXXXXX"; // <-- cambia aquí
+
+  // ✅ Audio
   const audioSrc = "/audio/Kurt%20-%20La%20Mujer%20Perfecta%20(Lyric%20Video)%20%5B1%5D.MP3";
 
   // ✅ Fotos (4)
   const carouselImages = [
     "https://i.pinimg.com/1200x/28/80/b0/2880b0579a6b1f3280266cb423e98f05.jpg",
-   
+    "https://i.pinimg.com/736x/fc/8f/b0/fc8fb0ea308adb0c58d2cef9cac509b6.jpg",
     "https://i.pinimg.com/736x/80/95/67/809567eb5b3482007d54d1d0e1e1d025.jpg",
     "https://i.pinimg.com/1200x/06/a4/dd/06a4dd27969325bdec82d7f4ef09ed7a.jpg",
   ];
 
-  const paperName = "Llego el gran día";
+  const paperName = "Periódico de Boda";
   const paperDate = "SÁBADO · 10 MAYO, 2026";
   const paperRegion = "VILLAVICENCIO";
   const bigHeadline = coupleName;
@@ -313,6 +316,11 @@ export default function Page() {
   const tituloNota = "Querida familia y amigos";
   const cuerpoNota =
     "Gracias por acompañarnos y por ser parte de esta historia. Hoy comenzamos una nueva etapa y queremos celebrarla contigo: amor, música, abrazos y recuerdos para toda la vida.";
+
+  // ✅ Versículo (parejas que se van a casar)
+  const bibleVerseText =
+    "Por encima de todo, vístanse de amor, que es el vínculo perfecto.";
+  const bibleVerseRef = "Colosenses 3:14";
 
   const mapsQuery = useMemo(
     () => encodeURIComponent(`${venueName}, ${venueAddress}`),
@@ -436,9 +444,8 @@ export default function Page() {
       setForm((prev) => ({ ...prev, [key]: e.target.value }));
     };
 
-  const submitRsvp = (e: React.FormEvent) => {
-    e.preventDefault();
-    const text = encodeURIComponent(
+  const buildRsvpText = () =>
+    encodeURIComponent(
       `RSVP — ${coupleName}\n\n` +
         `Respuesta: ${rsvp === "si" ? "ASISTO" : "NO ASISTO"}\n` +
         `Nombre: ${form.nombre}\n` +
@@ -449,7 +456,10 @@ export default function Page() {
         `Lugar: ${venueName} — ${venueAddress}`
     );
 
-    window.open(`https://wa.me/${rsvpPhone}?text=${text}`, "_blank");
+  const submitRsvpTo = (phone: string) => (e: React.FormEvent) => {
+    e.preventDefault();
+    const text = buildRsvpText();
+    window.open(`https://wa.me/${phone}?text=${text}`, "_blank");
   };
 
   // ===== Reveal + Arroz en carta =====
@@ -460,7 +470,6 @@ export default function Page() {
   const [giftOpen, setGiftOpen] = useState(false);
 
   const onExtraExtra = async () => {
-    // Música (click)
     const audio = audioRef.current;
     if (audio) {
       try {
@@ -475,17 +484,15 @@ export default function Page() {
       }
     }
 
-    // Abrir periódico
     window.setTimeout(() => setRevealed(true), 200);
 
-    // Arroz dentro de la carta
     setRiceInCard(true);
     window.setTimeout(() => setRiceInCard(false), 3200);
   };
 
   return (
     <main className="min-h-screen bg-[#efe6d2] text-neutral-900">
-      {/* ===== Estilos vintage premium (periódico antiguo) ===== */}
+      {/* ===== Estilos vintage premium ===== */}
       <style>{`
         .stage { perspective: 1400px; }
         .paper {
@@ -497,7 +504,6 @@ export default function Page() {
         .paperHidden { transform: rotateY(-92deg) translateX(-10px); filter: blur(10px); opacity: .2; }
         .paperShown { transform: rotateY(0deg) translateX(0px); filter: blur(0px); opacity: 1; }
 
-        /* Pliegue y sombra central */
         .fold:before{
           content:"";
           position:absolute;
@@ -521,7 +527,6 @@ export default function Page() {
           pointer-events:none;
         }
 
-        /* Papel antiguo */
         .paperTexture{
           background-color: #fbf6e8;
           background-image:
@@ -531,7 +536,6 @@ export default function Page() {
           background-position: 0 0, 0 0;
         }
 
-        /* “tinta” */
         .ink { color: #1b1b1b; }
       `}</style>
 
@@ -554,9 +558,7 @@ export default function Page() {
                   </div>
 
                   <div className="px-4 pt-6 sm:px-6">
-                    <div className="text-center font-serif text-4xl sm:text-6xl ink">
-                      {paperName}
-                    </div>
+                    <div className="text-center font-serif text-4xl sm:text-6xl ink">{paperName}</div>
                     <div className="mt-4 border-t border-neutral-900/20" />
                   </div>
 
@@ -572,7 +574,6 @@ export default function Page() {
                       Pulsa el botón para abrir el periódico de boda (flip), activar música y arroz dentro de la carta 🤍
                     </div>
 
-                    {/* Cuenta regresiva */}
                     <div className="mx-auto mt-6 max-w-xl rounded-3xl border border-neutral-900/15 bg-white/55 p-4">
                       <div className="flex items-center justify-between">
                         <div className="text-[11px] font-black tracking-[0.2em] uppercase text-neutral-800">
@@ -622,7 +623,7 @@ export default function Page() {
                         <p className="mt-3 text-xs text-red-600 text-center">{audioError}</p>
                       ) : (
                         <p className="mt-3 text-xs text-neutral-700 text-center">
-                           <span className="font-mono"></span> 
+                          Tip: si tu audio tiene espacios, usa <span className="font-mono">%20</span> o renómbralo.
                         </p>
                       )}
                     </div>
@@ -638,7 +639,7 @@ export default function Page() {
         </div>
       )}
 
-      {/* ===== Periódico (flip) ===== */}
+      {/* ===== Periódico ===== */}
       <div className="mx-auto max-w-6xl px-4 py-10">
         <div className="stage">
           <div
@@ -647,10 +648,8 @@ export default function Page() {
               revealed ? "paperShown" : "paperHidden",
             ].join(" ")}
           >
-            {/* Arroz dentro del periódico */}
             <RiceRainInCard show={riceInCard} density={160} />
 
-            {/* Top strip */}
             <div className="flex flex-col gap-2 border-b border-neutral-900/20 px-4 py-3 text-[11px] text-neutral-800 sm:flex-row sm:items-center sm:justify-between sm:px-6">
               <span className="font-semibold tracking-[0.22em] uppercase">{paperRegion}</span>
 
@@ -666,7 +665,6 @@ export default function Page() {
               <span className="font-semibold tracking-[0.18em] uppercase">{paperDate}</span>
             </div>
 
-            {/* Masthead */}
             <header className="px-4 pt-6 sm:px-6">
               <div className="text-center font-serif text-4xl sm:text-6xl ink">{paperName}</div>
 
@@ -692,10 +690,8 @@ export default function Page() {
               </div>
             </header>
 
-            {/* Main grid */}
             <section className="px-4 pb-8 sm:px-6">
               <div className="grid gap-6 lg:grid-cols-[1fr_1.35fr_1fr]">
-                {/* Left */}
                 <div className="space-y-6">
                   <div className="rounded-3xl border border-neutral-900/20 bg-white/55 p-5">
                     <div className="text-center text-xs font-black tracking-[0.22em] uppercase ink">
@@ -782,7 +778,6 @@ export default function Page() {
                   </div>
                 </div>
 
-                {/* Center */}
                 <div className="space-y-6">
                   <PhotoCarousel images={carouselImages} />
 
@@ -818,9 +813,21 @@ export default function Page() {
 
                     {audioError && <p className="mt-3 text-xs text-red-600">{audioError}</p>}
                   </div>
+
+                  {/* ✅ Versículo */}
+                  <div className="rounded-3xl border border-neutral-900/20 bg-white/55 p-6">
+                    <div className="text-center text-xs font-black tracking-[0.22em] uppercase ink">
+                      Versículo
+                    </div>
+                    <p className="mt-3 text-center font-serif text-lg leading-7 text-neutral-800">
+                      “{bibleVerseText}”
+                    </p>
+                    <p className="mt-3 text-center text-sm font-semibold text-neutral-900">
+                      {bibleVerseRef}
+                    </p>
+                  </div>
                 </div>
 
-                {/* Right */}
                 <div className="space-y-6">
                   <div className="rounded-3xl border border-neutral-900/20 bg-white/55 p-5">
                     <div className="text-center text-xs font-black tracking-[0.22em] uppercase ink">
@@ -883,7 +890,7 @@ export default function Page() {
               </div>
             </section>
 
-            {/* RSVP */}
+            {/* RSVP con 2 botones */}
             <section className="border-t border-neutral-900/20 bg-white/35 px-4 py-8 sm:px-6">
               <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[1fr_1.2fr] lg:items-start">
                 <div className="rounded-3xl border border-neutral-900/20 bg-white/60 p-6">
@@ -891,7 +898,7 @@ export default function Page() {
                     Confirmación (RSVP)
                   </div>
                   <p className="mt-2 text-sm text-neutral-700 leading-6">
-                    Confirma por WhatsApp si asistes o no. Se abrirá tu chat con el mensaje listo para enviar.
+                    Confirma por WhatsApp. Elige si deseas confirmar con el novio o con la novia.
                   </p>
 
                   <div className="mt-4 rounded-2xl border border-neutral-900/15 bg-white/70 p-4">
@@ -921,7 +928,7 @@ export default function Page() {
                 </div>
 
                 <div className="rounded-3xl border border-neutral-900/20 bg-white/60 p-6">
-                  <form onSubmit={submitRsvp} className="grid gap-3">
+                  <form className="grid gap-3">
                     <div className="grid gap-3 sm:grid-cols-2">
                       <div>
                         <label className="text-[11px] font-extrabold tracking-[0.18em] uppercase text-neutral-700">
@@ -978,12 +985,28 @@ export default function Page() {
                       </div>
                     </div>
 
-                    <button
-                      type="submit"
-                      className="mt-1 inline-flex w-full items-center justify-center rounded-full bg-neutral-900 px-4 py-4 text-sm font-extrabold tracking-[0.18em] uppercase text-white transition hover:bg-neutral-800"
-                    >
-                      Enviar confirmación por WhatsApp
-                    </button>
+                    {/* ✅ 2 botones: novio / novia */}
+                    <div className="mt-2 grid gap-3 sm:grid-cols-2">
+                      <button
+                        type="button"
+                        onClick={(e) => submitRsvpTo(rsvpPhoneNovio)(e as any)}
+                        className="inline-flex w-full items-center justify-center rounded-full bg-neutral-900 px-4 py-4 text-sm font-extrabold tracking-[0.14em] uppercase text-white transition hover:bg-neutral-800"
+                      >
+                        Confirmar con el novio
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={(e) => submitRsvpTo(rsvpPhoneNovia)(e as any)}
+                        className="inline-flex w-full items-center justify-center rounded-full border border-neutral-900/20 bg-white px-4 py-4 text-sm font-extrabold tracking-[0.14em] uppercase text-neutral-900 transition hover:bg-neutral-50"
+                      >
+                        Confirmar con la novia
+                      </button>
+                    </div>
+
+                    <p className="text-xs text-neutral-600 text-center">
+                      (Recuerda poner el número real de la novia en <span className="font-mono">rsvpPhoneNovia</span>)
+                    </p>
                   </form>
                 </div>
               </div>
