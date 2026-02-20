@@ -21,52 +21,55 @@ function pad2(n: number) {
 }
 
 /* =========================
-   Lluvia de arroz PRO (sin librerías)
+   Arroz cayendo DENTRO del periódico
 ========================= */
-function RiceRain({ show }: { show: boolean }) {
+function RiceRainInCard({ show, density = 140 }: { show: boolean; density?: number }) {
   const pieces = useMemo(() => {
     const colors = ["#f7f1e3", "#f3ead6", "#fffaf0", "#efe3c6"];
-    return Array.from({ length: 140 }).map((_, i) => {
-      const left = Math.random() * 100; // vw
+    return Array.from({ length: density }).map((_, i) => {
+      const left = Math.random() * 100; // %
       const delay = Math.random() * 0.35; // s
-      const dur = 1.7 + Math.random() * 1.3; // s
+      const dur = 1.6 + Math.random() * 1.3; // s
       const w = 4 + Math.random() * 5; // px
-      const h = w * (1.8 + Math.random() * 1.6); // grain
+      const h = w * (1.8 + Math.random() * 1.6);
       const rot0 = Math.random() * 360;
       const spin = 260 + Math.random() * 700;
-      const drift = (Math.random() - 0.5) * 260; // px
-      const wobble = 10 + Math.random() * 20; // px
-      const opacity = 0.6 + Math.random() * 0.4;
-      const blur = Math.random() < 0.2 ? 0.7 : 0;
+      const drift = (Math.random() - 0.5) * 220; // px
+      const wobble = 10 + Math.random() * 18; // px
+      const opacity = 0.55 + Math.random() * 0.45;
+      const blur = Math.random() < 0.18 ? 0.7 : 0;
       const color = colors[Math.floor(Math.random() * colors.length)];
-      return { i, left, delay, dur, w, h, rot0, spin, drift, wobble, opacity, blur, color };
+      const topOffset = -12 - Math.random() * 10;
+      return { i, left, delay, dur, w, h, rot0, spin, drift, wobble, opacity, blur, color, topOffset };
     });
-  }, [show]);
+  }, [show, density]);
 
   if (!show) return null;
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[80] overflow-hidden">
+    <div className="pointer-events-none absolute inset-0 z-[40] overflow-hidden">
       <style>{`
-        @keyframes riceFallPro {
-          0%   { transform: translate3d(var(--x), -14vh, 0) rotate(var(--r)); opacity: 0; }
-          10%  { opacity: var(--o); }
-          55%  { transform: translate3d(calc(var(--x) + var(--wob)), 55vh, 0) rotate(calc(var(--r) + var(--spin) * 0.55)); }
-          100% { transform: translate3d(calc(var(--x) * -1), 118vh, 0) rotate(calc(var(--r) + var(--spin))); opacity: 0; }
+        @keyframes riceCardFall {
+          0%   { transform: translate3d(var(--x), var(--y0), 0) rotate(var(--r)); opacity: 0; }
+          12%  { opacity: var(--o); }
+          55%  { transform: translate3d(calc(var(--x) + var(--wob)), 55%, 0) rotate(calc(var(--r) + var(--spin) * 0.55)); }
+          100% { transform: translate3d(calc(var(--x) * -1), 120%, 0) rotate(calc(var(--r) + var(--spin))); opacity: 0; }
         }
       `}</style>
 
       {pieces.map((p) => (
         <span
           key={p.i}
+          className="absolute"
           style={{
-            left: `${p.left}vw`,
+            left: `${p.left}%`,
+            top: `${p.topOffset}%`,
             width: `${p.w}px`,
             height: `${p.h}px`,
             background: p.color,
             opacity: p.opacity,
             filter: p.blur ? `blur(${p.blur}px)` : undefined,
-            animation: `riceFallPro ${p.dur}s cubic-bezier(.12,.72,.22,.98) forwards`,
+            animation: `riceCardFall ${p.dur}s cubic-bezier(.12,.72,.22,.98) forwards`,
             animationDelay: `${p.delay}s`,
             borderRadius: "999px",
             boxShadow: "0 1px 0 rgba(0,0,0,0.10), 0 2px 14px rgba(0,0,0,0.06)",
@@ -76,9 +79,9 @@ function RiceRain({ show }: { show: boolean }) {
               ["--r" as any]: `${p.rot0}deg`,
               ["--spin" as any]: `${p.spin}deg`,
               ["--o" as any]: `${p.opacity}`,
+              ["--y0" as any]: `-${40 + Math.random() * 30}px`,
             } as any ),
           }}
-          className="absolute top-0"
         />
       ))}
     </div>
@@ -86,22 +89,14 @@ function RiceRain({ show }: { show: boolean }) {
 }
 
 /* =========================
-   Carrusel simple (4 fotos) – sin librerías
+   Carrusel simple (4 fotos)
 ========================= */
-function PhotoCarousel({
-  images,
-  autoMs = 3800,
-}: {
-  images: string[];
-  autoMs?: number;
-}) {
+function PhotoCarousel({ images, autoMs = 3800 }: { images: string[]; autoMs?: number }) {
   const [idx, setIdx] = useState(0);
 
   useEffect(() => {
     if (!images.length) return;
-    const id = window.setInterval(() => {
-      setIdx((prev) => (prev + 1) % images.length);
-    }, autoMs);
+    const id = window.setInterval(() => setIdx((p) => (p + 1) % images.length), autoMs);
     return () => window.clearInterval(id);
   }, [images.length, autoMs]);
 
@@ -109,7 +104,7 @@ function PhotoCarousel({
   const next = () => setIdx((i) => (i + 1) % images.length);
 
   return (
-    <div className="rounded-3xl border border-neutral-900/20 bg-white/45 p-3">
+    <div className="rounded-3xl border border-neutral-900/20 bg-[#fffdf6] p-3 shadow-[0_18px_50px_rgba(0,0,0,0.12)]">
       <div className="relative overflow-hidden rounded-2xl bg-neutral-100">
         <div className="relative aspect-[16/11]">
           <Image
@@ -121,12 +116,11 @@ function PhotoCarousel({
           />
         </div>
 
-        {/* Controles */}
         <div className="pointer-events-none absolute inset-0 flex items-center justify-between p-2">
           <button
             type="button"
             onClick={prev}
-            className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/35 bg-black/35 text-white backdrop-blur-sm transition hover:bg-black/45"
+            className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/45 bg-black/30 text-white backdrop-blur-sm transition hover:bg-black/45"
             aria-label="Anterior"
           >
             ‹
@@ -134,15 +128,14 @@ function PhotoCarousel({
           <button
             type="button"
             onClick={next}
-            className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/35 bg-black/35 text-white backdrop-blur-sm transition hover:bg-black/45"
+            className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/45 bg-black/30 text-white backdrop-blur-sm transition hover:bg-black/45"
             aria-label="Siguiente"
           >
             ›
           </button>
         </div>
 
-        {/* Indicadores */}
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full border border-white/30 bg-black/35 px-3 py-1 backdrop-blur-sm">
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full border border-white/40 bg-black/30 px-3 py-1 backdrop-blur-sm">
           <div className="flex items-center gap-2">
             {images.map((_, i) => (
               <button
@@ -151,7 +144,7 @@ function PhotoCarousel({
                 onClick={() => setIdx(i)}
                 className={[
                   "h-2 w-2 rounded-full transition",
-                  i === idx ? "bg-white" : "bg-white/40 hover:bg-white/70",
+                  i === idx ? "bg-white" : "bg-white/45 hover:bg-white/80",
                 ].join(" ")}
                 aria-label={`Ir a foto ${i + 1}`}
               />
@@ -164,16 +157,14 @@ function PhotoCarousel({
         <div className="text-xs font-semibold tracking-[0.18em] uppercase text-neutral-800">
           Galería · 4 fotos
         </div>
-        <div className="text-[11px] text-neutral-700">
-          Usa las flechas o espera el cambio automático.
-        </div>
+        <div className="text-[11px] text-neutral-700">Flechas o cambio automático.</div>
       </div>
     </div>
   );
 }
 
 /* =========================
-   Modal flotante (lista de regalos)
+   Modal lista de regalos (flotante, vintage)
 ========================= */
 function GiftModal({
   open,
@@ -185,9 +176,7 @@ function GiftModal({
   gifts: string[];
 }) {
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     if (open) window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
@@ -196,15 +185,14 @@ function GiftModal({
 
   return (
     <div className="fixed inset-0 z-[95]">
-      {/* Backdrop */}
       <button
         type="button"
         onClick={onClose}
         className="absolute inset-0 bg-black/35 backdrop-blur-[2px]"
         aria-label="Cerrar"
       />
-      {/* Card */}
-      <div className="relative mx-auto mt-16 w-[min(720px,92vw)]">
+
+      <div className="relative mx-auto mt-16 w-[min(760px,92vw)]">
         <div className="paperTexture relative overflow-hidden rounded-[28px] border border-neutral-900/25 bg-[#fffdf7] shadow-[0_30px_80px_rgba(0,0,0,0.25)]">
           <div className="flex items-center justify-between border-b border-neutral-900/15 px-5 py-4">
             <div>
@@ -259,15 +247,15 @@ function GiftModal({
         <div className="pointer-events-none absolute -top-3 left-1/2 -translate-x-1/2 rounded-full border border-neutral-900/25 bg-[#fffdf7] px-4 py-2 text-[11px] font-semibold tracking-[0.22em] uppercase text-neutral-800 shadow-sm">
           Edición especial
         </div>
-      </div>
 
-      <style>{`
-        .paperTexture{
-          background-image: radial-gradient(rgba(0,0,0,0.03) 1px, transparent 1px);
-          background-size: 22px 22px;
-          background-position: 0 0;
-        }
-      `}</style>
+        <style>{`
+          .paperTexture{
+            background-image: radial-gradient(rgba(0,0,0,0.03) 1px, transparent 1px);
+            background-size: 22px 22px;
+            background-position: 0 0;
+          }
+        `}</style>
+      </div>
     </div>
   );
 }
@@ -285,25 +273,23 @@ export default function Page() {
   const venueAddress = "Villavicencio — Vereda Apiay / vía Puerto López";
   const rsvpPhone = "573116533163";
 
-  // ✅ Audio
-  const audioSrc = "/audio/Kurt - La Mujer Perfecta (Lyric Video) [1].MP3";
+  // ✅ Audio (IMPORTANTE: si tiene espacios, usa %20 o renómbralo)
+  const audioSrc = "/audio/Kurt%20-%20La%20Mujer%20Perfecta%20(Lyric%20Video)%20%5B1%5D.MP3";
 
   // ✅ Fotos (4)
   const carouselImages = [
     "https://i.pinimg.com/1200x/28/80/b0/2880b0579a6b1f3280266cb423e98f05.jpg",
-    "https://i.pinimg.com/736x/fc/8f/b0/fc8fb0ea308adb0c58d2cef9cac509b6.jpg",
+   
     "https://i.pinimg.com/736x/80/95/67/809567eb5b3482007d54d1d0e1e1d025.jpg",
     "https://i.pinimg.com/1200x/06/a4/dd/06a4dd27969325bdec82d7f4ef09ed7a.jpg",
   ];
 
-  // Periódico
-  const paperName = "Periódico de Boda";
+  const paperName = "Llego el gran día";
   const paperDate = "SÁBADO · 10 MAYO, 2026";
   const paperRegion = "VILLAVICENCIO";
   const bigHeadline = coupleName;
   const subHeadline = "SE CASAN HOY";
 
-  // Secciones
   const historiaCorta = [
     { label: "Se conocieron", value: "Septiembre 2019 · en el trabajo" },
     { label: "Empezaron a salir", value: "Marzo 31, 2020" },
@@ -311,7 +297,6 @@ export default function Page() {
     { label: "Boda", value: "Mayo 10, 2026" },
   ];
 
-  // Itinerario con HORA (como pediste)
   const itinerario = [
     { hora: "3:30 p.m.", evento: "Llegada de invitados" },
     { hora: "4:00 p.m.", evento: "Ceremonia" },
@@ -323,15 +308,12 @@ export default function Page() {
     { hora: "1:00 a.m.", evento: "Despedida" },
   ];
 
-  // Lista de regalos (modal flotante)
   const regalos = ["Nevera", "Plancha Air Fryer", "Lavadora", "Sala", "Comedor"];
 
-  // Nota
   const tituloNota = "Querida familia y amigos";
   const cuerpoNota =
     "Gracias por acompañarnos y por ser parte de esta historia. Hoy comenzamos una nueva etapa y queremos celebrarla contigo: amor, música, abrazos y recuerdos para toda la vida.";
 
-  // ===== Maps =====
   const mapsQuery = useMemo(
     () => encodeURIComponent(`${venueName}, ${venueAddress}`),
     [venueName, venueAddress]
@@ -409,7 +391,7 @@ export default function Page() {
 
   // ===== Calendario =====
   const calYear = 2026;
-  const calMonthIndex0 = 4; // Mayo
+  const calMonthIndex0 = 4;
   const highlightedDay = 10;
 
   const monthNamesEs = [
@@ -470,9 +452,9 @@ export default function Page() {
     window.open(`https://wa.me/${rsvpPhone}?text=${text}`, "_blank");
   };
 
-  // ===== Portada / Reveal =====
+  // ===== Reveal + Arroz en carta =====
   const [revealed, setRevealed] = useState(false);
-  const [showRice, setShowRice] = useState(false);
+  const [riceInCard, setRiceInCard] = useState(false);
 
   // Modal regalos
   const [giftOpen, setGiftOpen] = useState(false);
@@ -493,17 +475,17 @@ export default function Page() {
       }
     }
 
-    // Arroz
-    setShowRice(true);
-    window.setTimeout(() => setShowRice(false), 2800);
+    // Abrir periódico
+    window.setTimeout(() => setRevealed(true), 200);
 
-    // Reveal
-    window.setTimeout(() => setRevealed(true), 220);
+    // Arroz dentro de la carta
+    setRiceInCard(true);
+    window.setTimeout(() => setRiceInCard(false), 3200);
   };
 
   return (
-    <main className="min-h-screen bg-[#f4efe3] text-neutral-900">
-      {/* ===== CSS: flip + papel + pliegue central ===== */}
+    <main className="min-h-screen bg-[#efe6d2] text-neutral-900">
+      {/* ===== Estilos vintage premium (periódico antiguo) ===== */}
       <style>{`
         .stage { perspective: 1400px; }
         .paper {
@@ -515,6 +497,7 @@ export default function Page() {
         .paperHidden { transform: rotateY(-92deg) translateX(-10px); filter: blur(10px); opacity: .2; }
         .paperShown { transform: rotateY(0deg) translateX(0px); filter: blur(0px); opacity: 1; }
 
+        /* Pliegue y sombra central */
         .fold:before{
           content:"";
           position:absolute;
@@ -522,7 +505,7 @@ export default function Page() {
           left:50%;
           width:2px;
           transform: translateX(-1px);
-          background: rgba(0,0,0,0.12);
+          background: rgba(0,0,0,0.16);
           opacity:.55;
           pointer-events:none;
         }
@@ -531,27 +514,26 @@ export default function Page() {
           position:absolute;
           top:0; bottom:0;
           left:50%;
-          width:170px;
+          width:220px;
           transform: translateX(-50%);
-          background: linear-gradient(to right, rgba(0,0,0,.10), rgba(0,0,0,0), rgba(0,0,0,.08));
-          opacity:.15;
+          background: linear-gradient(to right, rgba(0,0,0,.16), rgba(0,0,0,0), rgba(0,0,0,.12));
+          opacity:.18;
           pointer-events:none;
         }
 
+        /* Papel antiguo */
         .paperTexture{
-          background-image: radial-gradient(rgba(0,0,0,0.03) 1px, transparent 1px);
-          background-size: 22px 22px;
-          background-position: 0 0;
+          background-color: #fbf6e8;
+          background-image:
+            radial-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(0,0,0,0.03), transparent 25%, rgba(0,0,0,0.03));
+          background-size: 22px 22px, 100% 220px;
+          background-position: 0 0, 0 0;
         }
 
-        .masthead{
-          letter-spacing: -0.02em;
-          text-rendering: geometricPrecision;
-        }
+        /* “tinta” */
+        .ink { color: #1b1b1b; }
       `}</style>
-
-      {/* Arroz */}
-      <RiceRain show={showRice} />
 
       {/* Modal regalos */}
       <GiftModal open={giftOpen} onClose={() => setGiftOpen(false)} gifts={regalos} />
@@ -561,36 +543,36 @@ export default function Page() {
 
       {/* ===== Portada ===== */}
       {!revealed && (
-        <div className="fixed inset-0 z-[90] bg-[#f4efe3] overflow-auto">
+        <div className="fixed inset-0 z-[90] bg-[#efe6d2] overflow-auto">
           <div className="min-h-screen grid place-items-start">
-            <div className="w-full pt-8 sm:pt-12 md:pt-14 pb-10 grid place-items-center">
+            <div className="w-full pt-10 sm:pt-12 md:pt-14 pb-10 grid place-items-center">
               <div className="relative w-[min(980px,92vw)]">
-                <div className="paperTexture relative overflow-hidden rounded-[32px] border border-neutral-900/25 bg-[#fbf8f1] shadow-[0_30px_80px_rgba(0,0,0,0.12)]">
+                <div className="paperTexture relative overflow-hidden rounded-[32px] border border-neutral-900/25 shadow-[0_30px_80px_rgba(0,0,0,0.12)]">
                   <div className="flex items-center justify-between border-b border-neutral-900/20 px-4 py-3 text-[11px] text-neutral-800 sm:px-6">
                     <span className="font-semibold tracking-[0.22em] uppercase">{paperRegion}</span>
                     <span className="font-semibold tracking-[0.18em] uppercase">{paperDate}</span>
                   </div>
 
                   <div className="px-4 pt-6 sm:px-6">
-                    <div className="masthead text-center font-serif text-4xl sm:text-6xl">
+                    <div className="text-center font-serif text-4xl sm:text-6xl ink">
                       {paperName}
                     </div>
                     <div className="mt-4 border-t border-neutral-900/20" />
                   </div>
 
                   <div className="px-4 py-6 text-center sm:px-6">
-                    <div className="font-black tracking-tight text-4xl sm:text-6xl md:text-7xl">
+                    <div className="font-black tracking-tight text-4xl sm:text-6xl md:text-7xl ink">
                       {bigHeadline}
                     </div>
-                    <div className="mt-2 font-serif text-2xl sm:text-3xl tracking-wide">
+                    <div className="mt-2 font-serif text-2xl sm:text-3xl tracking-wide ink">
                       {subHeadline}
                     </div>
 
                     <div className="mx-auto mt-6 max-w-2xl text-sm text-neutral-700">
-                      Pulsa el botón para abrir el periódico de boda (con flip), activar música y lluvia de arroz 🤍
+                      Pulsa el botón para abrir el periódico de boda (flip), activar música y arroz dentro de la carta 🤍
                     </div>
 
-                    {/* Cuenta regresiva en portada */}
+                    {/* Cuenta regresiva */}
                     <div className="mx-auto mt-6 max-w-xl rounded-3xl border border-neutral-900/15 bg-white/55 p-4">
                       <div className="flex items-center justify-between">
                         <div className="text-[11px] font-black tracking-[0.2em] uppercase text-neutral-800">
@@ -612,7 +594,7 @@ export default function Page() {
                             key={x.label}
                             className="rounded-2xl border border-neutral-900/15 bg-white/70 p-3 text-center"
                           >
-                            <div className="text-2xl font-black tabular-nums">{pad2(x.value)}</div>
+                            <div className="text-2xl font-black tabular-nums ink">{pad2(x.value)}</div>
                             <div className="mt-1 text-[11px] font-semibold tracking-[0.12em] uppercase text-neutral-700">
                               {x.label}
                             </div>
@@ -640,25 +622,10 @@ export default function Page() {
                         <p className="mt-3 text-xs text-red-600 text-center">{audioError}</p>
                       ) : (
                         <p className="mt-3 text-xs text-neutral-700 text-center">
-                          Audio: <span className="font-mono">/public/audio/manuel.MP3</span>
+                           <span className="font-mono"></span> 
                         </p>
                       )}
                     </div>
-                  </div>
-
-                  <div className="grid gap-4 border-t border-neutral-900/20 px-4 py-6 sm:grid-cols-3 sm:px-6">
-                    {[
-                      { t: "Historia corta", d: "Una historia breve de cómo llegamos aquí." },
-                      { t: "Itinerario", d: "Horarios claros para que no te pierdas nada." },
-                      { t: "Regalos", d: "Una lista sugerida si deseas bendecirnos." },
-                    ].map((x) => (
-                      <div key={x.t} className="border border-neutral-900/15 bg-white/40 rounded-2xl p-4">
-                        <div className="text-xs font-bold tracking-[0.18em] uppercase text-neutral-800">
-                          {x.t}
-                        </div>
-                        <p className="mt-2 text-sm text-neutral-700 leading-6">{x.d}</p>
-                      </div>
-                    ))}
                   </div>
                 </div>
 
@@ -676,19 +643,22 @@ export default function Page() {
         <div className="stage">
           <div
             className={[
-              "paper fold paperTexture relative overflow-hidden rounded-[34px] border border-neutral-900/25 bg-[#fbf8f1] shadow-[0_25px_70px_rgba(0,0,0,0.12)]",
+              "paper fold paperTexture relative overflow-hidden rounded-[34px] border border-neutral-900/25 shadow-[0_25px_70px_rgba(0,0,0,0.14)]",
               revealed ? "paperShown" : "paperHidden",
             ].join(" ")}
           >
+            {/* Arroz dentro del periódico */}
+            <RiceRainInCard show={riceInCard} density={160} />
+
             {/* Top strip */}
             <div className="flex flex-col gap-2 border-b border-neutral-900/20 px-4 py-3 text-[11px] text-neutral-800 sm:flex-row sm:items-center sm:justify-between sm:px-6">
               <span className="font-semibold tracking-[0.22em] uppercase">{paperRegion}</span>
 
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-full border border-neutral-900/25 bg-white/50 px-3 py-1 font-semibold tracking-[0.18em] uppercase">
+                <span className="rounded-full border border-neutral-900/25 bg-white/60 px-3 py-1 font-semibold tracking-[0.18em] uppercase">
                   {weddingDateLabel}
                 </span>
-                <span className="rounded-full border border-neutral-900/25 bg-white/50 px-3 py-1 font-semibold tracking-[0.18em] uppercase">
+                <span className="rounded-full border border-neutral-900/25 bg-white/60 px-3 py-1 font-semibold tracking-[0.18em] uppercase">
                   {ceremonyTimeLabel}
                 </span>
               </div>
@@ -698,29 +668,25 @@ export default function Page() {
 
             {/* Masthead */}
             <header className="px-4 pt-6 sm:px-6">
-              <div className="masthead text-center font-serif text-4xl sm:text-6xl">
-                {paperName}
-              </div>
+              <div className="text-center font-serif text-4xl sm:text-6xl ink">{paperName}</div>
 
               <div className="mt-4 grid gap-3 border-y border-neutral-900/20 py-4 sm:grid-cols-3 sm:items-center">
                 <div className="text-center text-[11px] font-semibold tracking-[0.22em] uppercase text-neutral-800 sm:text-left">
                   {cityLine}
                 </div>
-
                 <div className="text-center text-[11px] font-semibold tracking-[0.22em] uppercase text-neutral-800">
                   {venueName}
                 </div>
-
                 <div className="text-center text-[11px] font-semibold tracking-[0.22em] uppercase text-neutral-800 sm:text-right">
                   {venueAddress}
                 </div>
               </div>
 
               <div className="py-6 text-center">
-                <div className="font-black tracking-tight text-4xl sm:text-6xl md:text-7xl">
+                <div className="font-black tracking-tight text-4xl sm:text-6xl md:text-7xl ink">
                   {coupleName}
                 </div>
-                <div className="mt-2 font-serif text-2xl sm:text-3xl tracking-wide">
+                <div className="mt-2 font-serif text-2xl sm:text-3xl tracking-wide ink">
                   ¡NOS CASAMOS HOY!
                 </div>
               </div>
@@ -729,17 +695,17 @@ export default function Page() {
             {/* Main grid */}
             <section className="px-4 pb-8 sm:px-6">
               <div className="grid gap-6 lg:grid-cols-[1fr_1.35fr_1fr]">
-                {/* Left: Historia + calendario + cuenta */}
+                {/* Left */}
                 <div className="space-y-6">
-                  <div className="rounded-3xl border border-neutral-900/20 bg-white/45 p-5">
-                    <div className="text-center text-xs font-black tracking-[0.22em] uppercase">
+                  <div className="rounded-3xl border border-neutral-900/20 bg-white/55 p-5">
+                    <div className="text-center text-xs font-black tracking-[0.22em] uppercase ink">
                       Historia corta
                     </div>
 
                     <div className="mt-4 space-y-4">
                       {historiaCorta.map((x) => (
                         <div key={x.label} className="text-center">
-                          <div className="text-xs font-extrabold tracking-[0.12em] uppercase text-neutral-900">
+                          <div className="text-xs font-extrabold tracking-[0.12em] uppercase ink">
                             {x.label}
                           </div>
                           <div className="mt-1 text-sm text-neutral-700">{x.value}</div>
@@ -748,9 +714,9 @@ export default function Page() {
                     </div>
                   </div>
 
-                  <div className="rounded-3xl border border-neutral-900/20 bg-white/45 p-5">
+                  <div className="rounded-3xl border border-neutral-900/20 bg-white/55 p-5">
                     <div className="flex items-center justify-between">
-                      <div className="text-[11px] font-black tracking-[0.2em] uppercase text-neutral-800">
+                      <div className="text-[11px] font-black tracking-[0.2em] uppercase ink">
                         Calendario
                       </div>
                       <div className="text-[11px] font-semibold tracking-[0.18em] uppercase text-neutral-700">
@@ -772,9 +738,8 @@ export default function Page() {
                                 "mx-auto flex h-8 w-8 items-center justify-center rounded-xl text-xs",
                                 cell.isHighlight
                                   ? "bg-neutral-900 text-white"
-                                  : "border border-neutral-900/15 bg-white/60 text-neutral-900",
+                                  : "border border-neutral-900/15 bg-white/60 ink",
                               ].join(" ")}
-                              title={cell.isHighlight ? "10 de mayo" : undefined}
                             >
                               {cell.day}
                             </div>
@@ -786,12 +751,12 @@ export default function Page() {
                     </div>
                   </div>
 
-                  <div className="rounded-3xl border border-neutral-900/20 bg-white/45 p-5">
+                  <div className="rounded-3xl border border-neutral-900/20 bg-white/55 p-5">
                     <div className="flex items-center justify-between">
-                      <div className="text-[11px] font-black tracking-[0.2em] uppercase text-neutral-800">
+                      <div className="text-[11px] font-black tracking-[0.2em] uppercase ink">
                         Cuenta regresiva
                       </div>
-                      <span className="rounded-full border border-neutral-900/20 bg-white/60 px-3 py-1 text-[11px] font-semibold tracking-[0.18em] uppercase text-neutral-800">
+                      <span className="rounded-full border border-neutral-900/20 bg-white/60 px-3 py-1 text-[11px] font-semibold tracking-[0.18em] uppercase ink">
                         {mounted ? (cd.done ? "¡HOY!" : "FALTA") : "CARGANDO"}
                       </span>
                     </div>
@@ -807,7 +772,7 @@ export default function Page() {
                           key={x.label}
                           className="rounded-2xl border border-neutral-900/15 bg-white/70 p-3 text-center"
                         >
-                          <div className="text-2xl font-black tabular-nums">{pad2(x.value)}</div>
+                          <div className="text-2xl font-black tabular-nums ink">{pad2(x.value)}</div>
                           <div className="mt-1 text-[11px] font-semibold tracking-[0.12em] uppercase text-neutral-700">
                             {x.label}
                           </div>
@@ -817,14 +782,15 @@ export default function Page() {
                   </div>
                 </div>
 
-                {/* Center: Carrusel + nota + música */}
+                {/* Center */}
                 <div className="space-y-6">
                   <PhotoCarousel images={carouselImages} />
 
-                  <div className="rounded-3xl border border-neutral-900/20 bg-white/45 p-6">
-                    <div className="text-center text-sm font-black tracking-[0.22em] uppercase">
+                  <div className="rounded-3xl border border-neutral-900/20 bg-white/55 p-6">
+                    <div className="text-center text-sm font-black tracking-[0.22em] uppercase ink">
                       {tituloNota}
                     </div>
+
                     <p className="mt-4 text-sm leading-7 text-neutral-800 md:columns-2 md:gap-8">
                       {cuerpoNota}
                     </p>
@@ -838,19 +804,26 @@ export default function Page() {
                         {playing ? "Pausar música" : "▶ Reproducir música"}
                       </button>
 
-                      <div className="rounded-full border border-neutral-900/20 bg-white/60 px-4 py-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-neutral-800 text-center">
-                        {playing ? "Sonando" : "Lista"} · Nuestra canción
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setRiceInCard(true);
+                          window.setTimeout(() => setRiceInCard(false), 2800);
+                        }}
+                        className="inline-flex items-center justify-center rounded-full border border-neutral-900/20 bg-white/70 px-5 py-3 text-xs font-extrabold tracking-[0.18em] uppercase ink transition hover:bg-white"
+                      >
+                        🎉 Lanzar arroz
+                      </button>
                     </div>
 
                     {audioError && <p className="mt-3 text-xs text-red-600">{audioError}</p>}
                   </div>
                 </div>
 
-                {/* Right: Itinerario con hora + regalos */}
+                {/* Right */}
                 <div className="space-y-6">
-                  <div className="rounded-3xl border border-neutral-900/20 bg-white/45 p-5">
-                    <div className="text-center text-xs font-black tracking-[0.22em] uppercase">
+                  <div className="rounded-3xl border border-neutral-900/20 bg-white/55 p-5">
+                    <div className="text-center text-xs font-black tracking-[0.22em] uppercase ink">
                       Itinerario
                     </div>
 
@@ -860,20 +833,20 @@ export default function Page() {
                           key={`${x.hora}-${x.evento}-${i}`}
                           className="flex items-center justify-between gap-4 rounded-2xl border border-neutral-900/15 bg-white/70 px-4 py-3"
                         >
-                          <div className="text-sm font-extrabold text-neutral-900">{x.hora}</div>
+                          <div className="text-sm font-extrabold ink">{x.hora}</div>
                           <div className="text-sm text-neutral-800">{x.evento}</div>
                         </div>
                       ))}
                     </div>
                   </div>
 
-                  <div className="rounded-3xl border border-neutral-900/20 bg-white/45 p-5">
-                    <div className="text-center text-xs font-black tracking-[0.22em] uppercase">
+                  <div className="rounded-3xl border border-neutral-900/20 bg-white/55 p-5">
+                    <div className="text-center text-xs font-black tracking-[0.22em] uppercase ink">
                       Ubicación
                     </div>
 
                     <div className="mt-4 rounded-2xl border border-neutral-900/15 bg-white/70 p-4">
-                      <div className="text-xs font-extrabold tracking-[0.18em] uppercase text-neutral-800">
+                      <div className="text-xs font-extrabold tracking-[0.18em] uppercase ink">
                         {venueName}
                       </div>
                       <div className="mt-2 text-sm text-neutral-700">{venueAddress}</div>
@@ -889,10 +862,11 @@ export default function Page() {
                     </a>
                   </div>
 
-                  <div className="rounded-3xl border border-neutral-900/20 bg-white/45 p-5">
-                    <div className="text-center text-xs font-black tracking-[0.22em] uppercase">
+                  <div className="rounded-3xl border border-neutral-900/20 bg-white/55 p-5">
+                    <div className="text-center text-xs font-black tracking-[0.22em] uppercase ink">
                       Regalos
                     </div>
+
                     <p className="mt-3 text-sm text-neutral-700 leading-6 text-center">
                       Si deseas bendecirnos, mira nuestra lista sugerida.
                     </p>
@@ -909,11 +883,11 @@ export default function Page() {
               </div>
             </section>
 
-            {/* ===== RSVP ===== */}
-            <section className="border-t border-neutral-900/20 bg-[#f7f2e7] px-4 py-8 sm:px-6">
+            {/* RSVP */}
+            <section className="border-t border-neutral-900/20 bg-white/35 px-4 py-8 sm:px-6">
               <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[1fr_1.2fr] lg:items-start">
                 <div className="rounded-3xl border border-neutral-900/20 bg-white/60 p-6">
-                  <div className="text-xs font-black tracking-[0.22em] uppercase text-neutral-800">
+                  <div className="text-xs font-black tracking-[0.22em] uppercase ink">
                     Confirmación (RSVP)
                   </div>
                   <p className="mt-2 text-sm text-neutral-700 leading-6">
@@ -1015,13 +989,12 @@ export default function Page() {
               </div>
             </section>
 
-            {/* Footer */}
-            <footer className="border-t border-neutral-900/20 bg-[#fbf8f1] px-4 py-6 text-center sm:px-6">
+            <footer className="border-t border-neutral-900/20 bg-white/20 px-4 py-6 text-center sm:px-6">
               <div className="text-xs font-extrabold tracking-[0.22em] uppercase text-neutral-800">
-                Gracias por celebrar con nosotros una unión de amor, risas y felicidad
+                Con amor, {coupleName}
               </div>
               <div className="mt-2 text-xs text-neutral-700">
-                {coupleName} · {weddingDateLabel} · {cityLine}
+                {weddingDateLabel} · {cityLine}
               </div>
             </footer>
           </div>
