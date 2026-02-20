@@ -69,7 +69,7 @@ export default function Page() {
       subtitle: "Experiencia completa",
       price: "$349.900",
       oldPrice: "$449.900",
-      demoUrl: "/demo/premium",
+      demoUrl: "/tarjetas/anayluis",
       items: [
         "TABLERO cuenta regresiva / días, horas, minutos y segundos (interactivo)",
         "Itinerario",
