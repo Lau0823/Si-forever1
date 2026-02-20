@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, X, Sparkles } from "lucide-react";
 
 /* =========================
    Utils
@@ -25,42 +24,139 @@ function cn(...classes: Array<string | false | null | undefined>) {
 }
 
 /* =========================
+   Portada GLASS (Extra Extra) + BG editable atrás
+========================= */
+function GlassCover({
+  coupleName,
+  cityLine,
+  weddingDateLabel,
+  ceremonyTimeLabel,
+  venueName,
+  paperName,
+  paperDate,
+  paperRegion,
+  onOpen,
+  onDress,
+  onGifts,
+}: {
+  coupleName: string;
+  cityLine: string;
+  weddingDateLabel: string;
+  ceremonyTimeLabel: string;
+  venueName: string;
+  paperName: string;
+  paperDate: string;
+  paperRegion: string;
+  onOpen: () => void;
+  onDress: () => void;
+  onGifts: () => void;
+}) {
+  return (
+    <div className="relative overflow-hidden rounded-[34px] border border-black/10 bg-white shadow-[0_30px_90px_rgba(0,0,0,0.12)]">
+      {/* BACK LAYER: BG + letras/patrón editable */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(0,0,0,0.06),transparent_55%),radial-gradient(circle_at_82%_30%,rgba(0,0,0,0.05),transparent_52%)]" />
+        <div className="absolute -top-12 left-1/2 -translate-x-1/2 whitespace-nowrap select-none opacity-[0.07]">
+          <div className="text-[120px] sm:text-[170px] font-black tracking-tight">
+            SI FOREVER · SI FOREVER · SI FOREVER
+          </div>
+        </div>
+      </div>
+
+      {/* TOP STRIP minimal */}
+      <div className="relative z-10 flex items-center justify-between px-5 py-4 text-[11px]">
+        <span className="font-semibold tracking-[0.22em] uppercase text-black/60">{paperRegion}</span>
+        <span className="font-semibold tracking-[0.18em] uppercase text-black/55">{paperDate}</span>
+      </div>
+
+      {/* GLASS CARD */}
+      <div className="relative z-10 px-4 pb-7 sm:px-6 sm:pb-10">
+        <div className="rounded-[30px] border border-white/45 bg-white/30 backdrop-blur-2xl shadow-[0_18px_60px_rgba(0,0,0,0.10)]">
+          <div className="px-6 pt-7 text-center">
+            <div className="font-serif text-4xl sm:text-5xl tracking-tight">{paperName}</div>
+            <div className="mx-auto mt-4 h-px w-[min(720px,86vw)] bg-black/10" />
+          </div>
+
+          <div className="px-6 pb-7 pt-6 text-center sm:px-10 sm:pb-9">
+            <div className="text-[11px] font-semibold tracking-[0.22em] uppercase text-black/60">{cityLine}</div>
+
+            <h1 className="mt-3 text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-black">
+              {coupleName}
+            </h1>
+
+            <div className="mt-2 font-serif text-xl sm:text-2xl tracking-wide text-black/80">Se casan</div>
+
+            <div className="mt-6 flex flex-wrap justify-center gap-2">
+              <span className="rounded-full border border-black/10 bg-white/60 px-3 py-1 text-[11px] font-semibold tracking-[0.18em] uppercase text-black/80">
+                {weddingDateLabel}
+              </span>
+              <span className="rounded-full border border-black/10 bg-white/60 px-3 py-1 text-[11px] font-semibold tracking-[0.18em] uppercase text-black/80">
+                {ceremonyTimeLabel}
+              </span>
+              <span className="rounded-full border border-black/10 bg-white/60 px-3 py-1 text-[11px] font-semibold tracking-[0.18em] uppercase text-black/80">
+                {venueName}
+              </span>
+            </div>
+
+            <div className="mt-7 grid gap-3 sm:grid-cols-3">
+              <button
+                type="button"
+                onClick={onOpen}
+                className="rounded-full bg-black px-5 py-3 text-[12px] font-semibold tracking-[0.18em] uppercase text-white transition hover:bg-black/90 active:scale-[0.99]"
+              >
+                Abrir
+              </button>
+
+              <button
+                type="button"
+                onClick={onDress}
+                className="rounded-full border border-black/15 bg-white/55 px-5 py-3 text-[12px] font-semibold tracking-[0.18em] uppercase text-black/80 backdrop-blur-xl transition hover:bg-white/70 active:scale-[0.99]"
+              >
+                Dress code
+              </button>
+
+              <button
+                type="button"
+                onClick={onGifts}
+                className="rounded-full border border-black/15 bg-white/55 px-5 py-3 text-[12px] font-semibold tracking-[0.18em] uppercase text-black/80 backdrop-blur-xl transition hover:bg-white/70 active:scale-[0.99]"
+              >
+                Regalos
+              </button>
+            </div>
+
+            <div className="mt-6 text-[11px] font-semibold tracking-[0.22em] uppercase text-black/45">
+              Vista previa · Extra Extra
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* =========================
    Arroz cayendo DENTRO del periódico (AUTO)
 ========================= */
 function RiceRainInCard({ show, density = 160 }: { show: boolean; density?: number }) {
   const pieces = useMemo(() => {
-    const colors = ["#f7f1e3", "#f3ead6", "#fffaf0", "#efe3c6"];
+    // más “blanco/perla” (lujo), no amarillo
+    const colors = ["#ffffff", "#fbfbfb", "#f6f6f6", "#f1f1f1"];
     return Array.from({ length: density }).map((_, i) => {
-      const left = Math.random() * 100; // %
-      const delay = Math.random() * 0.35; // s
-      const dur = 1.6 + Math.random() * 1.6; // s
-      const w = 3.5 + Math.random() * 4.8; // px
+      const left = Math.random() * 100;
+      const delay = Math.random() * 0.35;
+      const dur = 1.6 + Math.random() * 1.6;
+      const w = 3.5 + Math.random() * 4.8;
       const h = w * (2.0 + Math.random() * 1.6);
       const rot0 = Math.random() * 360;
       const spin = 260 + Math.random() * 700;
-      const drift = (Math.random() - 0.5) * 240; // px
-      const wobble = 8 + Math.random() * 18; // px
-      const opacity = 0.55 + Math.random() * 0.45;
+      const drift = (Math.random() - 0.5) * 240;
+      const wobble = 8 + Math.random() * 18;
+      const opacity = 0.45 + Math.random() * 0.45;
       const blur = Math.random() < 0.18 ? 0.7 : 0;
       const color = colors[Math.floor(Math.random() * colors.length)];
       const topOffset = -12 - Math.random() * 12;
 
-      return {
-        i,
-        left,
-        delay,
-        dur,
-        w,
-        h,
-        rot0,
-        spin,
-        drift,
-        wobble,
-        opacity,
-        blur,
-        color,
-        topOffset,
-      };
+      return { i, left, delay, dur, w, h, rot0, spin, drift, wobble, opacity, blur, color, topOffset };
     });
   }, [show, density]);
 
@@ -92,7 +188,7 @@ function RiceRainInCard({ show, density = 160 }: { show: boolean; density?: numb
             animation: `riceCardFall ${p.dur}s cubic-bezier(.12,.72,.22,.98) forwards`,
             animationDelay: `${p.delay}s`,
             borderRadius: "999px",
-            boxShadow: "0 1px 0 rgba(0,0,0,0.10), 0 2px 14px rgba(0,0,0,0.06)",
+            boxShadow: "0 1px 0 rgba(0,0,0,0.08), 0 10px 30px rgba(0,0,0,0.06)",
             ...({
               ["--x" as any]: `${p.drift}px`,
               ["--wob" as any]: `${(Math.random() < 0.5 ? -1 : 1) * p.wobble}px`,
@@ -110,6 +206,7 @@ function RiceRainInCard({ show, density = 160 }: { show: boolean; density?: numb
 
 /* =========================
    HERO Banner (pantalla completa + scroll)
+   - sin íconos
 ========================= */
 function HeroBanner({
   images,
@@ -134,7 +231,7 @@ function HeroBanner({
   const next = () => setIdx((i) => (i + 1) % images.length);
 
   return (
-    <section className="relative h-[100svh] w-full overflow-hidden rounded-[34px] border border-neutral-900/20 shadow-[0_30px_90px_rgba(0,0,0,0.18)]">
+    <section className="relative h-[100svh] w-full overflow-hidden rounded-[34px] border border-black/10 shadow-[0_30px_90px_rgba(0,0,0,0.18)]">
       <div className="absolute inset-0">
         <Image src={images[idx]} alt={`Foto ${idx + 1}`} fill priority={idx === 0} className="object-cover" />
       </div>
@@ -144,12 +241,11 @@ function HeroBanner({
 
       <div className="relative z-10 flex h-full items-end p-5 sm:p-8">
         <div className="max-w-2xl">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-3 py-1 text-[11px] font-semibold tracking-[0.16em] uppercase text-white/90 backdrop-blur-md">
-            <Sparkles className="h-4 w-4" />
+          <div className="inline-flex items-center rounded-full border border-white/30 bg-white/10 px-3 py-1 text-[11px] font-semibold tracking-[0.16em] uppercase text-white/90 backdrop-blur-md">
             {subtitle}
           </div>
 
-          <h2 className="mt-4 font-black tracking-tight text-white text-4xl sm:text-6xl">{title}</h2>
+          <h2 className="mt-4 text-4xl font-black tracking-tight text-white sm:text-6xl">{title}</h2>
 
           <div className="mt-5 flex items-center gap-2">
             <button
@@ -158,7 +254,7 @@ function HeroBanner({
               className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/35 bg-white/10 text-white/90 backdrop-blur-md transition hover:bg-white/15 active:scale-[0.98]"
               aria-label="Anterior"
             >
-              <ChevronLeft className="h-5 w-5" />
+              <span className="text-xl leading-none">‹</span>
             </button>
 
             <button
@@ -167,7 +263,7 @@ function HeroBanner({
               className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/35 bg-white/10 text-white/90 backdrop-blur-md transition hover:bg-white/15 active:scale-[0.98]"
               aria-label="Siguiente"
             >
-              <ChevronRight className="h-5 w-5" />
+              <span className="text-xl leading-none">›</span>
             </button>
 
             <div className="ml-2 rounded-full border border-white/35 bg-white/10 px-3 py-2 text-[12px] font-semibold text-white/90 backdrop-blur-md tabular-nums">
@@ -191,9 +287,10 @@ function HeroBanner({
         </div>
       </div>
 
+      {/* sutil (menos “texto innecesario”) */}
       <div className="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 z-10">
-        <div className="rounded-full border border-white/25 bg-white/10 px-4 py-2 text-[11px] font-semibold tracking-[0.14em] uppercase text-white/85 backdrop-blur-md">
-          Desliza hacia abajo
+        <div className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[10px] font-semibold tracking-[0.18em] uppercase text-white/75 backdrop-blur-md">
+          Desliza
         </div>
       </div>
     </section>
@@ -206,8 +303,8 @@ function HeroBanner({
 type DressIdea = {
   title: string;
   note?: string;
-  imageUrl?: string; // URL externa
-  imageFileUrl?: string; // imagen subida (blob:)
+  imageUrl?: string;
+  imageFileUrl?: string;
 };
 
 function DressCodeIdeasModal({
@@ -270,9 +367,7 @@ function DressCodeIdeasModal({
       },
     ]);
 
-    // ir a la última (la recién agregada)
     setTimeout(() => setIdx(ideas.length), 0);
-
     setNewIdea({ title: "", note: "", imageUrl: "", imageFileUrl: "" });
   };
 
@@ -290,59 +385,44 @@ function DressCodeIdeasModal({
       <button type="button" onClick={onClose} className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" aria-label="Cerrar" />
 
       <div className="relative mx-auto mt-10 w-[min(980px,94vw)]">
-        <div className="paperTexture relative overflow-hidden rounded-[28px] border border-neutral-900/20 bg-[#fffdf7] shadow-[0_30px_90px_rgba(0,0,0,0.28)]">
-          <div className="flex items-center justify-between border-b border-neutral-900/15 px-5 py-4">
+        <div className="paperTexture relative overflow-hidden rounded-[28px] border border-black/10 bg-white shadow-[0_30px_90px_rgba(0,0,0,0.28)]">
+          <div className="flex items-center justify-between border-b border-black/10 px-5 py-4">
             <div>
-              <div className="text-xs font-black tracking-[0.20em] uppercase text-neutral-900">Dress code</div>
-              <div className="mt-1 text-lg font-semibold text-neutral-900">{dressCodeTitle}</div>
-              <div className="mt-1 text-sm text-neutral-700">{dressCodeNote}</div>
+              <div className="text-xs font-semibold tracking-[0.20em] uppercase text-black/70">Dress code</div>
+              <div className="mt-1 text-lg font-semibold text-black">{dressCodeTitle}</div>
+              <div className="mt-1 text-sm text-black/70">{dressCodeNote}</div>
             </div>
 
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-900/15 bg-white/60 text-neutral-900/80 transition hover:bg-white active:scale-[0.99]"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white/70 text-black/70 backdrop-blur-md transition hover:bg-white active:scale-[0.99]"
               aria-label="Cerrar modal"
             >
-              <X className="h-5 w-5" />
+              <span className="text-xl leading-none">×</span>
             </button>
           </div>
 
-          <div className="px-5 py-5 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="grid gap-5 px-5 py-5 lg:grid-cols-[1.1fr_0.9fr]">
             {/* Carrusel */}
-            <div className="rounded-[24px] border border-neutral-900/12 bg-white/70 p-4">
+            <div className="rounded-[24px] border border-black/10 bg-white/70 p-4">
               <div className="flex items-center justify-between">
-                <div className="text-[11px] font-semibold tracking-[0.16em] uppercase text-neutral-800">Ideas</div>
-                <div className="text-[11px] text-neutral-600 tabular-nums">{hasIdeas ? `${idx + 1}/${ideas.length}` : "0/0"}</div>
+                <div className="text-[11px] font-semibold tracking-[0.16em] uppercase text-black/70">Ideas</div>
+                <div className="text-[11px] text-black/50 tabular-nums">{hasIdeas ? `${idx + 1}/${ideas.length}` : "0/0"}</div>
               </div>
 
-              <div className="mt-4 relative overflow-hidden rounded-[18px] border border-neutral-900/10 bg-neutral-50">
+              <div className="mt-4 relative overflow-hidden rounded-[18px] border border-black/10 bg-black/5">
                 <div className="relative aspect-[16/10]">
-                  {(current?.imageUrl || current?.imageFileUrl) ? (
+                  {current?.imageUrl || current?.imageFileUrl ? (
                     current?.imageFileUrl ? (
-                      <img
-                        src={current.imageFileUrl}
-                        alt={current.title}
-                        className="absolute inset-0 h-full w-full object-cover"
-                      />
+                      <img src={current.imageFileUrl} alt={current.title} className="absolute inset-0 h-full w-full object-cover" />
                     ) : (
-                      <Image
-                        src={current!.imageUrl!}
-                        alt={current!.title}
-                        fill
-                        className="object-cover"
-                      />
+                      <Image src={current!.imageUrl!} alt={current!.title} fill className="object-cover" />
                     )
                   ) : (
-                    <div className="absolute inset-0 grid place-items-center">
-                      <div className="text-center px-6">
-                        <div className="text-sm font-semibold text-neutral-900">
-                          {current?.title || "Aún no hay ideas"}
-                        </div>
-                        <div className="mt-2 text-sm text-neutral-600">
-                          {current?.note || "Agrega una idea (texto y opcional imagen/URL)."}
-                        </div>
-                      </div>
+                    <div className="absolute inset-0 grid place-items-center px-6 text-center">
+                      <div className="text-sm font-semibold text-black">{current?.title || "Aún no hay ideas"}</div>
+                      <div className="mt-2 text-sm text-black/60">{current?.note || "Agrega una idea con texto y opcional imagen."}</div>
                     </div>
                   )}
                 </div>
@@ -357,7 +437,7 @@ function DressCodeIdeasModal({
                     className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/40 bg-white/15 text-white/90 backdrop-blur-md transition hover:bg-white/20 disabled:opacity-40"
                     aria-label="Anterior"
                   >
-                    <ChevronLeft className="h-5 w-5" />
+                    <span className="text-xl leading-none">‹</span>
                   </button>
 
                   <button
@@ -367,72 +447,72 @@ function DressCodeIdeasModal({
                     className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/40 bg-white/15 text-white/90 backdrop-blur-md transition hover:bg-white/20 disabled:opacity-40"
                     aria-label="Siguiente"
                   >
-                    <ChevronRight className="h-5 w-5" />
+                    <span className="text-xl leading-none">›</span>
                   </button>
                 </div>
               </div>
 
               {hasIdeas && (
                 <div className="mt-4">
-                  <div className="text-base font-semibold text-neutral-900">{current?.title}</div>
-                  {current?.note && <div className="mt-1 text-sm text-neutral-700">{current.note}</div>}
+                  <div className="text-base font-semibold text-black">{current?.title}</div>
+                  {current?.note && <div className="mt-1 text-sm text-black/70">{current.note}</div>}
                   <button
                     type="button"
                     onClick={removeCurrent}
-                    className="mt-3 text-xs font-semibold tracking-[0.14em] uppercase text-neutral-700 hover:text-neutral-900"
+                    className="mt-3 text-xs font-semibold tracking-[0.14em] uppercase text-black/60 hover:text-black"
                   >
-                    Eliminar esta idea
+                    Eliminar
                   </button>
                 </div>
               )}
             </div>
 
             {/* Form agregar */}
-            <div className="rounded-[24px] border border-neutral-900/12 bg-white/70 p-4">
-              <div className="text-[11px] font-semibold tracking-[0.16em] uppercase text-neutral-800">Agregar idea</div>
+            <div className="rounded-[24px] border border-black/10 bg-white/70 p-4">
+              <div className="text-[11px] font-semibold tracking-[0.16em] uppercase text-black/70">Agregar idea</div>
 
               <div className="mt-3 grid gap-3">
                 <div>
-                  <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-neutral-700">Título</label>
+                  <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-black/60">Título</label>
                   <input
                     value={newIdea.title}
                     onChange={(e) => setNewIdea((p) => ({ ...p, title: e.target.value }))}
-                    className="mt-1 w-full rounded-2xl border border-neutral-900/12 bg-white px-3 py-3 text-sm outline-none focus:border-neutral-900/40"
+                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-3 py-3 text-sm outline-none focus:border-black/30"
                     placeholder="Ej: Vestido largo en tonos neutros"
                   />
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-neutral-700">Nota (opcional)</label>
+                  <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-black/60">Nota (opcional)</label>
                   <input
                     value={newIdea.note}
                     onChange={(e) => setNewIdea((p) => ({ ...p, note: e.target.value }))}
-                    className="mt-1 w-full rounded-2xl border border-neutral-900/12 bg-white px-3 py-3 text-sm outline-none focus:border-neutral-900/40"
-                    placeholder="Ej: evita blanco / evita tenis"
+                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-3 py-3 text-sm outline-none focus:border-black/30"
+                    placeholder="Ej: evitar blanco / evitar tenis"
                   />
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-neutral-700">URL imagen (opcional)</label>
+                  <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-black/60">URL imagen (opcional)</label>
                   <input
                     value={newIdea.imageUrl}
                     onChange={(e) => setNewIdea((p) => ({ ...p, imageUrl: e.target.value }))}
-                    className="mt-1 w-full rounded-2xl border border-neutral-900/12 bg-white px-3 py-3 text-sm outline-none focus:border-neutral-900/40"
+                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-3 py-3 text-sm outline-none focus:border-black/30"
                     placeholder="https://..."
                   />
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-neutral-700">Subir imagen (opcional)</label>
+                  <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-black/60">Subir imagen (opcional)</label>
                   <input
                     type="file"
                     accept="image/*"
                     onChange={onPickImage}
-                    className="mt-1 w-full rounded-2xl border border-neutral-900/12 bg-white px-3 py-3 text-sm outline-none focus:border-neutral-900/40"
+                    className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-3 py-3 text-sm outline-none focus:border-black/30"
                   />
 
                   {newIdea.imageFileUrl && (
-                    <div className="mt-2 overflow-hidden rounded-2xl border border-neutral-900/12">
+                    <div className="mt-2 overflow-hidden rounded-2xl border border-black/10">
                       <img src={newIdea.imageFileUrl} alt="Preview" className="h-40 w-full object-cover" />
                     </div>
                   )}
@@ -441,24 +521,22 @@ function DressCodeIdeasModal({
                 <button
                   type="button"
                   onClick={addIdea}
-                  className="mt-1 inline-flex w-full items-center justify-center rounded-full bg-neutral-900 px-4 py-3 text-sm font-semibold tracking-[0.16em] uppercase text-white transition hover:bg-neutral-800 active:scale-[0.99]"
+                  className="mt-1 inline-flex w-full items-center justify-center rounded-full bg-black px-4 py-3 text-sm font-semibold tracking-[0.16em] uppercase text-white transition hover:bg-black/90 active:scale-[0.99]"
                   disabled={!newIdea.title.trim()}
                 >
-                  Guardar idea
+                  Guardar
                 </button>
 
-                <div className="text-xs text-neutral-600 leading-5">
-                  Tip: puedes pegar URL o subir una imagen. (Las subidas se guardan solo en esta sesión.)
-                </div>
+                <div className="text-xs text-black/55 leading-5">Tip: URL o subir imagen (solo sesión actual).</div>
               </div>
             </div>
           </div>
 
-          <div className="border-t border-neutral-900/15 px-5 py-4">
+          <div className="border-t border-black/10 px-5 py-4">
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex w-full items-center justify-center rounded-full border border-neutral-900/15 bg-white px-4 py-3 text-sm font-semibold tracking-[0.16em] uppercase text-neutral-900 transition hover:bg-neutral-50 active:scale-[0.99]"
+              className="inline-flex w-full items-center justify-center rounded-full border border-black/10 bg-white px-4 py-3 text-sm font-semibold tracking-[0.16em] uppercase text-black/80 transition hover:bg-black/[0.03] active:scale-[0.99]"
             >
               Cerrar
             </button>
@@ -486,54 +564,47 @@ function GiftModal({ open, onClose, gifts }: { open: boolean; onClose: () => voi
       <button type="button" onClick={onClose} className="absolute inset-0 bg-black/35 backdrop-blur-[2px]" aria-label="Cerrar" />
 
       <div className="relative mx-auto mt-16 w-[min(820px,92vw)]">
-        <div className="paperTexture relative overflow-hidden rounded-[28px] border border-neutral-900/20 bg-[#fffdf7] shadow-[0_30px_90px_rgba(0,0,0,0.28)]">
-          <div className="flex items-center justify-between border-b border-neutral-900/15 px-5 py-4">
+        <div className="paperTexture relative overflow-hidden rounded-[28px] border border-black/10 bg-white shadow-[0_30px_90px_rgba(0,0,0,0.28)]">
+          <div className="flex items-center justify-between border-b border-black/10 px-5 py-4">
             <div>
-              <div className="text-xs font-black tracking-[0.20em] uppercase text-neutral-900">Lista de regalos</div>
-              <div className="mt-1 text-sm text-neutral-700">Si deseas bendecirnos, aquí tienes algunas ideas</div>
+              <div className="text-xs font-semibold tracking-[0.20em] uppercase text-black/70">Regalos</div>
+              <div className="mt-1 text-sm text-black/65">Si deseas bendecirnos, aquí tienes algunas ideas</div>
             </div>
 
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-900/15 bg-white/60 text-neutral-900/80 transition hover:bg-white active:scale-[0.99]"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white/70 text-black/70 backdrop-blur-md transition hover:bg-white active:scale-[0.99]"
               aria-label="Cerrar modal"
             >
-              <X className="h-5 w-5" />
+              <span className="text-xl leading-none">×</span>
             </button>
           </div>
 
           <div className="px-5 py-5">
             <div className="grid gap-3 sm:grid-cols-2">
               {gifts.map((g, i) => (
-                <div
-                  key={`gift-${i}-${g}`}
-                  className="rounded-2xl border border-neutral-900/12 bg-white/75 px-4 py-4 shadow-[0_12px_30px_rgba(0,0,0,0.08)]"
-                >
-                  <div className="text-[11px] font-semibold tracking-[0.16em] uppercase text-neutral-700">Opción {i + 1}</div>
-                  <div className="mt-2 text-base font-semibold text-neutral-900">{g}</div>
+                <div key={`gift-${i}-${g}`} className="rounded-2xl border border-black/10 bg-white/75 px-4 py-4 shadow-[0_12px_30px_rgba(0,0,0,0.08)]">
+                  <div className="text-[11px] font-semibold tracking-[0.16em] uppercase text-black/60">Opción {i + 1}</div>
+                  <div className="mt-2 text-base font-semibold text-black">{g}</div>
                 </div>
               ))}
             </div>
 
-            <div className="mt-5 rounded-2xl border border-neutral-900/12 bg-white/70 p-4 text-sm leading-6 text-neutral-700">
-              Si prefieres, también puedes apoyarnos con un detalle libre. ¡Gracias por tu cariño! 🤍
+            <div className="mt-5 rounded-2xl border border-black/10 bg-white/70 p-4 text-sm leading-6 text-black/70">
+              Si prefieres, también puedes apoyarnos con un detalle libre. Gracias 🤍
             </div>
           </div>
 
-          <div className="border-t border-neutral-900/15 px-5 py-4">
+          <div className="border-t border-black/10 px-5 py-4">
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex w-full items-center justify-center rounded-full bg-neutral-900 px-4 py-4 text-sm font-semibold tracking-[0.16em] uppercase text-white transition hover:bg-neutral-800 active:scale-[0.99]"
+              className="inline-flex w-full items-center justify-center rounded-full bg-black px-4 py-4 text-sm font-semibold tracking-[0.16em] uppercase text-white transition hover:bg-black/90 active:scale-[0.99]"
             >
               Cerrar
             </button>
           </div>
-        </div>
-
-        <div className="pointer-events-none absolute -top-3 left-1/2 -translate-x-1/2 rounded-full border border-neutral-900/20 bg-[#fffdf7] px-4 py-2 text-[11px] font-semibold tracking-[0.20em] uppercase text-neutral-800 shadow-sm">
-          Edición especial
         </div>
       </div>
     </div>
@@ -552,14 +623,14 @@ export default function Page() {
   const venueName = "Finca Palo & Rosa";
   const venueAddress = "Villavicencio — Vereda Apiay / vía Puerto López";
 
-  // ✅ AUDIO: se dispara en "Extra Extra"
-  const audioSrc = "/audio/Kurt - La Mujer Perfecta (Lyric Video) [1].MP3"; // ✅ recomendado (renombra tu mp3 así)
+  // ✅ AUDIO: se dispara al abrir
+  const audioSrc = "/audio/Río Roma - Caminar de Tu Mano (Official Video) ft. Fonseca [1].";
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [audioError, setAudioError] = useState<string | null>(null);
 
   // WhatsApp (RSVP)
   const rsvpPhoneNovio = "573116533163";
-  const rsvpPhoneNovia = "57XXXXXXXXXX"; // pon el real
+  const rsvpPhoneNovia = "57XXXXXXXXXX";
 
   // WhatsApp sugerir canción
   const songPhone = rsvpPhoneNovio;
@@ -607,7 +678,7 @@ export default function Page() {
   const dressCodeNote = "Tonos neutros y elegantes. Evitar blanco y tenis.";
   const [dressOpen, setDressOpen] = useState(false);
   const [dressIdeas, setDressIdeas] = useState<DressIdea[]>([
-    { title: "Ella: vestido largo o midi", note: "Colores: champagne, beige, terracota, verde oliva, negro." },
+    { title: "Ella: vestido largo o midi", note: "Champagne, beige, terracota, verde oliva, negro." },
     { title: "Él: traje o blazer", note: "Camisa clara, zapatos formales. Corbata opcional." },
   ]);
 
@@ -657,7 +728,7 @@ export default function Page() {
   const calMonthIndex0 = 4; // Mayo
   const highlightedDay = 10;
 
-  const monthNamesEs = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+  const monthNamesEs = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
   const calendarCells = useMemo(() => {
     const firstDay = new Date(calYear, calMonthIndex0, 1).getDay();
@@ -714,8 +785,8 @@ export default function Page() {
   // Modal regalos
   const [giftOpen, setGiftOpen] = useState(false);
 
-  // ✅ EXTRA EXTRA: abre y reproduce canción
-  const onExtraExtra = async () => {
+  // ✅ OPEN (Extra Extra)
+  const onOpen = async () => {
     setRevealed(true);
     setRiceInCard(true);
     window.setTimeout(() => setRiceInCard(false), 2600);
@@ -733,31 +804,28 @@ export default function Page() {
         audio.currentTime = 0;
         await audio.play();
       } catch {
-        setAudioError(
-          "Tu navegador bloqueó el audio automático. Revisa que el archivo exista en /public/audio y el nombre sea correcto."
-        );
+        setAudioError("Tu navegador bloqueó el audio automático. Verifica el archivo en /public/audio.");
       }
     }
   };
 
   // tokens UI
   const paperWrap =
-    "paper fold paperTexture relative overflow-hidden rounded-[34px] border border-neutral-900/20 shadow-[0_25px_70px_rgba(0,0,0,0.14)]";
-  const card =
-    "rounded-[26px] border border-neutral-900/15 bg-white/65 shadow-[0_18px_55px_rgba(0,0,0,0.12)]";
-  const kicker = "text-[11px] font-black tracking-[0.20em] uppercase text-neutral-900";
+    "paper fold paperTexture relative overflow-hidden rounded-[34px] border border-black/10 shadow-[0_25px_70px_rgba(0,0,0,0.12)]";
+  const card = "rounded-[26px] border border-black/10 bg-white/70 shadow-[0_18px_55px_rgba(0,0,0,0.10)]";
+  const kicker = "text-[11px] font-semibold tracking-[0.20em] uppercase text-black/70";
 
   const glassBtn =
-    "inline-flex items-center justify-center rounded-full border border-neutral-900/10 bg-white/20 px-5 py-3 text-[12px] font-semibold tracking-[0.14em] uppercase text-neutral-900 backdrop-blur-xl transition hover:bg-white/25 active:scale-[0.99] disabled:opacity-60";
+    "inline-flex items-center justify-center rounded-full border border-black/10 bg-white/55 px-5 py-3 text-[12px] font-semibold tracking-[0.14em] uppercase text-black/80 backdrop-blur-xl transition hover:bg-white/70 active:scale-[0.99] disabled:opacity-60";
   const glassBtnDark =
-    "inline-flex items-center justify-center rounded-full bg-neutral-900 px-6 py-4 text-[12px] font-semibold tracking-[0.16em] uppercase text-white transition hover:bg-neutral-800 active:scale-[0.99]";
+    "inline-flex items-center justify-center rounded-full bg-black px-6 py-4 text-[12px] font-semibold tracking-[0.16em] uppercase text-white transition hover:bg-black/90 active:scale-[0.99]";
 
   const pill =
-    "rounded-full border border-neutral-900/15 bg-white/55 px-3 py-1 text-[11px] font-semibold tracking-[0.16em] uppercase text-neutral-900";
+    "rounded-full border border-black/10 bg-white/65 px-3 py-1 text-[11px] font-semibold tracking-[0.16em] uppercase text-black/80";
 
   return (
-    <main className="min-h-screen bg-[#efe6d2] text-neutral-900">
-      {/* ✅ AUDIO oculto (sin botón) */}
+    <main className="min-h-screen bg-neutral-100 text-neutral-950">
+      {/* ✅ AUDIO oculto */}
       <audio ref={audioRef} src={audioSrc} preload="auto" playsInline />
 
       {/* ===== Estilos ===== */}
@@ -778,8 +846,8 @@ export default function Page() {
           left:50%;
           width:2px;
           transform: translateX(-1px);
-          background: rgba(0,0,0,0.16);
-          opacity:.55;
+          background: rgba(0,0,0,0.14);
+          opacity:.42;
           pointer-events:none;
         }
         .fold:after{
@@ -789,22 +857,23 @@ export default function Page() {
           left:50%;
           width:220px;
           transform: translateX(-50%);
-          background: linear-gradient(to right, rgba(0,0,0,.16), rgba(0,0,0,0), rgba(0,0,0,.12));
-          opacity:.18;
+          background: linear-gradient(to right, rgba(0,0,0,.12), rgba(0,0,0,0), rgba(0,0,0,.10));
+          opacity:.14;
           pointer-events:none;
         }
+        /* ✅ blanco lujo */
         .paperTexture{
-          background-color: #fbf6e8;
+          background-color: #ffffff;
           background-image:
-            radial-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(0,0,0,0.03), transparent 25%, rgba(0,0,0,0.03));
-          background-size: 22px 22px, 100% 220px;
+            radial-gradient(rgba(0,0,0,0.018) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(0,0,0,0.02), transparent 28%, rgba(0,0,0,0.02));
+          background-size: 26px 26px, 100% 240px;
           background-position: 0 0, 0 0;
         }
         .innerGlow{
           box-shadow:
-            inset 0 1px 0 rgba(255,255,255,0.7),
-            inset 0 -1px 0 rgba(0,0,0,0.06);
+            inset 0 1px 0 rgba(255,255,255,0.75),
+            inset 0 -1px 0 rgba(0,0,0,0.05);
         }
       `}</style>
 
@@ -819,86 +888,25 @@ export default function Page() {
         setIdeas={setDressIdeas}
       />
 
-      {/* ===== Portada ===== */}
+      {/* ===== Portada GLASS ===== */}
       {!revealed && (
-        <div className="fixed inset-0 z-[90] overflow-auto bg-[#efe6d2]">
-          <div className="min-h-screen grid place-items-start">
-            <div className="w-full pt-14 pb-10 sm:pt-16 grid place-items-center">
-              <div className="relative w-[min(1040px,92vw)]">
-                <div className="paperTexture innerGlow relative overflow-hidden rounded-[34px] border border-neutral-900/20 shadow-[0_30px_90px_rgba(0,0,0,0.14)]">
-                  <div className="flex items-center justify-between border-b border-neutral-900/15 px-4 py-3 text-[11px] text-neutral-900">
-                    <span className="font-semibold tracking-[0.20em] uppercase">{paperRegion}</span>
-                    <span className="font-semibold tracking-[0.16em] uppercase">{paperDate}</span>
-                  </div>
-
-                  <div className="px-4 pt-7 text-center">
-                    <div className="font-serif text-5xl tracking-tight">{paperName}</div>
-                    <div className="mx-auto mt-3 h-px w-[min(720px,86vw)] bg-neutral-900/20" />
-                  </div>
-
-                  <div className="px-4 py-6 text-center">
-                    <div className="font-black tracking-tight text-4xl sm:text-6xl md:text-7xl">{coupleName}</div>
-                    <div className="mt-2 font-serif text-2xl sm:text-3xl tracking-wide">SE CASAN HOY</div>
-
-                    <div className="mx-auto mt-6 w-[min(860px,92vw)] rounded-[26px] border border-white/30 bg-white/10 p-4 backdrop-blur-xl shadow-[0_22px_70px_rgba(0,0,0,0.16)]">
-                      <div className="flex flex-wrap items-center justify-center gap-2">
-                        <span className={pill}>{weddingDateLabel}</span>
-                        <span className={pill}>{ceremonyTimeLabel}</span>
-                        <span className={pill}>{venueName}</span>
-                      </div>
-
-                      <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                        <button type="button" onClick={() => setGiftOpen(true)} className={glassBtn}>
-                          Lista de regalos
-                        </button>
-                        <button type="button" onClick={() => setDressOpen(true)} className={glassBtn}>
-                          Dress code
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="mx-auto mt-6 w-[min(860px,92vw)] rounded-[26px] border border-white/30 bg-white/10 p-4 backdrop-blur-xl shadow-[0_22px_70px_rgba(0,0,0,0.16)]">
-                      <div className="flex items-center justify-between">
-                        <div className="text-[11px] font-black tracking-[0.20em] uppercase text-neutral-900">
-                          Cuenta regresiva
-                        </div>
-                        <span className={pill}>{mounted ? (cd.done ? "¡HOY!" : "FALTA") : "CARGANDO"}</span>
-                      </div>
-
-                      <div className="mt-3 grid grid-cols-4 gap-2">
-                        {[
-                          { label: "Días", value: mounted ? cd.days : 0 },
-                          { label: "Horas", value: mounted ? cd.hours : 0 },
-                          { label: "Min", value: mounted ? cd.minutes : 0 },
-                          { label: "Seg", value: mounted ? cd.seconds : 0 },
-                        ].map((x) => (
-                          <div
-                            key={`cover-${x.label}`}
-                            className="rounded-2xl border border-white/30 bg-white/10 p-3 text-center backdrop-blur-xl"
-                          >
-                            <div className="text-2xl font-black tabular-nums">{pad2(x.value)}</div>
-                            <div className="mt-1 text-[11px] font-semibold tracking-[0.12em] uppercase text-neutral-700">
-                              {x.label}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {audioError && <p className="mt-3 text-xs text-red-600">{audioError}</p>}
-                  </div>
-
-                  <div className="pb-10">
-                    <div className="grid place-items-center px-4">
-                      <button type="button" onClick={onExtraExtra} className={cn(glassBtnDark, "px-10")}>
-                        Extra Extra
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                
-              </div>
+        <div className="fixed inset-0 z-[90] overflow-auto bg-neutral-100">
+          <div className="min-h-screen grid place-items-center px-4 py-10">
+            <div className="w-[min(1040px,92vw)]">
+              <GlassCover
+                coupleName={coupleName}
+                cityLine={cityLine}
+                weddingDateLabel={weddingDateLabel}
+                ceremonyTimeLabel={ceremonyTimeLabel}
+                venueName={venueName}
+                paperName={paperName}
+                paperDate={paperDate}
+                paperRegion={paperRegion}
+                onOpen={onOpen}
+                onDress={() => setDressOpen(true)}
+                onGifts={() => setGiftOpen(true)}
+              />
+              {audioError && <p className="mt-3 text-xs text-red-600">{audioError}</p>}
             </div>
           </div>
         </div>
@@ -911,41 +919,35 @@ export default function Page() {
             <RiceRainInCard show={riceInCard} density={170} />
 
             {/* Top strip */}
-            <div className="flex flex-col gap-2 border-b border-neutral-900/15 px-4 py-3 text-[11px] text-neutral-900 sm:flex-row sm:items-center sm:justify-between">
-              <span className="font-semibold tracking-[0.20em] uppercase">{paperRegion}</span>
+            <div className="flex flex-col gap-2 border-b border-black/10 px-4 py-3 text-[11px] sm:flex-row sm:items-center sm:justify-between">
+              <span className="font-semibold tracking-[0.20em] uppercase text-black/60">{paperRegion}</span>
 
               <div className="flex flex-wrap items-center gap-2">
                 <span className={pill}>{weddingDateLabel}</span>
                 <span className={pill}>{ceremonyTimeLabel}</span>
               </div>
 
-              <span className="font-semibold tracking-[0.16em] uppercase">{paperDate}</span>
+              <span className="font-semibold tracking-[0.16em] uppercase text-black/55">{paperDate}</span>
             </div>
 
             {/* Masthead */}
             <header className="px-4 pt-6">
               <div className="text-center font-serif text-5xl sm:text-6xl tracking-tight">{paperName}</div>
 
-              <div className="mt-4 grid gap-3 border-y border-neutral-900/15 py-4 sm:grid-cols-3 sm:items-center">
-                <div className="text-center text-[11px] font-semibold tracking-[0.20em] uppercase text-neutral-900 sm:text-left">
-                  {cityLine}
-                </div>
-                <div className="text-center text-[11px] font-semibold tracking-[0.20em] uppercase text-neutral-900">
-                  {venueName}
-                </div>
-                <div className="text-center text-[11px] font-semibold tracking-[0.20em] uppercase text-neutral-900 sm:text-right">
-                  {venueAddress}
-                </div>
+              <div className="mt-4 grid gap-3 border-y border-black/10 py-4 sm:grid-cols-3 sm:items-center">
+                <div className="text-center text-[11px] font-semibold tracking-[0.20em] uppercase text-black/65 sm:text-left">{cityLine}</div>
+                <div className="text-center text-[11px] font-semibold tracking-[0.20em] uppercase text-black/65">{venueName}</div>
+                <div className="text-center text-[11px] font-semibold tracking-[0.20em] uppercase text-black/65 sm:text-right">{venueAddress}</div>
               </div>
 
               <div className="py-6 text-center">
                 <div className="font-black tracking-tight text-4xl sm:text-6xl md:text-7xl">{coupleName}</div>
-                <div className="mt-2 font-serif text-2xl sm:text-3xl tracking-wide">CELEBRAMOS NUESTRO AMOR</div>
+                <div className="mt-2 font-serif text-2xl sm:text-3xl tracking-wide text-black/80">CELEBRAMOS NUESTRO AMOR</div>
 
-                <div className="mx-auto mt-5 w-[min(980px,92vw)] rounded-[22px] border border-white/30 bg-white/10 p-3 backdrop-blur-xl shadow-[0_22px_70px_rgba(0,0,0,0.16)]">
+                <div className="mx-auto mt-5 w-[min(980px,92vw)] rounded-[22px] border border-black/10 bg-white/60 p-3 backdrop-blur-xl shadow-[0_22px_70px_rgba(0,0,0,0.10)]">
                   <div className="flex flex-wrap items-center justify-center gap-2">
                     <button type="button" onClick={() => setGiftOpen(true)} className={glassBtn}>
-                      Lista de regalos
+                      Regalos
                     </button>
 
                     <button type="button" onClick={() => setDressOpen(true)} className={glassBtn}>
@@ -958,7 +960,7 @@ export default function Page() {
                       rel="noreferrer"
                       className={glassBtn}
                     >
-                      Ver ubicación
+                      Ubicación
                     </a>
                   </div>
                 </div>
@@ -978,12 +980,12 @@ export default function Page() {
                 {/* Izquierda */}
                 <div className="space-y-6">
                   <div className={cn(card, "p-5")}>
-                    <div className={cn(kicker, "text-center")}>Historia corta</div>
+                    <div className={cn(kicker, "text-center")}>Historia</div>
                     <div className="mt-4 space-y-4">
                       {historiaCorta.map((x, i) => (
                         <div key={`hist-${i}-${x.label}`} className="text-center">
-                          <div className="text-[11px] font-semibold tracking-[0.16em] uppercase text-neutral-800">{x.label}</div>
-                          <div className="mt-1 text-sm text-neutral-700">{x.value}</div>
+                          <div className="text-[11px] font-semibold tracking-[0.16em] uppercase text-black/60">{x.label}</div>
+                          <div className="mt-1 text-sm text-black/70">{x.value}</div>
                         </div>
                       ))}
                     </div>
@@ -992,14 +994,14 @@ export default function Page() {
                   <div className={cn(card, "p-5")}>
                     <div className="flex items-center justify-between">
                       <div className={kicker}>Calendario</div>
-                      <div className="text-[11px] font-semibold tracking-[0.16em] uppercase text-neutral-700">
+                      <div className="text-[11px] font-semibold tracking-[0.16em] uppercase text-black/55">
                         {monthNamesEs[calMonthIndex0]} {calYear}
                       </div>
                     </div>
 
                     <div className="mt-3 grid grid-cols-7 gap-1 text-center">
                       {["L", "Ma", "Mi", "J", "V", "S", "D"].map((d) => (
-                        <div key={`dow-${d}`} className="text-[10px] font-semibold text-neutral-700">
+                        <div key={`dow-${d}`} className="text-[10px] font-semibold text-black/55">
                           {d}
                         </div>
                       ))}
@@ -1009,9 +1011,7 @@ export default function Page() {
                             <div
                               className={cn(
                                 "mx-auto flex h-8 w-8 items-center justify-center rounded-xl text-xs",
-                                cell.isHighlight
-                                  ? "bg-neutral-900 text-white"
-                                  : "border border-neutral-900/12 bg-white/70 text-neutral-900"
+                                cell.isHighlight ? "bg-black text-white" : "border border-black/10 bg-white text-black/80"
                               )}
                             >
                               {cell.day}
@@ -1027,7 +1027,7 @@ export default function Page() {
                   <div className={cn(card, "p-5")}>
                     <div className="flex items-center justify-between">
                       <div className={kicker}>Cuenta regresiva</div>
-                      <span className={pill}>{mounted ? (cd.done ? "¡HOY!" : "FALTA") : "CARGANDO"}</span>
+                      <span className={pill}>{mounted ? (cd.done ? "HOY" : "FALTA") : "..."}</span>
                     </div>
 
                     <div className="mt-3 grid grid-cols-4 gap-2">
@@ -1037,9 +1037,9 @@ export default function Page() {
                         { label: "Min", value: mounted ? cd.minutes : 0 },
                         { label: "Seg", value: mounted ? cd.seconds : 0 },
                       ].map((x) => (
-                        <div key={`cd-${x.label}`} className="rounded-2xl border border-neutral-900/12 bg-white/70 p-3 text-center">
+                        <div key={`cd-${x.label}`} className="rounded-2xl border border-black/10 bg-white p-3 text-center">
                           <div className="text-2xl font-black tabular-nums">{pad2(x.value)}</div>
-                          <div className="mt-1 text-[11px] font-semibold tracking-[0.12em] uppercase text-neutral-700">{x.label}</div>
+                          <div className="mt-1 text-[11px] font-semibold tracking-[0.12em] uppercase text-black/55">{x.label}</div>
                         </div>
                       ))}
                     </div>
@@ -1050,44 +1050,41 @@ export default function Page() {
                 <div className="space-y-6">
                   <div className={cn(card, "p-6")}>
                     <div className={cn(kicker, "text-center")}>{tituloNota}</div>
-                    <p className="mt-4 text-sm leading-7 text-neutral-800">{cuerpoNota}</p>
+                    <p className="mt-4 text-sm leading-7 text-black/75">{cuerpoNota}</p>
                   </div>
 
-                  {/* ✅ Sugiere una canción */}
+                  {/* Sugiere una canción */}
                   <div className={cn(card, "p-6")}>
-                    <div className={cn(kicker, "text-center")}>Sugiere una canción</div>
-
-                    <p className="mt-3 text-sm text-neutral-700 leading-6 text-center">
-                      ¿Qué canción no puede faltar? Envíanos tu recomendación.
-                    </p>
+                    <div className={cn(kicker, "text-center")}>Canción</div>
+                    <p className="mt-3 text-sm text-black/65 leading-6 text-center">¿Qué canción no puede faltar?</p>
 
                     <div className="mt-4 grid gap-3">
                       <div>
-                        <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-neutral-700">Canción</label>
+                        <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-black/55">Canción</label>
                         <input
                           value={song.name}
                           onChange={(e) => setSong((p) => ({ ...p, name: e.target.value }))}
-                          className="mt-1 w-full rounded-2xl border border-neutral-900/12 bg-white px-3 py-3 text-sm outline-none focus:border-neutral-900/40"
+                          className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-3 py-3 text-sm outline-none focus:border-black/30"
                           placeholder="Ej: Perfect"
                         />
                       </div>
 
                       <div>
-                        <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-neutral-700">Artista</label>
+                        <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-black/55">Artista</label>
                         <input
                           value={song.artist}
                           onChange={(e) => setSong((p) => ({ ...p, artist: e.target.value }))}
-                          className="mt-1 w-full rounded-2xl border border-neutral-900/12 bg-white px-3 py-3 text-sm outline-none focus:border-neutral-900/40"
+                          className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-3 py-3 text-sm outline-none focus:border-black/30"
                           placeholder="Ej: Ed Sheeran"
                         />
                       </div>
 
                       <div>
-                        <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-neutral-700">Link (opcional)</label>
+                        <label className="text-[11px] font-semibold tracking-[0.14em] uppercase text-black/55">Link (opcional)</label>
                         <input
                           value={song.link}
                           onChange={(e) => setSong((p) => ({ ...p, link: e.target.value }))}
-                          className="mt-1 w-full rounded-2xl border border-neutral-900/12 bg-white px-3 py-3 text-sm outline-none focus:border-neutral-900/40"
+                          className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-3 py-3 text-sm outline-none focus:border-black/30"
                           placeholder="Spotify / YouTube"
                         />
                       </div>
@@ -1095,18 +1092,18 @@ export default function Page() {
                       <button
                         type="button"
                         onClick={sendSong}
-                        className="mt-1 inline-flex w-full items-center justify-center rounded-full bg-neutral-900 px-4 py-3 text-sm font-semibold tracking-[0.16em] uppercase text-white transition hover:bg-neutral-800 active:scale-[0.99]"
+                        className="mt-1 inline-flex w-full items-center justify-center rounded-full bg-black px-4 py-3 text-sm font-semibold tracking-[0.16em] uppercase text-white transition hover:bg-black/90 active:scale-[0.99]"
                         disabled={!song.name.trim()}
                       >
-                        Enviar por WhatsApp
+                        Enviar
                       </button>
                     </div>
                   </div>
 
                   <div className={cn(card, "p-6")}>
                     <div className={cn(kicker, "text-center")}>Versículo</div>
-                    <p className="mt-3 text-center font-serif text-lg leading-7 text-neutral-800">“{bibleVerseText}”</p>
-                    <p className="mt-3 text-center text-sm font-semibold text-neutral-900">{bibleVerseRef}</p>
+                    <p className="mt-3 text-center font-serif text-lg leading-7 text-black/80">“{bibleVerseText}”</p>
+                    <p className="mt-3 text-center text-sm font-semibold text-black">{bibleVerseRef}</p>
                   </div>
                 </div>
 
@@ -1118,10 +1115,10 @@ export default function Page() {
                       {itinerario.map((x, i) => (
                         <div
                           key={`it-${i}-${x.hora}-${x.evento}`}
-                          className="flex items-center justify-between gap-4 rounded-2xl border border-neutral-900/12 bg-white/70 px-4 py-3"
+                          className="flex items-center justify-between gap-4 rounded-2xl border border-black/10 bg-white px-4 py-3"
                         >
-                          <div className="text-sm font-semibold text-neutral-900">{x.hora}</div>
-                          <div className="text-sm text-neutral-800">{x.evento}</div>
+                          <div className="text-sm font-semibold text-black">{x.hora}</div>
+                          <div className="text-sm text-black/75">{x.evento}</div>
                         </div>
                       ))}
                     </div>
@@ -1130,9 +1127,9 @@ export default function Page() {
                   <div className={cn(card, "p-5")}>
                     <div className={cn(kicker, "text-center")}>Ubicación</div>
 
-                    <div className="mt-4 rounded-2xl border border-neutral-900/12 bg-white/70 p-4">
-                      <div className="text-[11px] font-semibold tracking-[0.16em] uppercase text-neutral-900">{venueName}</div>
-                      <div className="mt-2 text-sm text-neutral-700">{venueAddress}</div>
+                    <div className="mt-4 rounded-2xl border border-black/10 bg-white p-4">
+                      <div className="text-[11px] font-semibold tracking-[0.16em] uppercase text-black/65">{venueName}</div>
+                      <div className="mt-2 text-sm text-black/70">{venueAddress}</div>
                     </div>
 
                     <a
@@ -1141,16 +1138,15 @@ export default function Page() {
                       rel="noreferrer"
                       className={cn(glassBtn, "mt-4 w-full")}
                     >
-                      Ver ubicación
+                      Ver mapa
                     </a>
                   </div>
 
-                  {/* Dress code card */}
                   <div className={cn(card, "p-5")}>
                     <div className={cn(kicker, "text-center")}>Dress code</div>
                     <div className="mt-3 text-center">
-                      <div className="text-lg font-semibold text-neutral-900">{dressCodeTitle}</div>
-                      <p className="mt-2 text-sm text-neutral-700 leading-6">{dressCodeNote}</p>
+                      <div className="text-lg font-semibold text-black">{dressCodeTitle}</div>
+                      <p className="mt-2 text-sm text-black/65 leading-6">{dressCodeNote}</p>
                     </div>
 
                     <button type="button" onClick={() => setDressOpen(true)} className={cn(glassBtn, "mt-4 w-full")}>
@@ -1160,10 +1156,10 @@ export default function Page() {
 
                   <div className={cn(card, "p-5")}>
                     <div className={cn(kicker, "text-center")}>Regalos</div>
-                    <p className="mt-3 text-sm text-neutral-700 leading-6 text-center">Si deseas bendecirnos, mira nuestra lista sugerida.</p>
+                    <p className="mt-3 text-sm text-black/65 leading-6 text-center">Si deseas bendecirnos, mira la lista.</p>
 
                     <button type="button" onClick={() => setGiftOpen(true)} className={cn(glassBtn, "mt-4 w-full")}>
-                      Lista de regalos
+                      Ver lista
                     </button>
                   </div>
                 </div>
@@ -1171,13 +1167,13 @@ export default function Page() {
             </section>
 
             {/* RSVP */}
-            <section className="border-t border-neutral-900/15 bg-white/35 px-4 py-8">
+            <section className="border-t border-black/10 bg-white/40 px-4 py-8">
               <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[1fr_1.2fr] lg:items-start">
                 <div className={cn(card, "p-6")}>
                   <div className={kicker}>Confirmación</div>
-                  <p className="mt-2 text-sm text-neutral-700 leading-6">Completa tus datos y envía tu respuesta por WhatsApp.</p>
+                  <p className="mt-2 text-sm text-black/65 leading-6">Completa tus datos y envía tu respuesta por WhatsApp.</p>
 
-                  <div className="mt-4 rounded-2xl border border-neutral-900/12 bg-white/70 p-4">
+                  <div className="mt-4 rounded-2xl border border-black/10 bg-white p-4">
                     <div className="flex flex-wrap items-center gap-4">
                       <label className="flex items-center gap-2 text-sm">
                         <input type="radio" name="rsvp" value="si" checked={rsvp === "si"} onChange={() => setRsvp("si")} />
@@ -1196,33 +1192,33 @@ export default function Page() {
                   <form onSubmit={(e) => e.preventDefault()} className="grid gap-3">
                     <div className="grid gap-3 sm:grid-cols-2">
                       <div>
-                        <label className="text-[11px] font-semibold tracking-[0.16em] uppercase text-neutral-700">Nombre</label>
+                        <label className="text-[11px] font-semibold tracking-[0.16em] uppercase text-black/55">Nombre</label>
                         <input
                           value={form.nombre}
                           onChange={onChange("nombre")}
                           required
-                          className="mt-1 w-full rounded-2xl border border-neutral-900/12 bg-white px-3 py-3 text-sm outline-none focus:border-neutral-900/40"
+                          className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-3 py-3 text-sm outline-none focus:border-black/30"
                           placeholder="Tu nombre completo"
                         />
                       </div>
 
                       <div>
-                        <label className="text-[11px] font-semibold tracking-[0.16em] uppercase text-neutral-700">WhatsApp</label>
+                        <label className="text-[11px] font-semibold tracking-[0.16em] uppercase text-black/55">WhatsApp</label>
                         <input
                           value={form.whatsapp}
                           onChange={onChange("whatsapp")}
-                          className="mt-1 w-full rounded-2xl border border-neutral-900/12 bg-white px-3 py-3 text-sm outline-none focus:border-neutral-900/40"
+                          className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-3 py-3 text-sm outline-none focus:border-black/30"
                           placeholder="+57 300 000 0000"
                         />
                       </div>
 
                       <div>
-                        <label className="text-[11px] font-semibold tracking-[0.16em] uppercase text-neutral-700">Asistentes</label>
+                        <label className="text-[11px] font-semibold tracking-[0.16em] uppercase text-black/55">Asistentes</label>
                         <select
                           value={form.asistentes}
                           onChange={onChange("asistentes")}
                           disabled={rsvp === "no"}
-                          className="mt-1 w-full rounded-2xl border border-neutral-900/12 bg-white px-3 py-3 text-sm outline-none focus:border-neutral-900/40 disabled:opacity-60"
+                          className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-3 py-3 text-sm outline-none focus:border-black/30 disabled:opacity-60"
                         >
                           <option value="1">1</option>
                           <option value="2">2</option>
@@ -1232,34 +1228,22 @@ export default function Page() {
                       </div>
 
                       <div>
-                        <label className="text-[11px] font-semibold tracking-[0.16em] uppercase text-neutral-700">Mensaje</label>
+                        <label className="text-[11px] font-semibold tracking-[0.16em] uppercase text-black/55">Mensaje</label>
                         <input
                           value={form.mensaje}
                           onChange={onChange("mensaje")}
-                          className="mt-1 w-full rounded-2xl border border-neutral-900/12 bg-white px-3 py-3 text-sm outline-none focus:border-neutral-900/40"
+                          className="mt-1 w-full rounded-2xl border border-black/10 bg-white px-3 py-3 text-sm outline-none focus:border-black/30"
                           placeholder="Ej: ¡Qué emoción!"
                         />
                       </div>
                     </div>
 
                     <div className="mt-2 grid gap-3 sm:grid-cols-2">
-                      <button
-                        type="button"
-                        onClick={() => sendWhatsApp(rsvpPhoneNovio)}
-                        className={glassBtn}
-                        disabled={!form.nombre.trim()}
-                        aria-disabled={!form.nombre.trim()}
-                      >
+                      <button type="button" onClick={() => sendWhatsApp(rsvpPhoneNovio)} className={glassBtn} disabled={!form.nombre.trim()}>
                         Enviar al novio
                       </button>
 
-                      <button
-                        type="button"
-                        onClick={() => sendWhatsApp(rsvpPhoneNovia)}
-                        className={glassBtn}
-                        disabled={!form.nombre.trim()}
-                        aria-disabled={!form.nombre.trim()}
-                      >
+                      <button type="button" onClick={() => sendWhatsApp(rsvpPhoneNovia)} className={glassBtn} disabled={!form.nombre.trim()}>
                         Enviar a la novia
                       </button>
                     </div>
@@ -1268,13 +1252,28 @@ export default function Page() {
               </div>
             </section>
 
-            <footer className="border-t border-neutral-900/15 bg-white/25 px-4 py-6 text-center">
-              <div className="text-xs font-semibold tracking-[0.20em] uppercase text-neutral-800">Con amor, {coupleName}</div>
-              <div className="mt-2 text-xs text-neutral-700">{weddingDateLabel} · {cityLine}</div>
+            <footer className="border-t border-black/10 bg-white/30 px-4 py-6 text-center">
+              <div className="text-xs font-semibold tracking-[0.20em] uppercase text-black/70">Con amor, {coupleName}</div>
+              <div className="mt-2 text-xs text-black/55">
+                {weddingDateLabel} · {cityLine}
+              </div>
             </footer>
           </div>
         </div>
       </div>
+
+      {/* ✅ botón discreto por si quieres volver a la portada */}
+      {revealed && (
+        <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-[80]">
+          <button
+            type="button"
+            onClick={() => setRevealed(false)}
+            className="rounded-full border border-black/10 bg-white/70 px-4 py-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-black/70 backdrop-blur-xl shadow-sm hover:bg-white"
+          >
+            Portada
+          </button>
+        </div>
+      )}
     </main>
   );
 }
