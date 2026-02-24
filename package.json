@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "canvas-confetti": "^1.9.4",
+    "cloudinary": "^2.9.0",
+    "firebase": "^12.9.0",
     "framer-motion": "^12.34.1",
     "lucide-react": "^0.563.0",
     "next": "16.1.6",
